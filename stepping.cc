@@ -26,11 +26,11 @@ MySteppingAction::~MySteppingAction()
 void MySteppingAction::UserSteppingAction(const G4Step *aStep)
 {
 
+    //extracting data
     G4double edep = aStep -> GetTotalEnergyDeposit();
 
     G4String particleName = aStep -> GetTrack() -> GetDynamicParticle() -> GetDefinition() -> GetParticleName();
-    
-  
+    G4int particleID = aStep -> GetTrack() -> GetTrackID();
 
     G4StepPoint* prePoint = aStep->GetPreStepPoint();
     G4StepPoint* postPoint = aStep->GetPostStepPoint();
@@ -44,10 +44,10 @@ void MySteppingAction::UserSteppingAction(const G4Step *aStep)
     G4double time = prePoint->GetLocalTime();
     
 //this is horrible inefficient, there must be a better way than this... 
-  if (particleName == "proton")
+  if (particleName == "mu-")
     {
     std::ofstream myFile("datatest2.csv",std::ios::app); //open file //append to file
-    myFile <<particleName << ", " << PositionPreStep <<", " << kinEnergyPreStep<<", " <<time<<", " << "\n";
+    myFile <<particleName << ", " <<particleID <<", " << PositionPreStep <<", " << kinEnergyPreStep<<", " <<time<<", " << "\n";
     myFile.close();
     };
     } 

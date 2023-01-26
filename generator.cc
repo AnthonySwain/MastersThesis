@@ -16,19 +16,19 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     //table of particles
     G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
     //finding the particle
-    G4String particleName="proton";
+    G4String particleName="mu-";
     G4ParticleDefinition *particle = particleTable->FindParticle(particleName);
 
     //where the particle is created
-    G4ThreeVector pos(0.,0.,0.);
+    G4ThreeVector pos(0.5,0.5,2);
     //diretion of particle
-    G4ThreeVector mom(0.,0.,1.);
+    G4ThreeVector mom(0.,0.01,1.);
 
 
     //use the particle gun to make the particle, defining the properties
     fParticleGun->SetParticlePosition(pos); //initial position
     fParticleGun->SetParticleMomentumDirection(mom); //this is the direction of the particle
-    fParticleGun->SetParticleMomentum(100.*GeV); //magnitude of momentum
+    fParticleGun->SetParticleMomentum(3.*GeV); //magnitude of momentum
     fParticleGun->SetParticleDefinition(particle); //what the particle is
 
     //Generates - called at the beginning of an event
