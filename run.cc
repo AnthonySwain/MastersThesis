@@ -13,7 +13,7 @@ MyRunAction::~MyRunAction()
 void MyRunAction::BeginOfRunAction(const G4Run* run)
 {
     std::ofstream myFile("datatest2.csv"); 
-    myFile <<"particleName" << ", " << "Position (x,y,z) / mm "<< ", " << "kinEnergy / Mev"<<", "<<"time"<<", "<< "\n";
+    myFile <<"particleName" << ", "<<"Track ID"<<", " << "Position (x,y,z) / mm "<< ", " << "kinEnergy / Mev"<<", "<<"time"<<", "<< "\n";
     myFile.close();   
 }
 
