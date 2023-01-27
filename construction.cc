@@ -4,6 +4,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <G4Tubs.hh>
+#include "G4VisAttributes.hh"
+#include <G4Colour.hh>
 
 //Constructor
 MyDetectorConstruction::MyDetectorConstruction()
@@ -83,11 +85,58 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
                                                 0, //copy number
                                                 true); //check for overlaps
                                                 
+
+    //Adding sensitive detector 
+
+    //Physical Properties of the detector
+    G4Element *Si = nist->FindOrBuildElement("Si"); //Silicon
+    G4Material *Detector = new G4Material("Detector", 2.329*g/cm3,1);
+    Detector->AddElement(Si,100*perCent);
+    G4MaterialPropertiesTable *mptDetector = new G4MaterialPropertiesTable();
     
+    //Adding The Detectors either side of the concrete 
+
+    //one of them isn't showing which is weird but we continue nevertheless
+    G4Box *solidDetector = new G4Box("solidDetector", 0.5*m, 0.5*m, 0.01*m);
+    G4LogicalVolume *logicDetector = new G4LogicalVolume(solidDetector, Detector, "logicDetector");
+
+    G4VPhysicalVolume *physDetector0 = new G4PVPlacement(
+                                                        0, //no rotation
+                                                        G4ThreeVector(0.,0., 1.1*m),  //position
+                                                        logicDetector, //Logical volume
+                                                        "OutDetector",  //name
+                                                        logicWorld,  //mother volume
+                                                        false,  //no boolean operation
+                                                        0,  //copy number
+                                                        true  //check for overlaps
+                                                        );
+
+    G4VPhysicalVolume *physDetector1 = new G4PVPlacement(
+                                                        0, //no rotation
+                                                        G4ThreeVector(0.,0.,-1.1*m),  //position
+                                                        logicDetector, //Logical volume
+                                                        "InDetector",  //name
+                                                        logicWorld,  //mother volume
+                                                        false,  //no boolean operation
+                                                        1,  //copy number
+                                                        true  //check for overlaps
+                                                        );
+
+    //Setting Visualisation Properties
+    logicWorld->SetVisAttributes (G4VisAttributes::GetInvisible()); //make air invisible
     
+    auto DetectorVisAtt = new G4VisAttributes(G4Colour(1.0,0,0));
+    DetectorVisAtt->SetVisibility(true);
+    logicDetector->SetVisAttributes(DetectorVisAtt);
+    
+
 
     return physWorld;
+}
+//Adding sensitive detector construction
+void MyDetectorConstruction::ConstructSDandField()
+{
+    MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
 
-
-    
+    logicDetector->SetSensitiveDetector(sensDet);
 }

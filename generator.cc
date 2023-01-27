@@ -20,9 +20,9 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     G4ParticleDefinition *particle = particleTable->FindParticle(particleName);
 
     //where the particle is created
-    G4ThreeVector pos(0.5,0.5,2);
+    G4ThreeVector pos(0.25*m,0.25*m,-2*m);
     //diretion of particle
-    G4ThreeVector mom(0.,0.01,1.);
+    G4ThreeVector mom(-0.125,-0.125,1.);
 
 
     //use the particle gun to make the particle, defining the properties

@@ -9,7 +9,7 @@
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
 #include "G4NistManager.hh"
-
+#include "detector.hh"
 
 //Use different units that are pre-implemented in G4
 #include "G4SystemOfUnits.hh"
@@ -25,6 +25,11 @@ public:
 
     //Main functino that constructs the whole detector geometry, description of detector should be in this functino
     virtual G4VPhysicalVolume *Construct();
+
+private: 
+    G4LogicalVolume *logicDetector; //acccess it outside of construction function
+    virtual void ConstructSDandField(); //construct sensitive detector (also EM fields)
+
 };
 
 #endif
