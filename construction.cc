@@ -1,6 +1,6 @@
 //Importing the headerfile
 #include "construction.hh"
-
+#include "G4SDManager.hh"
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <G4Tubs.hh>
@@ -96,32 +96,35 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     
     //Adding The Detectors either side of the concrete 
 
-    //one of them isn't showing which is weird but we continue nevertheless
-    G4Box *solidDetector = new G4Box("solidDetector", 0.5*m, 0.5*m, 0.01*m);
+    G4Box *solidDetector = new G4Box("solidDetector", 0.5*m, 0.5*m, 0.005*m);
     G4LogicalVolume *logicDetector = new G4LogicalVolume(solidDetector, Detector, "logicDetector");
 
-    G4VPhysicalVolume *physDetector0 = new G4PVPlacement(
-                                                        0, //no rotation
-                                                        G4ThreeVector(0.,0., 1.1*m),  //position
-                                                        logicDetector, //Logical volume
-                                                        "OutDetector",  //name
-                                                        logicWorld,  //mother volume
-                                                        false,  //no boolean operation
-                                                        0,  //copy number
-                                                        true  //check for overlaps
-                                                        );
-
-    G4VPhysicalVolume *physDetector1 = new G4PVPlacement(
-                                                        0, //no rotation
-                                                        G4ThreeVector(0.,0.,-1.1*m),  //position
-                                                        logicDetector, //Logical volume
-                                                        "InDetector",  //name
-                                                        logicWorld,  //mother volume
-                                                        false,  //no boolean operation
-                                                        1,  //copy number
-                                                        true  //check for overlaps
-                                                        );
-
+    //Detectors on one side
+    for(G4int i = 0; i<5; i++)
+    {
+        G4VPhysicalVolume *physDetector0 = new G4PVPlacement(
+                                                            0, //no rotation
+                                                            G4ThreeVector(0.,0., 1.1*m + i*0.05*m),  //position
+                                                            logicDetector, //Logical volume
+                                                            "OutDetector",  //name
+                                                            logicWorld,  //mother volume
+                                                            false,  //no boolean operation
+                                                            i,  //copy number
+                                                            true  //check for overlaps
+                                                            );
+    
+    //Detectors on the other side
+        G4VPhysicalVolume *physDetector1 = new G4PVPlacement(
+                                                            0, //no rotation
+                                                            G4ThreeVector(0.,0.,-1.1*m - i*0.05*m),  //position
+                                                            logicDetector, //Logical volume
+                                                            "InDetector",  //name
+                                                            logicWorld,  //mother volume
+                                                            false,  //no boolean operation
+                                                            i,  //copy number
+                                                            true  //check for overlaps
+                                                            );
+    };
     //Setting Visualisation Properties
     logicWorld->SetVisAttributes (G4VisAttributes::GetInvisible()); //make air invisible
     
@@ -129,14 +132,14 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     DetectorVisAtt->SetVisibility(true);
     logicDetector->SetVisAttributes(DetectorVisAtt);
     
-
-
     return physWorld;
 }
 //Adding sensitive detector construction
+
 void MyDetectorConstruction::ConstructSDandField()
 {
-    MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
+    auto simpleSD = new MySensitiveDetector("simpleSD");
+    G4SDManager::GetSDMpointer()->AddNewDetector(simpleSD);
 
-    logicDetector->SetSensitiveDetector(sensDet);
+    SetSensitiveDetector("logicDetector", simpleSD);
 }
