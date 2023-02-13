@@ -24,8 +24,9 @@ void MyRunAction::BeginOfRunAction(const G4Run* run)
     << "\n";
     myFile.close();
 
-    std::ofstream myFile2("DetectorHits.csv",std::ios::app); //open file //append to file
-        myFile2 << "particleName" << ","
+    std::ofstream myFile2("DetectorHits.csv");
+        myFile2 << "event_no" << ","
+        << "particleName" << ","
         << "PosX" << ","
         << "PosY" << ","
         << "PosZ" << ","

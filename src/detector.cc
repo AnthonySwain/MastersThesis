@@ -5,11 +5,14 @@
 #include "G4SDManager.hh"
 #include "G4Track.hh"
 #include "G4ios.hh"
+#include "G4Run.hh"
+#include "G4RunManager.hh"
 
 
 MySensitiveDetector::MySensitiveDetector(G4String name): G4VSensitiveDetector(name)
 {
     collectionName.insert("simpleSDColl"); //Name of the collection using
+
 }
 
 MySensitiveDetector::~MySensitiveDetector()
@@ -47,7 +50,8 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
     G4ThreeVector PositionPreStep = preStepPoint->GetPosition();
 
     auto time = aStep ->GetTrack()->GetGlobalTime();
-
+    auto event_no = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
+    //auto event_no = 2;
     //Volume Information
     auto volume = aStep->GetTrack()->GetVolume();
     auto volume_name = volume->GetName();
@@ -55,7 +59,8 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
 
     if (particleName == "mu-"){
         std::ofstream myFile("DetectorHits.csv",std::ios::app); //open file //append to file
-        myFile << particleName << ","
+        myFile << event_no << "," 
+        << particleName << ","
         << PositionPreStep[0] << ","
         << PositionPreStep[1] << ","
         << PositionPreStep[2] << ","

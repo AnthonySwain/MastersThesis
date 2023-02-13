@@ -68,7 +68,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     //Adding the steel Rod      
     G4Tubs *solidSteel = new G4Tubs("solidSteel",
                                     0., //inner radius
-                                    1*cm, //outer radius
+                                    5*cm, //outer radius
                                     50.*cm, // half z distance
                                     0., //start Phi angle
                                     2*M_PI*rad); //End Phi Angle

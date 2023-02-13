@@ -24,7 +24,6 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     //diretion of particle
     G4ThreeVector mom(-0.125,-0.125,1.);
 
-
     //use the particle gun to make the particle, defining the properties
     fParticleGun->SetParticlePosition(pos); //initial position
     fParticleGun->SetParticleMomentumDirection(mom); //this is the direction of the particle

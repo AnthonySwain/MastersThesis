@@ -22,49 +22,6 @@ from scipy.optimize import minimize
 from skspatial.objects import Line, Points
 from skspatial.plotting import plot_3d
 
-
-def get_real():
-    #Extracting data from the reality of the particle travel
-    df = pd.read_csv("/home/anthony/sim/build/datatest2.csv")#opening the data file
-    pos_in_X = df["PosX"].values
-    pos_in_Y = df["PosY"].values
-    pos_in_Z = df["PosZ"].values 
-    reality = (pos_in_X,pos_in_Y,pos_in_Z)
-    reality = np.stack(reality, axis=1)
-    return(reality)
-
-def get_hits():
-    #Getting position and times of the hits from the data file. 
-    #In_hits should contain the incoming hits and times
-    #Out_hits should contain the outgoing hits and times
-
-    data_frame = pd.read_csv("/home/anthony/sim/build/DetectorHits.csv") #opening the data file
-
-    #Splitting data into position and time for in and out detector and returning an arary of this.
-    in_detector = data_frame.query("volume_name == 'InDetector'")
-    out_detector = data_frame.query("volume_name == 'OutDetector'")
-
-    pos_in_X = in_detector["PosX"].values
-    pos_in_Y = in_detector["PosY"].values
-    pos_in_Z = in_detector["PosZ"].values
-    time_in = in_detector["time"].values
-
-    in_hits = (pos_in_X,pos_in_Y,pos_in_Z)
-    in_times = np.stack(time_in, axis=0)
-    in_hits = np.stack(in_hits, axis=1)
-    
-
-    pos_out_X = out_detector["PosX"].values
-    pos_out_Y = out_detector["PosY"].values
-    pos_out_Z = out_detector["PosZ"].values
-    time_out = out_detector["time"].values
-
-    out_hits = (pos_out_X,pos_out_Y,pos_out_Z)
-    out_times = np.stack(time_out, axis=0)
-    out_hits = np.stack(out_hits, axis=1)
-
-    return(in_hits, in_times, out_hits, out_times)
-
 def least_squares(hits):
     line_fit = Line.best_fit(hits)
     
@@ -156,6 +113,7 @@ def get_line_coords(line):
     d = line.direction
     dz = d[2]
 
+    #This has been set up for the current container!!!!! GENERALISE THIS!!!!!
     z = np.linspace(-1500,1500,3000)
     const = np.subtract(z,(z0*np.ones(np.shape(z)))) /dz
 
@@ -164,45 +122,3 @@ def get_line_coords(line):
 
     return(x,y,z)
 
-#Extracting hits
-hits_data = get_hits()
-pos_hits_in = hits_data[0]
-pos_hits_out = hits_data[2]
-
-result = fit_lines(pos_hits_in, pos_hits_out)
-
-line1 = Line(result[0:3],result[3:6])
-
-line2 = Line(result[6:9],result[9:12])
-
-reality = get_real()
-
-
-#Plotting a figure to check all is well.
-
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-
-#Limits of the axes
-xylim = 200
-zlim = 1500
-
-ax.set_xlim([-1*xylim,xylim])
-ax.set_ylim([-1*xylim,xylim])
-ax.set_zlim([-1*zlim,zlim])
-
-
-#Points that made the lines
-ax.scatter(pos_hits_in[:,0],pos_hits_in[:,1],pos_hits_in[:,2])
-ax.scatter(pos_hits_out[:,0],pos_hits_out[:,1],pos_hits_out[:,2])
-ax.scatter(reality[:,0],reality[:,1],reality[:,2], s=5)
-
-#r = r_0 + const * d 
-
-x1,y1,z1 = get_line_coords(line1)
-x2,y2,z2 = get_line_coords(line2)
-
-ax.plot(x1,y1,z1)
-ax.plot(x2,y2,z2)
-
-plt.show()

@@ -5,6 +5,7 @@
 #include "G4VSensitiveDetector.hh"
 #include "hit.hh"
 #include <vector>
+#include "run.hh"
 
 
 //Define hit collection / hit container
@@ -26,7 +27,7 @@ private:
     DetectorHitCollection* fHitsCollection = nullptr;
     /*G4int fNofCells = 0;*/
     G4int fHCID = -1;
-    
+        
 };
 
 #endif

@@ -38,7 +38,8 @@ void MySteppingAction::UserSteppingAction(const G4Step *aStep)
     auto kinEnergyPreStep = prePoint->GetKineticEnergy();
 
     auto PositionPreStep = prePoint->GetPosition();
-
+    
+    auto event_no = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
 
     G4double time = prePoint->GetLocalTime();
     
@@ -46,8 +47,9 @@ void MySteppingAction::UserSteppingAction(const G4Step *aStep)
   if (particleName == "mu-")
     {
     std::ofstream myFile("datatest2.csv",std::ios::app); //open file //append to file
-    myFile <<particleName << ","
-    <<particleID <<"," 
+    myFile << event_no << ","
+    << particleName << ","
+    << particleID <<"," 
     << PositionPreStep[0] <<"," 
     << PositionPreStep[1] <<"," 
     << PositionPreStep[2] <<"," 
