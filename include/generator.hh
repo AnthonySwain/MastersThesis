@@ -3,11 +3,13 @@
 #define GENERATOR_HH
 
 #include "G4VUserPrimaryGeneratorAction.hh"
-
+#include "../lib/EcoMug-1.3.1/EcoMug.h"
 #include "G4ParticleGun.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
+#include "run.hh"
 #include "G4ParticleDefinition.hh"
+#include <cmath>
 
 class MyPrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {

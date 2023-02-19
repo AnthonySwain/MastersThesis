@@ -35,26 +35,7 @@ int main(int argc, char** argv)
     //Get the pointer tp the UI manager, set verbosities
     G4UImanager *UImanager = G4UImanager::GetUIpointer();
     
-    //Setting the Verbosity     
-    //UImanager->ApplyCommand("/run/verbose 1");
-    //UImanager->ApplyCommand("/event/verbose 1");
-    //UImanager->ApplyCommand("/tracking/verbose 1");
-
-    /*  
-    //Tells geant4 to display
-    UImanager->ApplyCommand("/vis/open OGL");
-    //Draw the volume
-    UImanager->ApplyCommand("/vis/drawVolume");
-    //Draw trajectories
-    UImanager->ApplyCommand("/vis/scene/add/trajectories smooth");
-    //Change the initial position of the display
-    UImanager->ApplyCommand("/vis/viewer/set/viewpointVector 1 1 1 ");
-    //Update every event
-    UImanager->ApplyCommand("/vis/viewer/set/autoRefresh true");
-    //Start the session from G4
-    UImanager->ApplyCommand("/vis/scence/endOfEventAction accumulate");
-    */
-
+    //Run the macro file
     UImanager->ApplyCommand("/control/execute run.mac");
     ui->SessionStart();
 

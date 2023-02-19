@@ -8,6 +8,8 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 
+#include "H5output.hh"
+#include "CSVoutput.hh"
 
 MySensitiveDetector::MySensitiveDetector(G4String name): G4VSensitiveDetector(name)
 {
@@ -17,8 +19,6 @@ MySensitiveDetector::MySensitiveDetector(G4String name): G4VSensitiveDetector(na
 
 MySensitiveDetector::~MySensitiveDetector()
 {}
-
-
 
 //Register the hits collection object in the Hits Collections of this event (GHCofThisEvent)
 void MySensitiveDetector::Initialize(G4HCofThisEvent* HCE)
@@ -31,45 +31,69 @@ void MySensitiveDetector::Initialize(G4HCofThisEvent* HCE)
         fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); //To get an ID for collectionname[0]
     }
     HCE->AddHitsCollection(fHCID, fHitsCollection);
-}
-
-//Every event a new hit collection(HC) has to be created and added to current event collection of hits
+    //Every event a new hit collection(HC) has to be created and added to current event collection of hits
 //HC has 2 names - the SD Name that created it and the name of collection -UNIQUE PAir
 //G4 uses an unique id to identify the collection - use this to register and retriever the collection
+} 
 
-G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist)
+G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory */*ROhist*/)
 {
+    //Looking for charged particles only 
     auto charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
     if (charge==0.) return true;
-    //i legit have no idea why these 2 lines of code above are used but they are
-    //(from example B5 in geant4)
 
 
-    G4String particleName = aStep -> GetTrack() -> GetDynamicParticle() -> GetDefinition() -> GetParticleName();
+    //G4String particleName = aStep -> GetTrack() -> GetDynamicParticle() -> GetDefinition() -> GetParticleName();
+    int PDGnumb = aStep -> GetTrack() -> GetDynamicParticle() -> GetPDGcode();
     auto preStepPoint = aStep->GetPreStepPoint();
     G4ThreeVector PositionPreStep = preStepPoint->GetPosition();
 
     auto time = aStep ->GetTrack()->GetGlobalTime();
     auto event_no = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
-    //auto event_no = 2;
+    
     //Volume Information
     auto volume = aStep->GetTrack()->GetVolume();
     auto volume_name = volume->GetName();
+    
+    //Using a reference number for volume names (In/OutDetector so strings are not saved in H5 file)
+    int volume_ref_no;
+    if (volume_name == "InDetector"){
+        volume_ref_no = 0;
+    };
+
+    if (volume_name == "OutDetector"){
+        volume_ref_no = 1;
+    };
+
+    
     auto volume_copy = volume->GetCopyNo();
 
-    if (particleName == "mu-"){
-        std::ofstream myFile("DetectorHits.csv",std::ios::app); //open file //append to file
-        myFile << event_no << "," 
-        << particleName << ","
-        << PositionPreStep[0] << ","
-        << PositionPreStep[1] << ","
-        << PositionPreStep[2] << ","
-        << time << "," 
-        << volume_name << "," 
-        << volume_copy 
-        << "\n";
-        myFile.close();
+    /*
+    H5output::DetectorOutput(
+        event_no,
+        PDGnumb,
+        PositionPreStep[0],
+        PositionPreStep[1],
+        PositionPreStep[2],
+        time,
+        volume_ref_no,
+        volume_copy);*/
+    
+    
+    if (PDGnumb == 13 or PDGnumb == -13){
+        CSVoutput output;
+        output.DetectorOutput(
+            event_no,
+            PDGnumb,
+            PositionPreStep[0],
+            PositionPreStep[1],
+            PositionPreStep[2],
+            time,
+            volume_ref_no,
+            volume_copy);
     };
+    
+
     return true;
 }
 

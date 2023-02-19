@@ -2,19 +2,19 @@
 #include <fstream>
 
 MyRunAction::MyRunAction()
-{
- 
-}
-
+{}
 
 MyRunAction::~MyRunAction()
 {}
 
 void MyRunAction::BeginOfRunAction(const G4Run* run)
 {   
+    //Runs at the start of each run
+    /*
     //Setting up the header of the datafiles
     std::ofstream myFile("datatest2.csv"); 
-    myFile <<"particleName" << ","
+    myFile << "event_no" << ","
+    <<"PDGnumb" << ","
     <<"Track ID"<<"," 
     << "PosX" << ","
     << "PosY" << ","
@@ -24,22 +24,32 @@ void MyRunAction::BeginOfRunAction(const G4Run* run)
     << "\n";
     myFile.close();
 
+    //Hits on Detector
     std::ofstream myFile2("DetectorHits.csv");
-        myFile2 << "event_no" << ","
-        << "particleName" << ","
-        << "PosX" << ","
-        << "PosY" << ","
-        << "PosZ" << ","
-        << "time" << "," 
-        << "volume_name" << "," 
-        << "volume_copy" 
-        << "\n";
-        myFile2.close();
+    myFile2 << "event_no" << ","
+    << "PDGnumb" << ","
+    << "PosX" << ","
+    << "PosY" << ","
+    << "PosZ" << ","
+    << "time" << "," 
+    << "volume_name" << "," 
+    << "volume_copy" 
+    << "\n";
+    myFile2.close();
+
+    //Muon distribution
+    std::ofstream myFile3("Initial_Muon_Dist.csv");
+    myFile3 << "PDGnumb" << ","
+    << "PosX" << ","
+    << "PosY" << ","
+    << "PosZ" << ","
+    << "Momentum[GeV]" << ","
+    << "theta" << ","
+    << "phi" 
+    << "\n";
+    myFile3.close();
+    */
 }
 
 void MyRunAction::EndOfRunAction(const G4Run* run)
-{
-
-
-    //myFile.close(); //close file
-}
+{}

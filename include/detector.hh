@@ -27,6 +27,7 @@ private:
     DetectorHitCollection* fHitsCollection = nullptr;
     /*G4int fNofCells = 0;*/
     G4int fHCID = -1;
+
         
 };
 

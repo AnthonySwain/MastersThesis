@@ -43,5 +43,5 @@ for i in range (no_events):
 data = list(zip(scattering_angle,interaction_vertex_x,interaction_vertex_y,interaction_vertex_z))
 
 df = pd.DataFrame(data,columns=["angle","x","y","z"])
-df.to_csv('interactions&angle', index=False)
+df.to_csv('interactions&angle.csv', index=False)
 

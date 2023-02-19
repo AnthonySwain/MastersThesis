@@ -25,8 +25,6 @@
 /vis/scence/endOfEventAction accumulate
 #
 #
-# Set the initial kinematic and run 100 events
-# electron 1 GeV to the direction (1.,0.,0.)
-#
+#Run no. events
 /run/beamOn 100
 
