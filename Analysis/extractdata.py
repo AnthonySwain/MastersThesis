@@ -22,7 +22,7 @@ def get_real():
 
 def how_many_events():
     #Finds how many events were in the data file
-    data_frame = pd.read_csv("/home/anthony/sim/build/DetectorHits.csv") #opening the data file
+    data_frame = pd.read_csv("/home/anthony/sim/data/DetectorHits.csv") #opening the data file
     event_no = data_frame["event_no"].values
     events = event_no[-1] +1
     return(events)
@@ -32,12 +32,17 @@ def get_hits(event_no):
     #In_hits should contain the incoming hits and times
     #Out_hits should contain the outgoing hits and times
 
-    data_frame = pd.read_csv("/home/anthony/sim/build/DetectorHits.csv") #opening the data file
+    data_frame = pd.read_csv("/home/anthony/sim/data/DetectorHits.csv") #opening the data file
 
     #Splitting data into position and time for in and out detector and returning an arary of this.
     event_no = data_frame.query(f"event_no == {event_no}")
-    in_detector = event_no.query("volume_name == 'InDetector'")
-    out_detector = event_no.query("volume_name == 'OutDetector'")
+
+    in_detector = event_no.query("volume_ref == '0'")
+    out_detector = event_no.query("volume_ref == '1'")
+
+    #If one of the detectors wasn't hit we can't reconstruct tracks so skip that bit of data
+    if in_detector.empty or out_detector.empty or (len(in_detector.index)==1) or (len(out_detector.index)==1):
+        return(False)
 
     pos_in_X = in_detector["PosX"].values
     pos_in_Y = in_detector["PosY"].values

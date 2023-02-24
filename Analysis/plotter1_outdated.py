@@ -13,6 +13,9 @@ import vertexfinder as vfinder
 from skspatial.objects import Line, Points
 from skspatial.plotting import plot_3d
 
+#This will still be useful to actually check the vertex finder is working correctly
+#when error is introduced into the detector 
+
 #For plotting a cylinder
 def data_for_cylinder_along_z(center_x,center_y,radius,half_height_z):
     z = np.linspace(-half_height_z, half_height_z, 50)

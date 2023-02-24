@@ -5,6 +5,7 @@ import pandas as pd
 import os
 import scipy
 from scipy.optimize import minimize
+import math
 
 from skspatial.objects import Line, Points, Vector
 
@@ -60,10 +61,16 @@ def vertex_angle_find(line1,line2):
     intersection = (vertex1 + vertex2) /2 
 
 
-    #Also need to find the angle between the lines, this is in radians
+    #Find the angle between the lines
+
+
     angle = line1dir.angle_between(line2dir)
-
-
+    if angle > math.pi/2:
+        angle = math.pi - angle
+    
+    #Something weird has happened if this happens... #Put better error finder here.
+    if angle > math.pi/2:
+        return (0.0,intersection)
 
     return (angle, intersection)
 

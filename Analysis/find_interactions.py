@@ -21,7 +21,14 @@ interaction_vertex_y = []
 interaction_vertex_z = []
 
 for i in range (no_events):
+    print(i)
     hits_data = extractdata.get_hits(i)
+
+    #If one of the detectors wasn't hit in the event, hits_data is returned false, skip that event
+    if hits_data == False:
+        print("false baby")
+        continue
+
     pos_hits_in = hits_data[0]
     pos_hits_out = hits_data[2]
 
