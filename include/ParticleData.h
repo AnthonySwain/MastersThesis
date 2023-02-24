@@ -1,5 +1,6 @@
 //Sets up output data types for the particles 
-
+#ifndef PARTICLEDATA_HH
+#define PARTICLEDATA_HH
 #include "../lib/H5Composites/include/H5Composites/H5Struct.h"
 
 namespace H5CompositesStructures {
@@ -52,4 +53,4 @@ namespace H5CompositesStructures {
         H5COMPOSITES_DECLARE_STRUCT_DTYPE()
     };
 }
-
+#endif

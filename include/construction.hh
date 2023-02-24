@@ -10,6 +10,8 @@
 #include "G4PVPlacement.hh"
 #include "G4NistManager.hh"
 #include "detector.hh"
+#include "../lib/H5Composites/include/H5Composites/TypedWriter.h"
+#include "ParticleData.h"
 
 //Use different units that are pre-implemented in G4
 #include "G4SystemOfUnits.hh"
@@ -28,7 +30,7 @@ public:
 
 private: 
     G4LogicalVolume *logicDetector; //acccess it outside of construction function
-    virtual void ConstructSDandField(); //construct sensitive detector (also EM fields)
+    virtual void ConstructSDandField(/*H5Composites::TypedWriter<DetectorOutput>*/); //construct sensitive detector (also EM fields)
 
 };
 
