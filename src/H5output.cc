@@ -40,6 +40,11 @@ void H5output::InitialMuonOutput(int PDGnumb,
     initialWriter.write(data);
     }
 
+    /*
+    Open this in initial sim.cc file 
+    create group wrapper, create file,
+    In user actions take this file as argument and make writers within write call to do this
+    */
 void H5output::RealityOutput(int event_no,
                         int PDGnumb,
                         int particleID,

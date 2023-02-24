@@ -74,6 +74,7 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
         muon_position_array[1],
         muon_position_array[2]);
 
+    
     G4ParticleDefinition *particle = particleTable->FindParticle(particleName);
 
     //where the particle is created

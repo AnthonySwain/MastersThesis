@@ -10,11 +10,13 @@
 #include <G4UserSteppingAction.hh>
 #include "CSVoutput.hh"
 #include "H5output.hh"
+#include "ParticleData.h"
 
-//Constructor
-MySteppingAction::MySteppingAction(MyRunAction *runAction)
+//Constructor{
+MySteppingAction::MySteppingAction(MyRunAction *runAction, H5::Group &output) : m_writer(output, "StepData")
 {
     fRunAction = runAction; //get access
+
 }
 
 //Destructor
@@ -61,6 +63,22 @@ void MySteppingAction::UserSteppingAction(const G4Step *aStep)
             PositionPreStep[2],
             kinEnergyPreStep,
             time);
+
+        using namespace H5CompositesStructures;
+        Reality data;
+
+        data = Reality{
+            .Track_ID = particleID,
+            .event_no = event_no,
+            .PDGnumb = PDGnumb,
+            .PosX = PositionPreStep[0],
+            .PosY = PositionPreStep[1],
+            .PosZ = PositionPreStep[2],
+            .time = time,
+            .kinEnergy = kinEnergyPreStep
+            };
+        
+        m_writer.write(data);
         };
     } 
    

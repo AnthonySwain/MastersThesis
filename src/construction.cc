@@ -6,6 +6,14 @@
 #include <G4Tubs.hh>
 #include "G4VisAttributes.hh"
 #include <G4Colour.hh>
+#include "G4RotationMatrix.hh"
+#include "G4ThreeVector.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "ParticleData.h"
+#include "../lib/H5Composites/include/H5Composites/GroupWrapper.h"
+#include "../lib/H5Composites/include/H5Composites/TypedWriter.h"
+
 
 //Constructor
 MyDetectorConstruction::MyDetectorConstruction()
@@ -15,7 +23,7 @@ MyDetectorConstruction::MyDetectorConstruction()
 MyDetectorConstruction::~MyDetectorConstruction()
 {}
 
-G4VPhysicalVolume *MyDetectorConstruction::Construct()
+G4VPhysicalVolume *MyDetectorConstruction::Construct(/*H5Composites::TypedWriter<DetectorOutput> detectorWriter*/)
 {
     //Define material, using from pre-defined in G4
     G4NistManager *nist = G4NistManager::Instance();
@@ -35,7 +43,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     
 
     //making the solid one, G4Box(name, halfsize in xyz), this gives a 1m^3 box below
-    G4Box *solidWorld = new G4Box("solidWorld", 1*m, 1*m, 2*m);
+    G4Box *solidWorld = new G4Box("solidWorld", 2*m, 2*m, 2*m);
 
     //insert the material into the volume just made, G4LogicalVolume(solid, material,name)
     G4LogicalVolume *logicWorld = new G4LogicalVolume(solidWorld, worldMat,"logicWorld");
@@ -49,7 +57,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     //Making the concrete volume
     G4Material *Concrete = nist->FindOrBuildMaterial("G4_CONCRETE");
     G4MaterialPropertiesTable *mptConcrete = new G4MaterialPropertiesTable();
-    G4Box *solidConcrete = new G4Box("solidConcrete", 0.5*m, 0.5*m, 1*m);
+    G4Box *solidConcrete = new G4Box("solidConcrete", 1.0*m, 0.5*m, 0.5*m);
     G4LogicalVolume *logicConcrete = new G4LogicalVolume(solidConcrete, Concrete,"logicConcrete");
     G4VPhysicalVolume *physConcrete = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicConcrete, "physConcrete",logicWorld,false,0,true);
 
@@ -69,14 +77,25 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     G4Tubs *solidSteel = new G4Tubs("solidSteel",
                                     0., //inner radius
                                     5*cm, //outer radius
-                                    50.*cm, // half z distance
+                                    95.*cm, // half z distance
                                     0., //start Phi angle
                                     2*M_PI*rad); //End Phi Angle
+
+    //The rotation matrix
+    G4double phi = 30*deg;
+    // u, v, w are the daughter axes, projected on the mother frame     
+    G4ThreeVector u = G4ThreeVector(0, 0, -1);
+    G4ThreeVector v = G4ThreeVector(-std::sin(phi), std::cos(phi),0.);
+    G4ThreeVector w = G4ThreeVector( std::cos(phi), std::sin(phi),0.);
+    G4RotationMatrix* rotm1 = new G4RotationMatrix();
+    rotm1->rotateY(90.*deg); 
+
+    G4cout << rotm1 << "\n";
 
 
     G4LogicalVolume *logicSteel = new G4LogicalVolume(solidSteel, Steel,"Steel");
     G4VPhysicalVolume *physSteel = new G4PVPlacement(
-                                                0, //no rotation
+                                                rotm1, //no rotation
                                                 G4ThreeVector(0.,0.,0.), //its position
                                                 logicSteel, //its logical volume
                                                 "physSteel", //name
@@ -96,18 +115,18 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     
     //Adding The Detectors either side of the concrete 
 
-    G4Box *solidDetector = new G4Box("solidDetector", 0.5*m, 0.5*m, 0.0005*m);
+    G4Box *solidDetector = new G4Box("solidDetector", 0.75*m, 0.6*m, 0.0005*m);
     G4LogicalVolume *logicDetector = new G4LogicalVolume(solidDetector, Detector, "logicDetector");
 
     //Creating layers of particle detectors either side of the sample
-    for(G4int i = 0; i<5; i++)
+    for(G4int i = 0; i<2; i++)
     {
         //Detectors on one side
-        G4VPhysicalVolume *physDetector0 = new G4PVPlacement(
+        G4VPhysicalVolume *physDetector00 = new G4PVPlacement(
                                                             0, //no rotation
-                                                            G4ThreeVector(0.,0., 1.1*m + i*0.05*m),  //position
+                                                            G4ThreeVector(0.,0., 0.525*m + i*0.005*m),  //position
                                                             logicDetector, //Logical volume
-                                                            "OutDetector",  //name
+                                                            "InDetector1",  //name
                                                             logicWorld,  //mother volume
                                                             false,  //no boolean operation
                                                             i,  //copy number
@@ -115,11 +134,33 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
                                                             );
     
     //Detectors on the other side
-        G4VPhysicalVolume *physDetector1 = new G4PVPlacement(
+        G4VPhysicalVolume *physDetector10 = new G4PVPlacement(
                                                             0, //no rotation
-                                                            G4ThreeVector(0.,0.,-1.1*m - i*0.05*m),  //position
+                                                            G4ThreeVector(0.,0.,-0.525*m - i*0.005*m),  //position
                                                             logicDetector, //Logical volume
-                                                            "InDetector",  //name
+                                                            "OutDetector1",  //name
+                                                            logicWorld,  //mother volume
+                                                            false,  //no boolean operation
+                                                            i,  //copy number
+                                                            true  //check for overlaps
+                                                            );
+
+        G4VPhysicalVolume *physDetector11 = new G4PVPlacement(
+                                                            0, //no rotation
+                                                            G4ThreeVector(0.,0.,-0.725*m - i*0.005*m),  //position
+                                                            logicDetector, //Logical volume
+                                                            "OutDetector2",  //name
+                                                            logicWorld,  //mother volume
+                                                            false,  //no boolean operation
+                                                            i,  //copy number
+                                                            true  //check for overlaps
+                                                            );
+        
+        G4VPhysicalVolume *physDetector01 = new G4PVPlacement(
+                                                            0, //no rotation
+                                                            G4ThreeVector(0.,0.,0.725*m + i*0.005*m),  //position
+                                                            logicDetector, //Logical volume
+                                                            "InDetector2",  //name
                                                             logicWorld,  //mother volume
                                                             false,  //no boolean operation
                                                             i,  //copy number
