@@ -9,18 +9,19 @@ from scipy.optimize import minimize
 from skspatial.plotting import plot_3d
 import seaborn as sns
 from matplotlib.colors import LinearSegmentedColormap
-
+import math
 from wolframclient.evaluation import WolframLanguageSession
 from wolframclient.language import wl, wlexpr
 
-data_frame = pd.read_csv("/home/anthony/sim/data/interactions&angle.csv") #opening the data file
+data_frame = pd.read_csv("/home/anthony/MastersThesis/data/interactions&angle.csv") #opening the data file
 data_frame = data_frame[["x","y","z","angle"]]
 data_frame = data_frame.loc[(data_frame.x > -500) &
                             (data_frame.x < 500) &
                             (data_frame.y > -500) &
                             (data_frame.y < 500) &
                             (data_frame.z > -2000) &
-                            (data_frame.z < 2000)]
+                            (data_frame.z < 2000) &
+                            (data_frame.angle < math.pi)]
 
 angle = data_frame["angle"].values
 x = data_frame["x"].values
@@ -40,15 +41,11 @@ data = data.loc[data['y'] >= -1000]
 def scatter_map(x,y,z,angle):
     # creating figures
     fig = plt.figure(figsize=(10, 10))
-    ax = fig.add_subplot(111, projection='3d')
-    xylim = 200
-    zlim = 1500
-
-    ax.set_xlim([-1*xylim,xylim])
-    ax.set_ylim([-1*xylim,xylim])
-    ax.set_zlim([-1*zlim,zlim])
-
-    ax.scatter(x,y,z, s=angle*10)#,c=angle,cmap='Greens_r')
+    ax1 = fig.add_subplot(111, projection='3d')
+    ax1.set_xlim(-500, 500)
+    ax1.set_ylim(-500, 500)
+    ax1.set_zlim(-2000, 2000)
+    ax1.scatter(x,y,z, s=angle*10)#,c=angle,cmap='Greens_r')
     plt.show()
 
     return(None)
@@ -64,18 +61,12 @@ def scat_angle_dist(x,y,z,angle):
 
 def voxel_map(data):
     sns.set()
-    xyz=pd.DataFrame(xyz).to_numpy()
-
-    no_bins = 20
-    hist, binedges = np.histogramdd(xyz, weights = angle, normed=False, bins = no_bins)
-    print(np.shape(hist))
-    #data = data.pivot(index = 'x',columns = "y",values = "angle")
-    ax = sns.heatmap(hist)
     
-    plt.imshow(hist)
-    ax.set_xlim(-500, 500)
-    ax.set_ylim(-500, 500)
-    ax.set_zlim(-2000, 2000)
+    data = data.pivot(index = 'x',columns = "y",values = "angle")
+    ax = sns.heatmap(data)
+    
+    
+   
 
     plt.show()
     return(None)
@@ -85,7 +76,10 @@ def ct_esque(xyz,x,y,z,angle):
 
     no_bins = 10
     hist, binedges = np.histogramdd(xyz, weights = angle, normed=False, bins = no_bins)
-    fig = plt.figure()
+    print(np.shape(binedges))
+
+    
+    fig = plt.figure(figsize=(4, 10))
     ax1 = fig.add_subplot(111, projection='3d')
     ax1.plot(x,y,z,'k.',alpha=0.3)
     #Use one less than bin edges to give rough bin location
@@ -120,7 +114,15 @@ def ct_esque(xyz,x,y,z,angle):
                         levels=10, 
                         cmap=plt.cm.RdYlBu_r, 
                         alpha=0.05)
-    
+        
+        cs2 = ax1.contourf(X,Y,hist[:,:,ct], 
+                        zdir='z', 
+                        offset=binedges[2][ct], 
+                        levels=10, 
+                        cmap=plt.cm.RdYlBu_r, 
+                        alpha=0.05)
+        
+    ax1.set_aspect('equal')
 
     ax1.set_xlim(-500, 500)
     ax1.set_ylim(-500, 500)
@@ -138,12 +140,14 @@ def we_try_again(data_frame):
     #This does involvce importing the mathematica library and using it in python, so lets see what we can do...
 
     session = WolframLanguageSession()
-    #dist = wl.SmoothKernelDistribution[Most /@ datadata])
+    #I think the best way is to write a function in mathematica and call it into python... although i dont even need to call it into python and can just use mathematica for the plots at that point.
     session.stop()
     return(None)
 
+
+
 #scat_angle_dist(x,y,z,angle)
-#scatter_map(x,y,z,angle)
+scatter_map(x,y,z,angle)
 #voxel_map(data)
 #ct_esque(xyz,x,y,z,angle)
-we_try_again(data_frame)
+#we_try_again(data_frame)

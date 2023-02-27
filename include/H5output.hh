@@ -1,8 +1,8 @@
 #ifndef H5OUTPUT_HH 
 #define H5OUTPUT_HH
 #include "ParticleData.h"
-#include "../lib/H5Composites/include/H5Composites/GroupWrapper.h"
-#include "../lib/H5Composites/include/H5Composites/TypedWriter.h"
+#include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/GroupWrapper.h"
+#include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/TypedWriter.h"
 
 class H5output{
     public:

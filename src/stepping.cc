@@ -66,7 +66,7 @@ void MySteppingAction::UserSteppingAction(const G4Step *aStep)
 
         using namespace H5CompositesStructures;
         Reality data;
-
+        
         data = Reality{
             .Track_ID = particleID,
             .event_no = event_no,

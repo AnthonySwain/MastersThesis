@@ -1,7 +1,7 @@
 #include "generator.hh"
 #include "G4RunManager.hh"
 #include "CSVoutput.hh"
-#include "H5output.hh"
+
 
 
 MyPrimaryGenerator::MyPrimaryGenerator()
@@ -62,7 +62,7 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
         muon_position_array[1],
         muon_position_array[2]
     );*/
-    
+    /*
     //Output to CSV format
     CSVoutput output;
     output.InitialMuonOutput(
@@ -73,7 +73,7 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
         muon_position_array[0],
         muon_position_array[1],
         muon_position_array[2]);
-
+    */
     
     G4ParticleDefinition *particle = particleTable->FindParticle(particleName);
 

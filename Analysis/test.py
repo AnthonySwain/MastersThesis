@@ -1,5 +1,5 @@
 import h5py
-filename = "/home/anthony/sim/data/OutputTest.h5"
+filename = "/home/anthony/MastersThesis/build/OutputTest.h5"
 
 with h5py.File(filename, "r") as f:
     # Print all root level object names (aka keys) 
