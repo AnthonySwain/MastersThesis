@@ -1,2 +1,0 @@
-/usr/bin/ar qc libH5CompositesStructures.a  CMakeFiles/H5CompositesStructures.dir/src/ParticleData.cxx.o
-/usr/bin/ranlib libH5CompositesStructures.a
