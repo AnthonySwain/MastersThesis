@@ -16,7 +16,7 @@
 
 
 //Constructor
-MyDetectorConstruction::MyDetectorConstruction()
+MyDetectorConstruction::MyDetectorConstruction(H5::Group &output)
 {}
 
 //Destructor
@@ -181,9 +181,9 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(/*H5Composites::TypedWriter
 }
 
 //Adding sensitive detector construction
-void MyDetectorConstruction::ConstructSDandField()
+void MyDetectorConstruction::ConstructSDandField(H5::Group &output)
 {
-    auto simpleSD = new MySensitiveDetector("simpleSD");
+    auto simpleSD = new MySensitiveDetector("simpleSD", output);
     G4SDManager::GetSDMpointer()->AddNewDetector(simpleSD);
 
     //Assigning the detectors to be sensitive

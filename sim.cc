@@ -24,15 +24,7 @@ int main(int argc, char** argv)
     H5Composites::GroupWrapper fOut = H5Composites::GroupWrapper::createFile("OutputTest.h5",true);
     
     //Getting the group from the group wrapper
-    //H5::Group group;
-    //H5::Group group = fOut.group();
-
-    //Then pass the group onto each  function and do what jon has baso given me on a fruit platter...
-    // Prepare the details writers
-    //H5Composites::TypedWriter<H5CompositesStructures::InitialParticleData> genWriter = fOut.makeDataSetWriter<H5CompositesStructures::InitialParticleData>("InitialMuon");
-    //H5Composites::TypedWriter<H5CompositesStructures::DetectorOutput> detectorWriter = fOut.makeDataSetWriter<H5CompositesStructures::DetectorOutput>("DetectorOutput");
-    //H5Composites::TypedWriter<H5CompositesStructures::Reality> detailsWriter = fOut.makeDataSetWriter<H5CompositesStructures::Reality>("TruthData");
-
+    H5::Group group = fOut.group();
 
     //Heart of Geant4, takes care of run, event actions, stepping ect... ect...
     G4RunManager mgr; 
@@ -40,33 +32,33 @@ int main(int argc, char** argv)
     mgr.SetUserInitialization(new MyDetectorConstruction());
     mgr.SetUserInitialization(new MyPhysicsList());
 
-    MyPrimaryGenerator *generator = new MyPrimaryGenerator();
+    MyPrimaryGenerator *generator = new MyPrimaryGenerator(group);
     mgr.SetUserAction(generator);
 
-    //MyRunAction *runAction = new MyRunAction();
-    //mgr.SetUserAction(runAction);
+    MyRunAction *runAction = new MyRunAction();
+    mgr.SetUserAction(runAction);
 
-    //MySteppingAction *steppingAction = new MySteppingAction(runAction, group);
-    //mgr.SetUserAction(steppingAction);
+    MySteppingAction *steppingAction = new MySteppingAction(runAction, group);
+    mgr.SetUserAction(steppingAction);
 
     mgr.Initialize();
 
     
     //User interface
-    G4UIExecutive *ui = new G4UIExecutive(argc, argv);
+    //G4UIExecutive *ui = new G4UIExecutive(argc, argv);
 
     //Visualisation Manager
-    G4VisManager *visManager = new G4VisExecutive();
+    //G4VisManager *visManager = new G4VisExecutive();
     
     //Initialize visualisation
-    visManager->Initialize();
+    //visManager->Initialize();
 
     //Get the pointer tp the UI manager, set verbosities
     G4UImanager *UImanager = G4UImanager::GetUIpointer();
     
     //Run the macro file
     UImanager->ApplyCommand("/control/execute run.mac");
-    ui->SessionStart();
+    //ui->SessionStart();
 
     return 0;
 }

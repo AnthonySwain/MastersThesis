@@ -21,7 +21,7 @@ class MyDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
     //constructor
-    MyDetectorConstruction();
+    MyDetectorConstruction(H5::Group &output);
     //destructor
     ~MyDetectorConstruction();
 
@@ -30,7 +30,7 @@ public:
 
 private: 
     G4LogicalVolume *logicDetector; //acccess it outside of construction function
-    virtual void ConstructSDandField(/*H5Composites::TypedWriter<DetectorOutput>*/); //construct sensitive detector (also EM fields)
+    virtual void ConstructSDandField(H5::Group &output); //construct sensitive detector (also EM fields)
 
 };
 

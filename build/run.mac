@@ -1,0 +1,30 @@
+#
+# Macro file for "sim.cc"
+#
+#
+# set verbose level for this run
+#
+/run/verbose 0
+/event/verbose 1 
+/tracking/verbose 0
+
+#/vis/open OGL
+#Draw the volume
+#/vis/drawVolume
+#
+#Draw trajectories
+#/vis/scene/add/trajectories smooth
+#
+#Change the initial position of the display
+#/vis/viewer/set/viewpointVector 1 1 1
+#
+#Update every event
+#/vis/viewer/set/autoRefresh true
+#
+#Start the session from G4
+#/vis/scence/endOfEventAction accumulate
+#
+#
+#Run no. events
+/run/beamOn 1
+

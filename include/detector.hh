@@ -5,6 +5,9 @@
 #include "G4VSensitiveDetector.hh"
 #include "hit.hh"
 #include <vector>
+#include "ParticleData.h"
+#include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/GroupWrapper.h"
+#include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/TypedWriter.h"
 #include "run.hh"
 
 
@@ -15,7 +18,7 @@
 class MySensitiveDetector : public G4VSensitiveDetector
 {
 public:
-    MySensitiveDetector(G4String name); //constructor (G4String is the name of the detector)
+    MySensitiveDetector(G4String name,  H5::Group &output); //constructor (G4String is the name of the detector)
     ~MySensitiveDetector();
 
     //methods from base class? 
@@ -27,6 +30,7 @@ private:
     DetectorHitCollection* fHitsCollection = nullptr;
     /*G4int fNofCells = 0;*/
     G4int fHCID = -1;
+    H5Composites::TypedWriter<H5CompositesStructures::DetectorOutput> m_writer;
 
         
 };

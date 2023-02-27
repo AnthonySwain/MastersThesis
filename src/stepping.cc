@@ -9,7 +9,6 @@
 #include "G4SystemOfUnits.hh"
 #include <G4UserSteppingAction.hh>
 #include "CSVoutput.hh"
-#include "H5output.hh"
 #include "ParticleData.h"
 
 //Constructor{
@@ -46,14 +45,6 @@ void MySteppingAction::UserSteppingAction(const G4Step *aStep)
     if (PDGnumb == 13 or PDGnumb == -13){
 
         /*
-        H5output::RealityOutput(event_no,
-            PDGnumb,
-            particleID,
-            PositionPreStep[0],
-            PositionPreStep[1],
-            PositionPreStep[2],
-            kinEnergyPreStep,
-            time);*/
         CSVoutput output;
         output.RealityOutput(event_no,
             PDGnumb,
@@ -63,13 +54,14 @@ void MySteppingAction::UserSteppingAction(const G4Step *aStep)
             PositionPreStep[2],
             kinEnergyPreStep,
             time);
-
+        */
+       
         using namespace H5CompositesStructures;
         Reality data;
         
         data = Reality{
-            .Track_ID = particleID,
             .event_no = event_no,
+            .Track_ID = particleID,
             .PDGnumb = PDGnumb,
             .PosX = PositionPreStep[0],
             .PosY = PositionPreStep[1],

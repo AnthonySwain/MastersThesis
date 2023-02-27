@@ -7,11 +7,9 @@
 #include "G4ios.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-
-#include "H5output.hh"
 #include "CSVoutput.hh"
 
-MySensitiveDetector::MySensitiveDetector(G4String name): G4VSensitiveDetector(name)
+MySensitiveDetector::MySensitiveDetector(G4String name, H5::Group &output): G4VSensitiveDetector(name), m_writer(output, "DetectorOutput")
 {
     collectionName.insert("simpleSDColl"); //Name of the collection using
 
@@ -68,19 +66,13 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory */*ROh
     
     auto volume_copy = volume->GetCopyNo();
 
-    /*
-    H5output::DetectorOutput(
-        event_no,
-        PDGnumb,
-        PositionPreStep[0],
-        PositionPreStep[1],
-        PositionPreStep[2],
-        time,
-        volume_ref_no,
-        volume_copy);*/
+
     
+   
     
     if (PDGnumb == 13 or PDGnumb == -13){
+        
+        /*
         CSVoutput output;
         output.DetectorOutput(
             event_no,
@@ -91,7 +83,24 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory */*ROh
             time,
             volume_ref_no,
             volume_copy);
-    };
+        */
+        
+        using namespace H5CompositesStructures;
+        DetectorOutput data;
+        
+        data = DetectorOutput{
+            .event_no = event_no,
+            .PDGnumb = PDGnumb,
+            .PosX = PositionPreStep[0],
+            .PosY = PositionPreStep[1],
+            .PosZ = PositionPreStep[2],
+            .time = time,
+            .volume_ref = volume_ref_no,
+            .volume_no = volume_copy 
+            };
+        
+        m_writer.write(data);
+        };
     
 
     return true;

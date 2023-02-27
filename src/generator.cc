@@ -4,7 +4,7 @@
 
 
 
-MyPrimaryGenerator::MyPrimaryGenerator()
+MyPrimaryGenerator::MyPrimaryGenerator(H5::Group &output) : m_writer(output, "InitialMuons")
 {
     //G4ParticleGun(number of particles per event) (1 run contains several events and each event can contain several particles)
     fParticleGun = new G4ParticleGun(1);
@@ -52,16 +52,20 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
 
     //probably should output seed here 
     //output to H5 data format
-    /*
-    H5output::InitialMuonOutput(
-        PDGnumb,
-        muon_p,
-        muon_theta,
-        muon_phi,
-        muon_position_array[0],
-        muon_position_array[1],
-        muon_position_array[2]
-    );*/
+    using namespace H5CompositesStructures;
+    InitialParticleData data;
+    
+    data = InitialParticleData{
+        .PDGnumb = PDGnumb,
+        .momentum = muon_p,
+        .theta = muon_theta,
+        .phi = muon_phi,
+        .PosX = muon_position_array[0],
+        .PosY = muon_position_array[1],
+        .PosZ = muon_position_array[2],
+        };
+    
+    m_writer.write(data);
     /*
     //Output to CSV format
     CSVoutput output;

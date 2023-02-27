@@ -10,11 +10,14 @@
 #include "run.hh"
 #include "G4ParticleDefinition.hh"
 #include <cmath>
+#include "ParticleData.h"
+#include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/GroupWrapper.h"
+#include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/TypedWriter.h"
 
 class MyPrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {
 public:
-    MyPrimaryGenerator();
+    MyPrimaryGenerator(H5::Group &output);
     ~MyPrimaryGenerator();
 
     //runs the particle gun and computes the stepping ect...
@@ -24,6 +27,7 @@ public:
 private:
 //data members
     G4ParticleGun *fParticleGun; //pointer to G4 serice class
+    H5Composites::TypedWriter<H5CompositesStructures::InitialParticleData> m_writer;
 };
 
 #endif

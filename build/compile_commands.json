@@ -1,0 +1,187 @@
+[
+{
+  "directory": "/home/anthony/MastersThesis/build",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4LIB_BUILD_DLL -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtPrintSupport  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -pthread -fPIC -std=gnu++17 -o CMakeFiles/sim.dir/sim.cc.o -c /home/anthony/MastersThesis/sim.cc",
+  "file": "/home/anthony/MastersThesis/sim.cc"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4LIB_BUILD_DLL -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtPrintSupport  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -pthread -fPIC -std=gnu++17 -o CMakeFiles/sim.dir/src/CSVoutput.cc.o -c /home/anthony/MastersThesis/src/CSVoutput.cc",
+  "file": "/home/anthony/MastersThesis/src/CSVoutput.cc"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4LIB_BUILD_DLL -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtPrintSupport  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -pthread -fPIC -std=gnu++17 -o CMakeFiles/sim.dir/src/construction.cc.o -c /home/anthony/MastersThesis/src/construction.cc",
+  "file": "/home/anthony/MastersThesis/src/construction.cc"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4LIB_BUILD_DLL -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtPrintSupport  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -pthread -fPIC -std=gnu++17 -o CMakeFiles/sim.dir/src/detector.cc.o -c /home/anthony/MastersThesis/src/detector.cc",
+  "file": "/home/anthony/MastersThesis/src/detector.cc"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4LIB_BUILD_DLL -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtPrintSupport  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -pthread -fPIC -std=gnu++17 -o CMakeFiles/sim.dir/src/generator.cc.o -c /home/anthony/MastersThesis/src/generator.cc",
+  "file": "/home/anthony/MastersThesis/src/generator.cc"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4LIB_BUILD_DLL -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtPrintSupport  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -pthread -fPIC -std=gnu++17 -o CMakeFiles/sim.dir/src/hit.cc.o -c /home/anthony/MastersThesis/src/hit.cc",
+  "file": "/home/anthony/MastersThesis/src/hit.cc"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4LIB_BUILD_DLL -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtPrintSupport  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -pthread -fPIC -std=gnu++17 -o CMakeFiles/sim.dir/src/physics.cc.o -c /home/anthony/MastersThesis/src/physics.cc",
+  "file": "/home/anthony/MastersThesis/src/physics.cc"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4LIB_BUILD_DLL -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtPrintSupport  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -pthread -fPIC -std=gnu++17 -o CMakeFiles/sim.dir/src/run.cc.o -c /home/anthony/MastersThesis/src/run.cc",
+  "file": "/home/anthony/MastersThesis/src/run.cc"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4LIB_BUILD_DLL -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_PRINTSUPPORT_LIB -DQT_WIDGETS_LIB -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4 -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -isystem /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -isystem /usr/include/x86_64-linux-gnu/qt5/QtOpenGL -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtPrintSupport  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -pthread -fPIC -std=gnu++17 -o CMakeFiles/sim.dir/src/stepping.cc.o -c /home/anthony/MastersThesis/src/stepping.cc",
+  "file": "/home/anthony/MastersThesis/src/stepping.cc"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -std=gnu++17 -o CMakeFiles/H5CompositesStructures.dir/src/ParticleData.cxx.o -c /home/anthony/MastersThesis/src/ParticleData.cxx",
+  "file": "/home/anthony/MastersThesis/src/ParticleData.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DBOOST_UNIT_TEST_FRAMEWORK_DYN_LINK -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -std=gnu++17 -o CMakeFiles/test_tuple.dir/test/tuple.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/test/tuple.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/test/tuple.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DBOOST_UNIT_TEST_FRAMEWORK_DYN_LINK -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -std=gnu++17 -o CMakeFiles/test_array.dir/test/array.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/test/array.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/test/array.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DBOOST_UNIT_TEST_FRAMEWORK_DYN_LINK -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -std=gnu++17 -o CMakeFiles/test_dtypes.dir/test/dtypes.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/test/dtypes.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/test/dtypes.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -std=gnu++17 -o CMakeFiles/merge.dir/utils/merge.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/utils/merge.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/utils/merge.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -std=gnu++17 -o CMakeFiles/vtest.dir/utils/test.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/utils/test.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/utils/test.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DBOOST_UNIT_TEST_FRAMEWORK_DYN_LINK -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -std=gnu++17 -o CMakeFiles/test_readwrite_primitives.dir/test/readwrite_primitives.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/test/readwrite_primitives.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/test/readwrite_primitives.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g   -std=gnu++17 -o CMakeFiles/playground.dir/utils/playground.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/utils/playground.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/utils/playground.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/CompDTypeUtils.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/CompDTypeUtils.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/CompDTypeUtils.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/DataSetUtils.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/DataSetUtils.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/DataSetUtils.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/DTypeConverter.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/DTypeConverter.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/DTypeConverter.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/DTypeIterator.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/DTypeIterator.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/DTypeIterator.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/DTypePrinter.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/DTypePrinter.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/DTypePrinter.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/DTypes.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/DTypes.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/DTypes.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/DTypeUtils.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/DTypeUtils.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/DTypeUtils.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/EnumUtils.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/EnumUtils.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/EnumUtils.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/FileMerger.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/FileMerger.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/FileMerger.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/FixedLengthStringTraits.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/FixedLengthStringTraits.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/FixedLengthStringTraits.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/GroupWrapper.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/GroupWrapper.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/GroupWrapper.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/H5Buffer.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/H5Buffer.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/H5Buffer.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/IBufferWriter.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/IBufferWriter.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/IBufferWriter.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/MergeFactory.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/MergeFactory.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/MergeFactory.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/MergeUtils.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/MergeUtils.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/MergeUtils.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/SmartBuffer.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/SmartBuffer.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/SmartBuffer.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/StringTraits.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/StringTraits.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/StringTraits.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/TypeRegister.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/TypeRegister.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/TypeRegister.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/VLenDeleter.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/VLenDeleter.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/VLenDeleter.cxx"
+},
+{
+  "directory": "/home/anthony/MastersThesis/build/lib/H5Composites",
+  "command": "/usr/bin/g++  -DBOOST_ALL_NO_LIB -DG4UI_USE_QT -DG4UI_USE_TCSH -DG4VIS_USE_OPENGL -DG4VIS_USE_OPENGLQT -DH5Composites_EXPORTS -I/home/anthony/MastersThesis/include -I/home/anthony/MastersThesis/src -I/home/anthony/MastersThesis/lib/H5Composites/include -I/usr/include/hdf5/serial -isystem /home/anthony/software/geant4/geant4-v11.0.3-install/include/Geant4  -W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -std=c++17  -g -g -fPIC   -std=gnu++17 -o CMakeFiles/H5Composites.dir/src/Writer.cxx.o -c /home/anthony/MastersThesis/lib/H5Composites/src/Writer.cxx",
+  "file": "/home/anthony/MastersThesis/lib/H5Composites/src/Writer.cxx"
+}
+]
