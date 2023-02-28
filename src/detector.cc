@@ -9,7 +9,7 @@
 #include "G4RunManager.hh"
 #include "CSVoutput.hh"
 
-MySensitiveDetector::MySensitiveDetector(G4String name, H5::Group &output): G4VSensitiveDetector(name), m_writer(output, "DetectorOutput")
+MySensitiveDetector::MySensitiveDetector(G4String name, H5::Group* output) : G4VSensitiveDetector(name), m_writer(*output, "DetectorOutput")
 {
     collectionName.insert("simpleSDColl"); //Name of the collection using
 
@@ -65,10 +65,7 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory */*ROh
     
     auto volume_copy = volume->GetCopyNo();
    
-   
-    
     if (PDGnumb == 13 or PDGnumb == -13){
-        
         /*
         CSVoutput output;
         output.DetectorOutput(
@@ -81,7 +78,7 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory */*ROh
             volume_ref_no,
             volume_copy);
         */
-        /*
+        
         using namespace H5CompositesStructures;
         DetectorOutput data;
         
@@ -97,7 +94,7 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory */*ROh
             };
         
         m_writer.write(data);
-        */
+        
         };
     
 

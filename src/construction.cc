@@ -16,7 +16,7 @@
 
 
 //Constructor
-MyDetectorConstruction::MyDetectorConstruction(H5::Group &output) : group{output}
+MyDetectorConstruction::MyDetectorConstruction(H5::Group* output) : group{output}
 {}
 
 //Destructor
@@ -183,6 +183,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 //Adding sensitive detector construction
 void MyDetectorConstruction::ConstructSDandField()
 {
+    G4cout << group;
     auto simpleSD = new MySensitiveDetector("simpleSD", group);
     G4SDManager::GetSDMpointer()->AddNewDetector(simpleSD);
     

@@ -18,7 +18,7 @@
 class MySensitiveDetector : public G4VSensitiveDetector
 {
 public:
-    MySensitiveDetector(G4String name,  H5::Group &output); //constructor (G4String is the name of the detector)
+    MySensitiveDetector(G4String name,  H5::Group* output); //constructor (G4String is the name of the detector)
     ~MySensitiveDetector();
 
     //methods from base class? 

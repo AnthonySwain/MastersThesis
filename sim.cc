@@ -25,11 +25,12 @@ int main(int argc, char** argv)
     
     //Getting the group from the group wrapper
     H5::Group group = fOut.group();
+    G4cout << &group;
 
     //Heart of Geant4, takes care of run, event actions, stepping ect... ect...
-    G4RunManager mgr; 
-    
-    mgr.SetUserInitialization(new MyDetectorConstruction(group));
+        
+    G4RunManager mgr;
+    mgr.SetUserInitialization(new MyDetectorConstruction(&group));
     mgr.SetUserInitialization(new MyPhysicsList());
 
     MyPrimaryGenerator *generator = new MyPrimaryGenerator(group);
