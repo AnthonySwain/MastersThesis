@@ -9,7 +9,7 @@ void CSVoutput::DetectorOutput(int event_no,
                         int volume_ref,
                         int volume_no){
 
-    std::ofstream myFile("../data/DetectorHits.csv",std::ios::app); //open file //append to file
+    std::ofstream myFile("DetectorHits.csv",std::ios::app); //open file //append to file
     myFile << event_no << "," 
     << PDGnumb << ","
     << x << ","

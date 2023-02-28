@@ -29,7 +29,7 @@ int main(int argc, char** argv)
     //Heart of Geant4, takes care of run, event actions, stepping ect... ect...
     G4RunManager mgr; 
     
-    mgr.SetUserInitialization(new MyDetectorConstruction());
+    mgr.SetUserInitialization(new MyDetectorConstruction(group));
     mgr.SetUserInitialization(new MyPhysicsList());
 
     MyPrimaryGenerator *generator = new MyPrimaryGenerator(group);
@@ -45,13 +45,13 @@ int main(int argc, char** argv)
 
     
     //User interface
-    //G4UIExecutive *ui = new G4UIExecutive(argc, argv);
+    G4UIExecutive *ui = new G4UIExecutive(argc, argv);
 
     //Visualisation Manager
-    //G4VisManager *visManager = new G4VisExecutive();
+    G4VisManager *visManager = new G4VisExecutive();
     
     //Initialize visualisation
-    //visManager->Initialize();
+    visManager->Initialize();
 
     //Get the pointer tp the UI manager, set verbosities
     G4UImanager *UImanager = G4UImanager::GetUIpointer();

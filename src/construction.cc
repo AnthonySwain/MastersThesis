@@ -16,14 +16,14 @@
 
 
 //Constructor
-MyDetectorConstruction::MyDetectorConstruction(H5::Group &output)
+MyDetectorConstruction::MyDetectorConstruction(H5::Group &output) : group{output}
 {}
 
 //Destructor
 MyDetectorConstruction::~MyDetectorConstruction()
 {}
 
-G4VPhysicalVolume *MyDetectorConstruction::Construct(/*H5Composites::TypedWriter<DetectorOutput> detectorWriter*/)
+G4VPhysicalVolume *MyDetectorConstruction::Construct()
 {
     //Define material, using from pre-defined in G4
     G4NistManager *nist = G4NistManager::Instance();
@@ -181,11 +181,11 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(/*H5Composites::TypedWriter
 }
 
 //Adding sensitive detector construction
-void MyDetectorConstruction::ConstructSDandField(H5::Group &output)
+void MyDetectorConstruction::ConstructSDandField()
 {
-    auto simpleSD = new MySensitiveDetector("simpleSD", output);
+    auto simpleSD = new MySensitiveDetector("simpleSD", group);
     G4SDManager::GetSDMpointer()->AddNewDetector(simpleSD);
-
-    //Assigning the detectors to be sensitive
+    
+    //Assigning the detectors to be sensit
     SetSensitiveDetector("logicDetector", simpleSD);
 }

@@ -62,12 +62,9 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory */*ROh
     if (volume_name == "OutDetector"){
         volume_ref_no = 1;
     };
-
     
     auto volume_copy = volume->GetCopyNo();
-
-
-    
+   
    
     
     if (PDGnumb == 13 or PDGnumb == -13){
@@ -84,7 +81,7 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory */*ROh
             volume_ref_no,
             volume_copy);
         */
-        
+        /*
         using namespace H5CompositesStructures;
         DetectorOutput data;
         
@@ -100,6 +97,7 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory */*ROh
             };
         
         m_writer.write(data);
+        */
         };
     
 
