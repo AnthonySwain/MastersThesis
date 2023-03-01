@@ -92,7 +92,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 
     G4cout << rotm1 << "\n";
 
-
+    /*
     G4LogicalVolume *logicSteel = new G4LogicalVolume(solidSteel, Steel,"Steel");
     G4VPhysicalVolume *physSteel = new G4PVPlacement(
                                                 rotm1, //no rotation
@@ -103,7 +103,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
                                                 false, //no boolean operation
                                                 0, //copy number
                                                 true); //check for overlaps
-                                                
+    */                                     
 
     //Adding sensitive detector 
 

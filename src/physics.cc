@@ -7,5 +7,5 @@ MyPhysicsList::MyPhysicsList()
     RegisterPhysics ( new G4OpticalPhysics()); //Optical Photons
 
 };
-MyPhysicsList::~MyPhysicsList() //constuctor destructor??
+MyPhysicsList::~MyPhysicsList()
 {};
