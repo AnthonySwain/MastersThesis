@@ -12,6 +12,7 @@ from skspatial.objects import Line, Points, Vector
 from skspatial.plotting import plot_3d
 
 def vertex_angle_find(line1,line2):
+    #Finds the intersection of the re-constructed tracks.
     angle = float
     vertex = [float,float,float]
     #The lines don't actually intersect but they nearly do - say intersection if halfway between

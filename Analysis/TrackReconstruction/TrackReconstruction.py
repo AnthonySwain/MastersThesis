@@ -9,7 +9,7 @@
 # enforcing that they intersect at a point
 # (the point is a large scattering event / accumulation of coulomb scatterings) 
 
-#For ease I am not going to enfore this intersection, mainly because I am not sure how at the moment 
+#This is merely a file of functions to do the above, it should be called from another file. 
 
 import csv
 import matplotlib.pyplot as plt
@@ -82,6 +82,7 @@ def mse(pos_vector, direction_vector, x,y,z):
 
 def fit_lines(pos_hits_in,pos_hits_out):
     #pos_hits_in and out are the 2 sets of datapoints for each line
+    #May be useful to vectorise this in the future.
 
     # Finding lines of best for the in and out hits data (initial guess)
     in_line = least_squares(pos_hits_in)
@@ -105,7 +106,7 @@ def fit_lines(pos_hits_in,pos_hits_out):
     # Return the optimal coefficients
     return result.x
 
-def get_line_coords(line):
+def get_line_coords(line,z_min,z_max,no_points):
     #Converting line equation into a set of points to plot 
     r0 = line.point
     z0 = r0[2]
@@ -113,12 +114,12 @@ def get_line_coords(line):
     d = line.direction
     dz = d[2]
 
-    #This has been set up for the current container!!!!! GENERALISE THIS!!!!!
-    z = np.linspace(-1500,1500,3000)
+    z = np.linspace(z_min,z_max,no_points)
     const = np.subtract(z,(z0*np.ones(np.shape(z)))) /dz
 
-    y = r0[1]* np.ones(np.shape(z)) + const * d[1]
     x = r0[0]* np.ones(np.shape(z)) + const* d[0]
+    y = r0[1]* np.ones(np.shape(z)) + const * d[1]
+    
 
     return(x,y,z)
 

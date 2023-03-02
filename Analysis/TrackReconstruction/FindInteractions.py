@@ -6,12 +6,18 @@ import os
 import scipy
 from scipy.optimize import minimize
 
-import extractdata as extractdata
-import trackreconstruction as trackrecon
-import vertexfinder as vfinder
+import ReadH5 as ReadH5
+import TrackReconstruction.TrackReconstruction as trackrecon
+import TrackReconstruction.VertexFinder as vfinder
 
 from skspatial.objects import Line, Points
 from skspatial.plotting import plot_3d
+
+#Can change this into writing into another dataset in the H5 file with the event no, scattering angle and vertex
+
+#The function reads the H5 file, reconstructs the tracks, finds the scattering angle and vertex point
+# and then writes this data into a new dataset in the H5 file. 
+
 
 no_events = extractdata.how_many_events()
 
