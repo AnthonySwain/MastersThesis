@@ -55,12 +55,20 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory */*ROh
     
     //Using a reference number for volume names (In/OutDetector so strings are not saved in H5 file)
     int volume_ref_no;
-    if (volume_name == "InDetector"){
-        volume_ref_no = 0;
+    if (volume_name == "InDetector1"){
+        volume_ref_no = 00;
     };
 
-    if (volume_name == "OutDetector"){
-        volume_ref_no = 1;
+    if (volume_name == "InDetector2"){
+        volume_ref_no = 01;
+    };
+
+    if (volume_name == "OutDetector1"){
+        volume_ref_no = 10;
+    };
+
+    if (volume_name == "OutDetector2"){
+        volume_ref_no = 11;
     };
     
     auto volume_copy = volume->GetCopyNo();

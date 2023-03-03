@@ -7,8 +7,8 @@ import scipy
 from scipy.optimize import minimize
 
 import ReadH5 as ReadH5
-import TrackReconstruction.TrackReconstruction as trackrecon
-import TrackReconstruction.VertexFinder as vfinder
+import TrackReconstruction as trackrecon
+import VertexFinder as vfinder
 
 from skspatial.objects import Line, Points
 from skspatial.plotting import plot_3d
@@ -18,25 +18,36 @@ from skspatial.plotting import plot_3d
 #The function reads the H5 file, reconstructs the tracks, finds the scattering angle and vertex point
 # and then writes this data into a new dataset in the H5 file. 
 
+#Data from detectors
+detector_data = ReadH5.get_detector_data("/02.03.2023/1000PureConcrete.h5")
 
-no_events = extractdata.how_many_events()
 
-scattering_angle = []
-interaction_vertex_x = []
-interaction_vertex_y = []
-interaction_vertex_z = []
+#How many events are in that dataframe
+no_events = detector_data['event_no'].iloc[-1]
 
-for i in range (no_events):
-    print(i)
-    hits_data = extractdata.get_hits(i)
+#Data to input scattering data, pre-allocating the number of rows
+scattering_data = pd.DataFrame(index = np.arange(0,no_events),
+                               columns = ("event_no", "X", "Y", "Z", "angle"))
 
-    #If one of the detectors wasn't hit in the event, hits_data is returned false, skip that event
-    if hits_data == False:
-        print("false baby")
+#So the idea is to split the data into events and then into in and out detectors for the concrete.
+for i in np.arange(0,no_events):
+    
+    hits_data = detector_data.loc[detector_data.event_no == i]
+    
+    in_detector_hits = hits_data.loc[(hits_data['volume_ref'].isin([0,1]))]
+
+    out_detector_hits = hits_data.loc[(hits_data['volume_ref'].isin([10,11]))]
+
+    #If one of the in or out detectors wasn't hit in the event, hits_data is returned false, skip that event
+    if in_detector_hits.empty or out_detector_hits.empty or (len(in_detector_hits.index) == 1) or (len(out_detector_hits.index) == 1):
+        print(i,"Missed!")
+        scattering_data.loc[i] = [i,0,0,0,0]
+        #Write something to the dataframe like false or smth
         continue
-
-    pos_hits_in = hits_data[0]
-    pos_hits_out = hits_data[2]
+    print(i)
+    
+    pos_hits_in = in_detector_hits[['PosX','PosY','PosZ']].to_numpy()
+    pos_hits_out = out_detector_hits[['PosX','PosY','PosZ']].to_numpy()
 
     #Calculating re-constructed lines
     result = trackrecon.fit_lines(pos_hits_in, pos_hits_out)
@@ -46,15 +57,14 @@ for i in range (no_events):
     #Finding the vertex of interaction (saying there is a single scattering incident)
     interaction_vertex_angle = vfinder.vertex_angle_find(line1,line2)
 
-    scattering_angle.append(interaction_vertex_angle[0])
-    interaction_vertex_x.append(interaction_vertex_angle[1][0])
-    interaction_vertex_y.append(interaction_vertex_angle[1][1])
-    interaction_vertex_z.append(interaction_vertex_angle[1][2])
+    scattering_angle = (interaction_vertex_angle[0])
+    interaction_vertex_x = (interaction_vertex_angle[1][0])
+    interaction_vertex_y = (interaction_vertex_angle[1][1])
+    interaction_vertex_z = (interaction_vertex_angle[1][2])
+    
+    scattering_data.loc[i] = [i, interaction_vertex_x, interaction_vertex_y, interaction_vertex_z, scattering_angle]
 
 
-
-data = list(zip(scattering_angle,interaction_vertex_x,interaction_vertex_y,interaction_vertex_z))
-
-df = pd.DataFrame(data,columns=["angle","x","y","z"])
-df.to_csv('interactions&angle.csv', index=False)
+#Make this a H5 file, in the end should just append it to the original H5 file.
+scattering_data.to_hdf('Interaction.h5', key='Interactions', mode='w')
 
