@@ -59,7 +59,7 @@ int main(int argc, char** argv)
     
     //Run the macro file
     UImanager->ApplyCommand("/control/execute run.mac");
-    //ui->SessionStart();
+    ui->SessionStart();
 
     return 0;
 }

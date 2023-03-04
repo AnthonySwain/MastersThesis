@@ -35,3 +35,11 @@ def get_reconstructed_data(filename):
         gen_data_panda = pd.DataFrame(np.array(gen_data))
     return(gen_data_panda)
 
+def get_interactions(filename):
+    filepath = "/home/anthony/MastersThesis/Data/" + filename
+    with h5py.File(filepath, "r") as f:
+        print(f.keys())
+        detector_data = f['Interactions']
+        detector_data_panda = pd.DataFrame(np.array(detector_data))
+    
+        print(list(f['Interactions']['table']))

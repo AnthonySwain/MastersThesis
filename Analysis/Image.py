@@ -13,30 +13,31 @@ import math
 from wolframclient.evaluation import WolframLanguageSession
 from wolframclient.language import wl, wlexpr
 
-data_frame = pd.read_csv("/home/anthony/MastersThesis/data/interactions&angle.csv") #opening the data file
-data_frame = data_frame[["x","y","z","angle"]]
-data_frame = data_frame.loc[(data_frame.x > -500) &
-                            (data_frame.x < 500) &
-                            (data_frame.y > -500) &
-                            (data_frame.y < 500) &
-                            (data_frame.z > -2000) &
-                            (data_frame.z < 2000) &
-                            (data_frame.angle < math.pi)]
+data_frame = pd.read_csv("/home/anthony/MastersThesis/Data/04.03.2023/50000PureConcreteInteractions.csv") #opening the data file
+data_frame = data_frame[["X","Y","Z","angle"]]
+data_frame = data_frame.loc[(data_frame.X > -500) &
+                            (data_frame.X < 500) &
+                            (data_frame.Y > -500) &
+                            (data_frame.Y < 500) &
+                            (data_frame.Z > -2000) &
+                            (data_frame.Z < 2000) &
+                            (data_frame.angle < math.pi) &
+                            (data_frame.angle > 0)]
 
 angle = data_frame["angle"].values
-x = data_frame["x"].values
-y = data_frame["y"].values  
-z = data_frame["z"].values
+x = data_frame["X"].values
+y = data_frame["Y"].values  
+z = data_frame["Z"].values
 
-data = data_frame.drop(["z"],axis=1)
+data = data_frame.drop(["Z"],axis=1)
 
 xyz = data_frame.drop(["angle"],axis=1)
 
 
-data = data.loc[data['x'] <= 1000]
-data = data.loc[data['y'] <= 1000]
-data = data.loc[data['y'] >= -1000]
-data = data.loc[data['y'] >= -1000]
+data = data.loc[data['X'] <= 1000]
+data = data.loc[data['Y'] <= 1000]
+data = data.loc[data['X'] >= -1000]
+data = data.loc[data['Y'] >= -1000]
 
 def scatter_map(x,y,z,angle):
     # creating figures
@@ -51,7 +52,7 @@ def scatter_map(x,y,z,angle):
     return(None)
 
 def scat_angle_dist(x,y,z,angle):
-    plt.hist(angle, bins = 100)
+    plt.hist(angle, bins = 500)
 
     plt.xlabel("Scattered angle / radians")
     plt.ylabel("Count")
@@ -65,9 +66,6 @@ def voxel_map(data):
     data = data.pivot(index = 'x',columns = "y",values = "angle")
     ax = sns.heatmap(data)
     
-    
-   
-
     plt.show()
     return(None)
 
@@ -82,6 +80,7 @@ def ct_esque(xyz,x,y,z,angle):
     fig = plt.figure(figsize=(4, 10))
     ax1 = fig.add_subplot(111, projection='3d')
     ax1.plot(x,y,z,'k.',alpha=0.3)
+    
     #Use one less than bin edges to give rough bin location
     X, Y = np.meshgrid(binedges[0][:-1],binedges[1][:-1])
    
@@ -105,7 +104,7 @@ def ct_esque(xyz,x,y,z,angle):
     plt.register_cmap(cmap=map_object)
 
     X, Y = np.meshgrid(binedges[0][:-1],binedges[1][:-1])
-    B,Z = np.meshgrid(binedges[1][:-1],binedges[2][:-1])
+    #B,Z = np.meshgrid(binedges[1][:-1],binedges[2][:-1])
     for ct in bin_count: 
         
         cs = ax1.contourf(X,Y,hist[:,:,ct], 
@@ -115,12 +114,12 @@ def ct_esque(xyz,x,y,z,angle):
                         cmap=plt.cm.RdYlBu_r, 
                         alpha=0.05)
         
-        cs2 = ax1.contourf(X,Y,hist[:,:,ct], 
-                        zdir='z', 
-                        offset=binedges[2][ct], 
-                        levels=10, 
-                        cmap=plt.cm.RdYlBu_r, 
-                        alpha=0.05)
+        #cs2 = ax1.contourf(X,Y,hist[:,:,ct], 
+         #               zdir='z', 
+          #              offset=binedges[2][ct], 
+           #             levels=10, 
+            #            cmap=plt.cm.RdYlBu_r, 
+             #           alpha=0.05)
         
     ax1.set_aspect('equal')
 
@@ -146,8 +145,8 @@ def we_try_again(data_frame):
 
 
 
-#scat_angle_dist(x,y,z,angle)
-scatter_map(x,y,z,angle)
+scat_angle_dist(x,y,z,angle)
+#scatter_map(x,y,z,angle)
 #voxel_map(data)
 #ct_esque(xyz,x,y,z,angle)
 #we_try_again(data_frame)

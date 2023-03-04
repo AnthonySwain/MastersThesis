@@ -19,16 +19,21 @@ from skspatial.plotting import plot_3d
 # and then writes this data into a new dataset in the H5 file. 
 
 #Data from detectors
-detector_data = ReadH5.get_detector_data("/02.03.2023/1000PureConcrete.h5")
+detector_data = ReadH5.get_detector_data("/04.03.2023/1000PureConcrete.h5")
 
 
 #How many events are in that dataframe
 no_events = detector_data['event_no'].iloc[-1]
 
 #Data to input scattering data, pre-allocating the number of rows
-scattering_data = pd.DataFrame(index = np.arange(0,no_events),
-                               columns = ("event_no", "X", "Y", "Z", "angle"))
-
+scattering_data = pd.DataFrame(
+                               {"event_no" : pd.Series(dtype='int'),
+                                "X" : pd.Series(dtype='float'),
+                                "Y" : pd.Series(dtype='float'),
+                                "Z" : pd.Series(dtype='float'),
+                                "angle" : pd.Series(dtype='float')})
+#index = np.arange(0,no_events),
+print((scattering_data.dtypes))
 #So the idea is to split the data into events and then into in and out detectors for the concrete.
 for i in np.arange(0,no_events):
     
@@ -57,14 +62,13 @@ for i in np.arange(0,no_events):
     #Finding the vertex of interaction (saying there is a single scattering incident)
     interaction_vertex_angle = vfinder.vertex_angle_find(line1,line2)
 
-    scattering_angle = (interaction_vertex_angle[0])
-    interaction_vertex_x = (interaction_vertex_angle[1][0])
-    interaction_vertex_y = (interaction_vertex_angle[1][1])
-    interaction_vertex_z = (interaction_vertex_angle[1][2])
+    scattering_angle = float(interaction_vertex_angle[0])
+    interaction_vertex_x = float(interaction_vertex_angle[1][0])
+    interaction_vertex_y = float(interaction_vertex_angle[1][1])
+    interaction_vertex_z = float(interaction_vertex_angle[1][2])
     
     scattering_data.loc[i] = [i, interaction_vertex_x, interaction_vertex_y, interaction_vertex_z, scattering_angle]
 
-
 #Make this a H5 file, in the end should just append it to the original H5 file.
-scattering_data.to_hdf('Interaction.h5', key='Interactions', mode='w')
-
+scattering_data.to_hdf('Interaction.h5', key='Interactions', format = 'table', index=False)
+scattering_data.to_csv('Interaction2.csv',index=False)
