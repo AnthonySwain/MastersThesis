@@ -55,7 +55,7 @@ void MySteppingAction::UserSteppingAction(const G4Step *aStep)
             kinEnergyPreStep,
             time);
         */
-       
+        
         using namespace H5CompositesStructures;
         Reality data;
         
@@ -71,6 +71,7 @@ void MySteppingAction::UserSteppingAction(const G4Step *aStep)
             };
         
         m_writer.write(data);
+        
         };
     } 
    

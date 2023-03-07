@@ -53,23 +53,16 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     //this is the mother volume,
     G4VPhysicalVolume *physWorld = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicWorld, "physWorld",0,false,0,true);
 
-   
-    //Making the steel volume inside the concrete volume
-    //Steel is a mixture of elements so need to comprise it of carbon and iron
-    G4Element *C = nist->FindOrBuildElement("C"); //Carbon
-    G4Element *Fe = nist->FindOrBuildElement("Fe"); //Iron
-    
-    //Steel Composition & Properties
-    G4Material *Steel = new G4Material("Steel", 7.800*g/cm3,2);
-    Steel->AddElement(C, 1*perCent);
-    Steel->AddElement(Fe, 99*perCent);
-    G4MaterialPropertiesTable *mptSteel = new G4MaterialPropertiesTable();
 
-    G4Box *solidSteel = new G4Box("solidSteel", 1.0*m, 0.5*m, 7.5*cm);
+    //Making the concrete volume
+    G4Material *Concrete = nist->FindOrBuildMaterial("G4_CONCRETE");
+    G4MaterialPropertiesTable *mptConcrete = new G4MaterialPropertiesTable();
+    G4Box *solidConcrete = new G4Box("solidConcrete", 1.0*m, 0.5*m, 0.5*m);
+    G4LogicalVolume *logicConcrete = new G4LogicalVolume(solidConcrete, Concrete,"logicConcrete");
+    G4VPhysicalVolume *physConcrete = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicConcrete, "physConcrete",logicWorld,false,0,true);
+                         
 
-    //Adding the steel plate    
-    G4LogicalVolume *logicSteel = new G4LogicalVolume(solidSteel, Steel,"Steel");
-    G4VPhysicalVolume *physSteel = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicSteel, "physSteel",logicWorld,false,0,true);
+    //Adding sensitive detector 
 
     //Physical Properties of the detector
     G4Element *Si = nist->FindOrBuildElement("Si"); //Silicon

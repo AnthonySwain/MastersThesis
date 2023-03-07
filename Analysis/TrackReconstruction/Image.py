@@ -10,34 +10,40 @@ from skspatial.plotting import plot_3d
 import seaborn as sns
 from matplotlib.colors import LinearSegmentedColormap
 import math
-from wolframclient.evaluation import WolframLanguageSession
-from wolframclient.language import wl, wlexpr
-
-data_frame = pd.read_csv("/home/anthony/MastersThesis/Data/04.03.2023/50000PureConcreteInteractions.csv") #opening the data file
-data_frame = data_frame[["X","Y","Z","angle"]]
-data_frame = data_frame.loc[(data_frame.X > -500) &
-                            (data_frame.X < 500) &
-                            (data_frame.Y > -500) &
-                            (data_frame.Y < 500) &
-                            (data_frame.Z > -2000) &
-                            (data_frame.Z < 2000) &
-                            (data_frame.angle < math.pi) &
-                            (data_frame.angle > 0)]
-
-angle = data_frame["angle"].values
-x = data_frame["X"].values
-y = data_frame["Y"].values  
-z = data_frame["Z"].values
-
-data = data_frame.drop(["Z"],axis=1)
-
-xyz = data_frame.drop(["angle"],axis=1)
+import ReadH5 as ReadH5
+#from wolframclient.evaluation import WolframLanguageSession
+#from wolframclient.language import wl, wlexpr
 
 
-data = data.loc[data['X'] <= 1000]
-data = data.loc[data['Y'] <= 1000]
-data = data.loc[data['X'] >= -1000]
-data = data.loc[data['Y'] >= -1000]
+data_frame2 = ReadH5.pandas_read("/07.03.2023/100TestRunInteraction.h5")
+#print(data_frame)
+#data_frame = pd.read_csv("/home/anthony/MastersThesis/Data/04.03.2023/50000PureConcreteInteractions.csv") #opening the data file
+
+
+#data = data_frame.drop(["Z"],axis=1)
+#xyz = data_frame.drop(["angle"],axis=1)
+#data = data.loc[data['X'] <= 1000]
+#data = data.loc[data['Y'] <= 1000]
+#data = data.loc[data['X'] >= -1000]
+#data = data.loc[data['Y'] >= -1000]
+
+def data_clean(data):
+    data = data[["X","Y","Z","angle"]]
+    data = data.loc[#(data.X > -500) &
+                            #(data.X < 500) &
+                            #(data.Y > -500) &
+                            #(data.Y < 500) &
+                            #(data.Z > -1000) &
+                            #(data.Z < 1000) &
+                            #(data.angle < math.pi) &
+                            (data.angle > 0)]
+
+    angle = data["angle"].values
+    x = data["X"].values
+    y = data["Y"].values  
+    z = data["Z"].values
+               
+    return (x,y,z,angle)
 
 def scatter_map(x,y,z,angle):
     # creating figures
@@ -51,7 +57,7 @@ def scatter_map(x,y,z,angle):
 
     return(None)
 
-def scat_angle_dist(x,y,z,angle):
+def scat_angle_dist(angle):
     plt.hist(angle, bins = 500)
 
     plt.xlabel("Scattered angle / radians")
@@ -131,21 +137,17 @@ def ct_esque(xyz,x,y,z,angle):
     plt.show()
     return(None)
 
-def we_try_again(data_frame):
-    datadata = pd.DataFrame(data_frame).to_numpy()
-    print(datadata)
-    #This method is based off of this post:
-    # https://mathematica.stackexchange.com/questions/268402/build-a-3d-heat-map-plot-from-4d-data
-    #This does involvce importing the mathematica library and using it in python, so lets see what we can do...
 
-    session = WolframLanguageSession()
-    #I think the best way is to write a function in mathematica and call it into python... although i dont even need to call it into python and can just use mathematica for the plots at that point.
-    session.stop()
-    return(None)
+#clean_interaction = data_clean(data_frame)
+clean_no_interaction = data_clean(data_frame2)
+
+#interaction_angle = clean_interaction[3]
+no_interaction_angle = clean_no_interaction[3]
+
+#angle_diff = abs(interaction_angle - no_interaction_angle)
 
 
-
-scat_angle_dist(x,y,z,angle)
+scat_angle_dist(no_interaction_angle)
 #scatter_map(x,y,z,angle)
 #voxel_map(data)
 #ct_esque(xyz,x,y,z,angle)

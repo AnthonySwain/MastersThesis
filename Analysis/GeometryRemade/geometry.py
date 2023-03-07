@@ -2,6 +2,13 @@ import plotly.express as px
 import plotly.graph_objects as go
 import numpy as np
 
+import extractdata as extractdata
+
+#reality_data = extractdata.get_real()
+#print(reality_data)
+#events = extractdata.how_many_events()
+#detector_data = extractdata.get_hits(events)
+
 # https://stackoverflow.com/questions/72182976/plotly-how-to-plot-cylinder
 def cylinder(x, y, z, r, dz):
     """Create a cylindrical mesh located at x, y, z, with radius r and height dz"""
@@ -24,11 +31,11 @@ def circle(x, y, z, r):
     return x_circle, y_circle, z_circle
 
 # cylinder mesh
-x_cyl, y_cyl, z_cyl = cylinder(0, 0, -425, 50, 950)
+x_cyl, y_cyl, z_cyl = cylinder(0, 0, -950, 50, 1900)
 # bottom cap
-x_circle1, y_circle1, z_circle1 = circle(0, 0, -425, 50)
+x_circle1, y_circle1, z_circle1 = circle(0, 0, -950, 50)
 # top cap
-x_circle2, y_circle2, z_circle2 = circle(0, 0, 950-425, 50)
+x_circle2, y_circle2, z_circle2 = circle(0, 0, 950, 50)
 
 colorscale = [[0, '#0a0a0a'],
              [1, '#0a0a0a']]
@@ -54,11 +61,11 @@ y=[2.4]
 z=[0]
 
 fig = go.Figure(data=[
-     go.Scatter3d(x=x, y=y, z=z,
-                  mode='markers',
-                  marker=dict(size=2)
-                 ),
-     
+     #go.Scatter3d(x=reality_data[:,0], y=reality_data[:,1], z=reality_data[:,2],
+      #            mode='markers',
+       #           marker=dict(size=1.5)
+        #         ),
+     #
      go.Mesh3d(
         #the concrete (centered at 0,0,0)
         # 8 vertices of a cube, 
@@ -135,7 +142,6 @@ fig = go.Figure(data=[
     go.Surface(x=z_circle1, y=x_circle1, z=y_circle1, showscale=False, opacity=1),
     go.Surface(x=z_circle2, y=x_circle2, z=y_circle2, showscale=False, opacity=1),
 ])         
-                       
-#fig =px.scatter_3d(x=0.5,y=-0.5,z=2.0)
+
 
 fig.show()
