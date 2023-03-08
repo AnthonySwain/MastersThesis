@@ -13,6 +13,9 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${PROJECT_SOURCE_DIR}/lib/H5Composites)
 include_directories(${PROJECT_SOURCE_DIR}/lib/H5Composites/include/H5Composites)
 
+include_directories(${PROJECT_SOURCE_DIR}/lib/EcoMug-1.3.1)
+
+
 add_subdirectory(lib/H5Composites)
 
 # Locate sources, headers and macros for this project

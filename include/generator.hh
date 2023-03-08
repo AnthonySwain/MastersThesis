@@ -3,7 +3,7 @@
 #define GENERATOR_HH
 
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "/home/anthony/MastersThesis/lib/EcoMug-1.3.1/EcoMug.h"
+#include "EcoMug.h"
 #include "G4ParticleGun.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
