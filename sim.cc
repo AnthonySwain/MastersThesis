@@ -49,10 +49,10 @@ int main(int argc, char** argv)
     G4UIExecutive *ui = new G4UIExecutive(argc, argv);
 
     //Visualisation Manager
-    G4VisManager *visManager = new G4VisExecutive();
+    //G4VisManager *visManager = new G4VisExecutive();
     
     //Initialize visualisation
-    visManager->Initialize();
+    //visManager->Initialize();
 
     //Get the pointer tp the UI manager, set verbosities
     G4UImanager *UImanager = G4UImanager::GetUIpointer();
