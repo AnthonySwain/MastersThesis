@@ -65,7 +65,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     Steel->AddElement(Fe, 99*perCent);
     G4MaterialPropertiesTable *mptSteel = new G4MaterialPropertiesTable();
 
-    G4Box *solidSteel = new G4Box("solidSteel", 1.0*m, 0.5*m, 7.5*cm)
+    G4Box *solidSteel = new G4Box("solidSteel", 1.0*m, 0.5*m, 7.5*cm);
 
     //Adding the steel plate    
     G4LogicalVolume *logicSteel = new G4LogicalVolume(solidSteel, Steel,"Steel");

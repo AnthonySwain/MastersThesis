@@ -10,8 +10,8 @@
 #include "stepping.hh"
 
 #include "ParticleData.h"
-#include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/GroupWrapper.h"
-#include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/TypedWriter.h"
+#include "GroupWrapper.h"
+#include "TypedWriter.h"
 
 #include "construction.hh"
 #include "physics.hh"

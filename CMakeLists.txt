@@ -10,6 +10,8 @@ find_package(Geant4 REQUIRED ui_all vis_all)
 include (${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/src)
+include_directories(${PROJECT_SOURCE_DIR}/lib/H5Composites)
+include_directories(${PROJECT_SOURCE_DIR}/lib/H5Composites/include/H5Composites)
 
 add_subdirectory(lib/H5Composites)
 

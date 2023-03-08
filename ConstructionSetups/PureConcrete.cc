@@ -11,8 +11,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "ParticleData.h"
-#include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/GroupWrapper.h"
-#include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/TypedWriter.h"
+#include "GroupWrapper.h"
+#include "TypedWriter.h"
 
 
 //Constructor
@@ -57,7 +57,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     //Making the concrete volume
     G4Material *Concrete = nist->FindOrBuildMaterial("G4_CONCRETE");
     G4MaterialPropertiesTable *mptConcrete = new G4MaterialPropertiesTable();
-    G4Box *solidConcrete = new G4Box("solidConcrete", 1.0*m, 0.5*m, 0.5*m);
+    G4Box *solidConcrete = new G4Box("solidConcrete", 1.0*m, 0.5*m, 0.05*m);
     G4LogicalVolume *logicConcrete = new G4LogicalVolume(solidConcrete, Concrete,"logicConcrete");
     G4VPhysicalVolume *physConcrete = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicConcrete, "physConcrete",logicWorld,false,0,true);
                          
