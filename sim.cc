@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 
     
     //User interface
-    G4UIExecutive *ui = new G4UIExecutive(argc, argv);
+    //G4UIExecutive *ui = new G4UIExecutive(argc, argv);
 
     //Visualisation Manager
     //G4VisManager *visManager = new G4VisExecutive();
