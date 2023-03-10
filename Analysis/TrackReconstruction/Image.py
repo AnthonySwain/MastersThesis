@@ -28,8 +28,9 @@ def data_clean(data):
     x = data["X"].values
     y = data["Y"].values  
     z = data["Z"].values
+    xyz = data.drop(["angle"],axis=1)
                
-    return (x,y,z,angle)
+    return (x,y,z,angle,xyz)
 
 
 data_frame1steel = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab2Interaction.h5")
@@ -55,7 +56,7 @@ data_lead = pd.concat([data_frame1lead,data_frame2lead  ])
 
 
 #data = data_frame.drop(["Z"],axis=1)
-#xyz = data_frame.drop(["angle"],axis=1)
+
 #data = data.loc[data['X'] <= 1000]
 #data = data.loc[data['Y'] <= 1000]
 #data = data.loc[data['X'] >= -1000]
@@ -182,7 +183,10 @@ def ct_esque(xyz,x,y,z,angle):
     plt.show()
     return(None)
 
-
+def mess_about(xyz,angle):
+    no_bins = 10
+    hist, binedges = np.histogramdd(xyz, weights = angle, normed=False, bins = no_bins)
+    return(None)
 
 #clean_interaction = data_clean(data_frame)
 clean_air = data_clean(data_air)
