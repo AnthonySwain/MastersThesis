@@ -5,8 +5,9 @@ import pandas as pd
 import os
 import scipy
 from scipy.optimize import minimize
-
+import math
 import ReadH5 as ReadH5
+import sys
 import TrackReconstruction as trackrecon
 import VertexFinder as vfinder
 
@@ -50,7 +51,7 @@ def with_intersection(filename):
         #If one of the in or out detectors wasn't hit in the event, hits_data is returned false, skip that event
         if in_detector_hits.empty or out_detector_hits.empty or (len(in_detector_hits.index) == 1) or (len(out_detector_hits.index) == 1):
             print(i,"Missed!")
-            scattering_data.loc[i] = [i,0,0,0,0]
+            scattering_data.loc[i] = [i,0,0,0,-1]
             #Write something to the dataframe like false or smth
             continue
         print(i)
@@ -107,7 +108,7 @@ def without_intersection(filename):
         #If one of the in or out detectors wasn't hit in the event, hits_data is returned false, skip that event
         if in_detector_hits.empty or out_detector_hits.empty or (len(in_detector_hits.index) == 1) or (len(out_detector_hits.index) == 1):
             print(i,"Missed!")
-            scattering_data.loc[i] = [i,0,0,0,0]
+            scattering_data.loc[i] = [i,0,0,0,math.nan]
             #Write something to the dataframe like false or smth
             continue
         print(i)
@@ -119,7 +120,10 @@ def without_intersection(filename):
         
         line1 = trackrecon.least_squares(pos_hits_in)
         line2 = trackrecon.least_squares(pos_hits_out)
-
+        #residues = trackrecon.residues_get(line1,pos_hits_in)
+        #print((residues))
+        #print((trackrecon.residues_get(line2,pos_hits_out)))
+        
         #Finding the vertex of interaction (saying there is a single scattering incident)
         interaction_vertex_angle = vfinder.vertex_angle_find(line1,line2)
 
@@ -138,6 +142,6 @@ def without_intersection(filename):
     #scattering_data.to_csv('Interaction2.csv',index=False)
     return(None)
 
-filename = "/08.03.2023/50000PureConcreteSlab2.h5"
+filename = "/08.03.2023/Vacuum/Vacuum.h5"
 #with_intersection(filename)
 without_intersection(filename)

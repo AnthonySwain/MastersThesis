@@ -123,3 +123,14 @@ def get_line_coords(line,z_min,z_max,no_points):
 
     return(x,y,z)
 
+def residues_get(line,hits):
+    residues_square = []
+    no_hits = int(np.size(hits)/3)
+    print(np.size(hits)/3)
+    for i in range(no_hits):
+        residues_square.append((line.distance_point(hits[i])**2))
+
+    
+    error = np.power( np.sum(residues_square) / (no_hits - 2),1/2)
+
+    return(error)

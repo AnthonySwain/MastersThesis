@@ -13,6 +13,7 @@
 #include "GroupWrapper.h"
 #include "TypedWriter.h"
 
+
 #include "construction.hh"
 #include "physics.hh"
 //#include "action.hh"
@@ -21,7 +22,7 @@ int main(int argc, char** argv)
 {   
 
     //Create the output file
-    H5Composites::GroupWrapper fOut = H5Composites::GroupWrapper::createFile("OutputTest.h5",true);
+    H5Composites::GroupWrapper fOut = H5Composites::GroupWrapper::createFile("/home/anthony/MastersThesis/Data/Output.h5",true);
     
     //Getting the group from the group wrapper
     H5::Group group = fOut.group();

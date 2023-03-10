@@ -69,9 +69,7 @@ def vertex_angle_find(line1,line2):
     if angle > math.pi/2:
         angle = math.pi - angle
     
-    #Something weird has happened if this happens... #Put better error finder here.
-    if angle > math.pi/2:
-        return (0.0,intersection)
+    
 
     return (angle, intersection)
 

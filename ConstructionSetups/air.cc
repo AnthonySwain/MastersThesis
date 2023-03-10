@@ -30,7 +30,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 
     //get parameters pre-defined for different materials
     //Pre_defined material Air and defines worldMat as that
-    G4Material *worldMat = nist->FindOrBuildMaterial("G4_Galactic");
+    G4Material *worldMat = nist->FindOrBuildMaterial("G4_AIR");
 
     //Refractive index of air
     G4MaterialPropertiesTable *mptWorld = new G4MaterialPropertiesTable();

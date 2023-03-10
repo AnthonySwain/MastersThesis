@@ -30,7 +30,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 
     //get parameters pre-defined for different materials
     //Pre_defined material Air and defines worldMat as that
-    G4Material *worldMat = nist->FindOrBuildMaterial("G4_Galactic");
+    G4Material *worldMat = nist->FindOrBuildMaterial("G4_AIR");
 
     //Refractive index of air
     G4MaterialPropertiesTable *mptWorld = new G4MaterialPropertiesTable();
@@ -54,6 +54,13 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     G4VPhysicalVolume *physWorld = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicWorld, "physWorld",0,false,0,true);
 
 
+    //Making the concrete volume
+    G4Material *Lead = nist->FindOrBuildMaterial("G4_Pb");
+    G4MaterialPropertiesTable *mptLead = new G4MaterialPropertiesTable();
+    G4Box *solidLead = new G4Box("solidLead", 1.0*m, 0.5*m, 0.05*m);
+    G4LogicalVolume *logicLead= new G4LogicalVolume(solidLead, Lead,"logicLead");
+    G4VPhysicalVolume *physLead = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicLead, "physLead",logicWorld,false,0,true);
+                         
 
     //Adding sensitive detector 
 
