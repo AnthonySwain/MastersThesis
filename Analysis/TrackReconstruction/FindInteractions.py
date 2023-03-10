@@ -142,6 +142,6 @@ def without_intersection(filename):
     #scattering_data.to_csv('Interaction2.csv',index=False)
     return(None)
 
-filename = "/08.03.2023/Vacuum/Vacuum.h5"
+filename = "/Output.h5"
 #with_intersection(filename)
 without_intersection(filename)
