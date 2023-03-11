@@ -11,8 +11,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "ParticleData.h"
-#include "GroupWrapper.h"
-#include "TypedWriter.h"
+#include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/GroupWrapper.h"
+#include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/TypedWriter.h"
 
 
 //Constructor
@@ -53,16 +53,23 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     //this is the mother volume,
     G4VPhysicalVolume *physWorld = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicWorld, "physWorld",0,false,0,true);
 
+   
+    //Making the steel volume inside the concrete volume
+    //Steel is a mixture of elements so need to comprise it of carbon and iron
+    G4Element *C = nist->FindOrBuildElement("C"); //Carbon
+    G4Element *Fe = nist->FindOrBuildElement("Fe"); //Iron
+    
+    //Steel Composition & Properties
+    G4Material *Steel = new G4Material("Steel", 7.800*g/cm3,2);
+    Steel->AddElement(C, 1*perCent);
+    Steel->AddElement(Fe, 99*perCent);
+    G4MaterialPropertiesTable *mptSteel = new G4MaterialPropertiesTable();
 
-    //Making the concrete volume
-    G4Material *Lead = nist->FindOrBuildMaterial("G4_Pb");
-    G4MaterialPropertiesTable *mptLead = new G4MaterialPropertiesTable();
-    G4Box *solidLead = new G4Box("solidLead", 1.0*m, 0.5*m, 0.05*m);
-    G4LogicalVolume *logicLead= new G4LogicalVolume(solidLead, Lead,"logicLead");
-    G4VPhysicalVolume *physLead = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicLead, "physLead",logicWorld,false,0,true);
-                         
+    G4Box *solidSteel = new G4Box("solidSteel", 1.0*m, 0.5*m, 7.5*cm);
 
-    //Adding sensitive detector 
+    //Adding the steel plate    
+    G4LogicalVolume *logicSteel = new G4LogicalVolume(solidSteel, Steel,"Steel");
+    G4VPhysicalVolume *physSteel = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicSteel, "physSteel",logicWorld,false,0,true);
 
     //Physical Properties of the detector
     G4Element *Si = nist->FindOrBuildElement("Si"); //Silicon
