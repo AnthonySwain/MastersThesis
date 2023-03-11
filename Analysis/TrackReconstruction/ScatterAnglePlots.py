@@ -1,4 +1,4 @@
-#Makes a heatmap of the interaction points with colour based off of the angle scattered
+#Plots scatter angle distributions 
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,6 +14,7 @@ import ReadH5 as ReadH5
 #from wolframclient.evaluation import WolframLanguageSession
 #from wolframclient.language import wl, wlexpr
 def data_clean(data):
+    #Cleans the data getting rid of calculated interactions outside the volume between the two sets of detectors
     data = data[["X","Y","Z","angle"]]
     data = data.loc[(data.X > -750) &
                             (data.X < 750) &
@@ -39,14 +40,9 @@ data_frame1concrete = ReadH5.pandas_read("/08.03.2023/Concrete/50000PureConcrete
 data_frame2concrete = ReadH5.pandas_read("/08.03.2023/Concrete/50000PureConcreteSlab1Interaction.h5")
 data_frame1lead = ReadH5.pandas_read("/08.03.2023/Lead/50000PureLeadSlab1Interaction.h5")
 data_frame2lead = ReadH5.pandas_read("/08.03.2023/Lead/50000PureLeadSlab2Interaction.h5")
-
 data_vacuum= data_clean(ReadH5.pandas_read("/08.03.2023/Lead/50000PureLeadSlab2Interaction.h5"))
-
 data_frame_air = ReadH5.pandas_read("/08.03.2023/Air/50000AirInteraction.h5")
-
-
 data_frame_air2 = ReadH5.pandas_read("/08.03.2023/Air/50000Air2Interaction.h5")
-
 data_air = pd.concat([data_frame_air,data_frame_air2])
 data_steel = pd.concat([data_frame1steel,data_frame2steel])
 data_concrete= pd.concat([data_frame1concrete,data_frame2concrete])
@@ -112,81 +108,6 @@ def scat_angle_dist(angle1,angle2,angle3,angle4,angle5):
 
     return(None)
 
-def voxel_map(data):
-    sns.set()
-    
-    data = data.pivot(index = 'x',columns = "y",values = "angle")
-    ax = sns.heatmap(data)
-    
-    plt.show()
-    return(None)
-
-def ct_esque(xyz,x,y,z,angle):
-    xyz=pd.DataFrame(xyz).to_numpy()
-
-    no_bins = 10
-    hist, binedges = np.histogramdd(xyz, weights = angle, normed=False, bins = no_bins)
-    print(np.shape(binedges))
-
-    
-    fig = plt.figure(figsize=(4, 10))
-    ax1 = fig.add_subplot(111, projection='3d')
-    ax1.plot(x,y,z,'k.',alpha=0.3)
-    
-    #Use one less than bin edges to give rough bin location
-    X, Y = np.meshgrid(binedges[0][:-1],binedges[1][:-1])
-   
-    #Y,Z = np.meshgrid(binedges[1][:-1],binedges[2][:-1])
-    
-    #Loop over range of slice locations
-    #Create code to loop through bins
-    bin_count = np.linspace(0,no_bins-1,40,dtype = 'int')
-    
-    # get colormap
-    ncolors = 256
-    color_array = plt.get_cmap('gist_rainbow')(range(ncolors))
-
-    # change alpha values
-    color_array[:,-1] = np.linspace(1.0,0.0,ncolors)
-
-    # create a colormap object
-    map_object = LinearSegmentedColormap.from_list(name='rainbow_alpha',colors=color_array)
-
-    # register this new colormap with matplotlib
-    plt.register_cmap(cmap=map_object)
-
-    X, Y = np.meshgrid(binedges[0][:-1],binedges[1][:-1])
-    #B,Z = np.meshgrid(binedges[1][:-1],binedges[2][:-1])
-    for ct in bin_count: 
-        
-        cs = ax1.contourf(X,Y,hist[:,:,ct], 
-                        zdir='z', 
-                        offset=binedges[2][ct], 
-                        levels=10, 
-                        cmap=plt.cm.RdYlBu_r, 
-                        alpha=0.05)
-        
-        #cs2 = ax1.contourf(X,Y,hist[:,:,ct], 
-         #               zdir='z', 
-          #              offset=binedges[2][ct], 
-           #             levels=10, 
-            #            cmap=plt.cm.RdYlBu_r, 
-             #           alpha=0.05)
-        
-    ax1.set_aspect('equal')
-
-    ax1.set_xlim(-500, 500)
-    ax1.set_ylim(-500, 500)
-    ax1.set_zlim(-2000, 2000)
-    plt.colorbar(cs)
-    #plt.colorbar(cs2)
-    plt.show()
-    return(None)
-
-def mess_about(xyz,angle):
-    no_bins = 10
-    hist, binedges = np.histogramdd(xyz, weights = angle, normed=False, bins = no_bins)
-    return(None)
 
 #clean_interaction = data_clean(data_frame)
 clean_air = data_clean(data_air)

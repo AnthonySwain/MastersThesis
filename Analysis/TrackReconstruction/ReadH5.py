@@ -2,6 +2,8 @@ import h5py
 import pandas as pd
 import numpy as np
 
+#Pre-made functions to read H5 files and return a panda dataframe of the datafile 
+
 def get_detector_data(filename):
     #Assume filepath is to the data folder, returns panda dataframe of file
     filepath = "/home/anthony/MastersThesis/Data" + filename

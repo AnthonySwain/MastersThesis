@@ -14,14 +14,8 @@ import VertexFinder as vfinder
 from skspatial.objects import Line, Points
 from skspatial.plotting import plot_3d
 
-#Can change this into writing into another dataset in the H5 file with the event no, scattering angle and vertex
-
-#The function reads the H5 file, reconstructs the tracks, finds the scattering angle and vertex point
-# and then writes this data into a new dataset in the H5 file. 
-
-#Data from detectors
-
-
+#Calls upon functions in track reconsruction which constructs the incoming and outgoing tracks of the particle
+# then calls upon functions in vertex finder to find the scatter angle and vertex of interaction
 
 
 def with_intersection(filename):
@@ -75,7 +69,7 @@ def with_intersection(filename):
         scattering_data.loc[i] = [i, interaction_vertex_x, interaction_vertex_y, interaction_vertex_z, scattering_angle]
 
     #Make this a H5 file, in the end should just append it to the original H5 file.
-    interaction_filename = "/home/anthony/MastersThesis/Data" + filename[:-3] + "Interaction.h5"
+    interaction_filename = "/home/anthony/MastersThesis/Data" + filename[:-3] + "InteractionIntersect.h5"
     
     scattering_data.to_hdf(interaction_filename, key='Interactions', format = 'table', index=False)
     scattering_data.to_csv('Interaction2.csv',index=False)
@@ -143,5 +137,5 @@ def without_intersection(filename):
     return(None)
 
 filename = "/SteelSlab/Steel.h5"
-#with_intersection(filename)
-without_intersection(filename)
+with_intersection(filename)
+#without_intersection(filename)
