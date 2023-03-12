@@ -45,7 +45,7 @@ def with_intersection(filename):
         #If one of the in or out detectors wasn't hit in the event, hits_data is returned false, skip that event
         if in_detector_hits.empty or out_detector_hits.empty or (len(in_detector_hits.index) == 1) or (len(out_detector_hits.index) == 1):
             print(i,"Missed!")
-            scattering_data.loc[i] = [i,0,0,0,-1]
+            scattering_data.loc[i] = [i,0,0,0,float("NaN")]
             #Write something to the dataframe like false or smth
             continue
         print(i)
@@ -72,7 +72,7 @@ def with_intersection(filename):
     interaction_filename = "/home/anthony/MastersThesis/Data" + filename[:-3] + "InteractionIntersect.h5"
     
     scattering_data.to_hdf(interaction_filename, key='Interactions', format = 'table', index=False)
-    scattering_data.to_csv('Interaction2.csv',index=False)
+    #scattering_data.to_csv('Interaction2.csv',index=False)
     return(None)
 
 def without_intersection(filename):

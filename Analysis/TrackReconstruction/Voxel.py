@@ -10,6 +10,7 @@ import ReadH5 as ReadH5
 import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+
 #This is all working in mm!!!!!!!!
 
 detector_in_corners = ([0.75*1000,0.6*1000,0.5*1000],
@@ -24,6 +25,15 @@ detector_out_corners = ([0.75*1000,0.6*1000,-0.5*1000],
 
 def voxelisation(voxel_side_length,detector_in_corners,detector_out_corners,filename):
     df = ReadH5.pandas_read(filename)
+    print(df)
+    df = df.loc[(df.X > -750) &
+                            (df.X < 750) &
+                            (df.Y > -600) &
+                            (df.Y < 600) &
+                            (df.Z > -1000) &
+                            (df.Z < 1000) &
+                            #(data.angle < math.pi) &
+                            (df.angle >= 0)]
     #Dataframe should be in [x,y,z,angle] format:) 
     #Working out the number of voxels in each direction, given the side length:) 
     x_voxel_no = math.ceil((detector_in_corners[0][0] - detector_in_corners[2][0]) / (voxel_side_length))
@@ -134,7 +144,8 @@ def image_heatmap_3D(filepath):
         df.loc[index,"x"] = math.ceil(np.average(np.fromstring(df.loc[index,"x"],sep=",")))
         df.loc[index,"y"] = math.ceil(np.average(np.fromstring(df.loc[index,"y"],sep=",")))
         df.loc[index,"z"] = math.ceil(np.average(np.fromstring(df.loc[index,"z"],sep=",")))
-        
+    
+    print("DNE")
     x_val = df.loc[:,"x"].to_numpy()
     y_val = df.loc[:,"y"].to_numpy()
     z_val = df.loc[:,"z"].to_numpy()
@@ -146,10 +157,10 @@ def image_heatmap_3D(filepath):
     y=y_val.flatten(),
     z=z_val.flatten(),
     value=angles.flatten(),
-    isomin=0.1,
-    isomax=0.8,
+    #isomin=0.0,
+    #isomax=0.8,
     opacity=0.1, # needs to be small to see through all surfaces
-    surface_count=5, # needs to be a large number for good volume rendering
+    surface_count=20, # needs to be a large number for good volume rendering
     ))
     fig.show()
     
@@ -157,12 +168,12 @@ def image_heatmap_3D(filepath):
     
     return(None)
 #image_heatmap_2D_x_y()
-voxel_side_length = 10
-filename = "/SteelSlab/SteelInteraction.h5"
+voxel_side_length = 25#(mm)
+filename = "/SteelSlab/SteelInteractionIntersect.h5"
 #voxelisation(voxel_side_length,detector_in_corners,detector_out_corners,filename)
 #image_heatmap_2D_x_z("/home/anthony/MastersThesis/Data/SteelSlab/SteelInteractionxzplane.csv")
 #image_heatmap_2D_x_y("/home/anthony/MastersThesis/Data/SteelSlab/SteelInteractionxyplane.csv")
-image_heatmap_3D("/home/anthony/MastersThesis/Data/SteelSlab/SteelInteraction3D.csv")
+image_heatmap_3D("/home/anthony/MastersThesis/Data/SteelSlab/SteelInteractionIntersect3D.csv")
 #voxelised = df.Sgroupby([pd.cut(df.x, np.linspace(0, 1, 10)), pd.cut(df.y, np.linspace(0, 1, 10)), pd.cut(df.z, np.linspace(0, 1, 10))])['val'].mean()
 #voxelised.to_csv("test.csv")
 #print(voxelised)
