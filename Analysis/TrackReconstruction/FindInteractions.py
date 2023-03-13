@@ -136,6 +136,6 @@ def without_intersection(filename):
     #scattering_data.to_csv('Interaction2.csv',index=False)
     return(None)
 
-filename = "/Concretewithrod/SteelRodInConcrete.h5"
+filename = "/100mmSample/Concrete/Concrete.h5"
 #with_intersection(filename)
 without_intersection(filename)

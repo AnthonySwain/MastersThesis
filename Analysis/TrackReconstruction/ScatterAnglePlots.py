@@ -34,19 +34,19 @@ def data_clean(data):
     return (x,y,z,angle,xyz)
 
 
-data_frame1steel = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab2Interaction.h5")
-data_frame2steel = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab1Interaction.h5")
-data_frame1concrete = ReadH5.pandas_read("/08.03.2023/Concrete/50000PureConcreteSlab1Interaction.h5")
-data_frame2concrete = ReadH5.pandas_read("/08.03.2023/Concrete/50000PureConcreteSlab1Interaction.h5")
-data_frame1lead = ReadH5.pandas_read("/08.03.2023/Lead/50000PureLeadSlab1Interaction.h5")
-data_frame2lead = ReadH5.pandas_read("/08.03.2023/Lead/50000PureLeadSlab2Interaction.h5")
-data_vacuum= data_clean(ReadH5.pandas_read("/08.03.2023/Lead/50000PureLeadSlab2Interaction.h5"))
-data_frame_air = ReadH5.pandas_read("/08.03.2023/Air/50000AirInteraction.h5")
-data_frame_air2 = ReadH5.pandas_read("/08.03.2023/Air/50000Air2Interaction.h5")
-data_air = pd.concat([data_frame_air,data_frame_air2])
-data_steel = pd.concat([data_frame1steel,data_frame2steel])
-data_concrete= pd.concat([data_frame1concrete,data_frame2concrete])
-data_lead = pd.concat([data_frame1lead,data_frame2lead  ])
+
+
+
+
+data_frame1lead = ReadH5.pandas_read("/100mmSample/Concrete/ConcreteInteraction.h5")
+data_frame1steel = ReadH5.pandas_read("/50mmSample/Concrete/50000PureConcreteSlab1Interaction.h5")
+data_frame1concrete = ReadH5.pandas_read("/10mmSample/Concrete/ConcreteInteraction.h5")
+data_frame_air = ReadH5.pandas_read("/1mmSample/Concrete/ConcreteInteraction.h5")
+
+data_air = data_frame_air
+data_steel = data_frame1steel
+data_concrete= data_frame1concrete
+data_lead = data_frame1lead
 #print(data_frame)
 #data_frame = pd.read_csv("/home/anthony/MastersThesis/Data/04.03.2023/50000PureConcreteInteractions.csv") #opening the data file
 
@@ -72,37 +72,37 @@ def scatter_map(x,y,z,angle):
 
     return(None)
 
-def scat_angle_dist(angle1,angle2,angle3,angle4,angle5):
-    fig, ax = plt.subplots()
+def scat_angle_dist(angle1,angle2,angle3,angle4):
+    #fig, ax = plt.subplots()
     
-    angle1 = angle1 * (10**3)
-    angle2 = angle2 * (10**3)
-    angle3 = angle3 * (10**3)
-    angle4 = angle4 * (10**3)
+    #angle1 = angle1 * (10**3)
+    #angle2 = angle2 * (10**3)
+    #angle3 = angle3 * (10**3)
+    #angle4 = angle4 * (10**3)
     
 
     #ax = plt.hist(angle1, bins = 2000, label = 'Steel', alpha = 0.5)
     #ax = plt.hist(angle2, bins = 2000, label = 'Concrete', alpha = 0.5)  
-    #ax = plt.hist(angle3, bins = 2000, label = 'Lead',alpha = 0.5 )
+    #ax = plt.hist(angle3, bins = 2000, label = 'Concrete',alpha = 0.5 )
     #ax = plt.hist(angle4, bins = 2000, label = 'Air',alpha = 1)
-    ax = plt.hist(angle5, bins = 20, label = 'Vacuum',alpha = 1 )
-    plt.title("Scatter angle PDF, 50mm material | Sample size = 100,000")
-    plt.xlabel("Scattered angle [mrad]")
+    #ax = plt.hist(angle5, bins = 20, label = 'Vacuum',alpha = 1 )
+    plt.title("Scatter angle PDF, Concrete Slab | Sample size = 50,000")
+    plt.xlabel("Scattered angle / radians")
     angle1 = pd.Series(angle1)
     angle2 = pd.Series(angle2)
     angle3 = pd.Series(angle3)
     angle4 = pd.Series(angle4)
-    angle5 = pd.Series(angle5)
     
     
-    #ax = angle4.plot(kind = 'kde', label = 'Air')
-    #ax = angle2.plot(kind = 'kde', label = 'Concrete')
-    #ax = angle1.plot(kind = 'kde', label = 'Steel')
-    #ax = angle3.plot(kind = 'kde', label = 'Lead')
     
-    #ax.legend()
-    plt.xlim(-2,math.pi/64 * 10**3)
-    plt.ylim(0,10000)
+    ax = angle4.plot(kind = 'kde', label = '1mm')
+    ax = angle2.plot(kind = 'kde', label = '10mm')
+    ax = angle1.plot(kind = 'kde', label = '50mm')
+    ax = angle3.plot(kind = 'kde', label = '100mm')
+    
+    ax.legend()
+    plt.xlim(0,math.pi/16)
+    plt.ylim(0,50)
     plt.ylabel("Density")
     plt.show()
 
@@ -116,7 +116,7 @@ clean_steel = data_clean(data_steel)
 clean_lead = data_clean(data_lead)
 #print(np.size(clean_no_interaction[0]))
 #interaction_angle = clean_interaction[3]
-vacuum_angle = data_vacuum[3]
+
 air_angle = clean_air[3]
 steel_angle = clean_steel[3]
 concrete_angle = clean_concrete[3]
@@ -124,7 +124,7 @@ lead_angle = clean_lead[3]
 #angle_diff = abs(interaction_angle - no_interaction_angle)
 
 
-scat_angle_dist(steel_angle,concrete_angle,lead_angle,air_angle,vacuum_angle)
+scat_angle_dist(steel_angle,concrete_angle,lead_angle,air_angle)
 
 #scatter_map(x,y,z,angle)
 #voxel_map(data)
