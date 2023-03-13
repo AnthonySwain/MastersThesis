@@ -23,9 +23,8 @@ detector_out_corners = ([0.75*1000,0.6*1000,-0.5*1000],
                      [-0.75*1000,-0.6*1000,-0.5*1000],
                      [-0.75*1000,0.6*1000,-0.5*1000])
 
-def voxelisation(voxel_side_length,detector_in_corners,detector_out_corners,filename):
-    df = ReadH5.pandas_read(filename)
-    print(df)
+def voxelisation(voxel_side_length,detector_in_corners,detector_out_corners,filename,df):
+    
     df = df.loc[(df.X > -750) &
                             (df.X < 750) &
                             (df.Y > -600) &
@@ -42,17 +41,17 @@ def voxelisation(voxel_side_length,detector_in_corners,detector_out_corners,file
     
     voxelised = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
                              pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no)),
-                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])['angle'].mean()
+                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])['angle'].sum()
     #print(voxelised)
     x_y_plane = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
-                             pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no))])['angle'].mean()
+                             pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no))])['angle'].sum()
     
     y_z_plane = df.groupby([pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no)),
-                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])['angle'].mean()
+                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])['angle'].sum()
     
 
     x_z_plane = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
-                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])['angle'].mean()
+                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])['angle'].sum()
     
     #print(x_y_plane[0])
     #sns.heatmap(x_y_plane)
@@ -91,21 +90,28 @@ def image_heatmap_2D_x_y(filepath):
     return(None)
 def image_heatmap_2D_x_z(filepath):
     df = pd.read_csv(filepath)
-
-    df['x'] = df['x'].str.strip('(]')
-    df['z'] = df['z'].str.strip('(]')
+    df.rename(columns={0: 'x', 1: 'z', 2: 'angle'}, inplace=True)
+    
+    df['X'] = df['X'].str.strip('(]')
+    df['Z'] = df['Z'].str.strip('(]')
     df['angle'] = df['angle'].astype(float)
     df['angle'] = df['angle'].fillna(0)
     for index, row in df.iterrows():
 
-        df.loc[index,"x"] = math.ceil(np.average(np.fromstring(df.loc[index,"x"],sep=",")))
-        df.loc[index,"z"] = math.ceil(np.average(np.fromstring(df.loc[index,"z"],sep=",")))
+        df.loc[index,"X"] = math.ceil(np.average(np.fromstring(df.loc[index,"X"],sep=",")))
+        df.loc[index,"Z"] = math.ceil(np.average(np.fromstring(df.loc[index,"Z"],sep=",")))
 
-    x_val = df.loc[:,"x"]
-    y_val = df.loc[:,"z"]
+    x_val = df.loc[:,"X"]
+    y_val = df.loc[:,"Z"]
     angles = df.loc[:,"angle"]
     
-    pivot = df.pivot(values = 'angle',columns='x',index='z')
+    #object_outline
+    #outline_x = [1000,1000,-1000,-1000]
+    #outline_z = [-75,75,75,-75]
+    
+    
+    pivot = df.pivot(values = 'angle',columns='X',index='Z')
+    #plt.plot(outline_x, outline_z, linestyle='dashed', color='black')
     sns.heatmap(pivot,cmap = 'Spectral_r').axis('equal')
     plt.show()
     
@@ -168,12 +174,17 @@ def image_heatmap_3D(filepath):
     
     return(None)
 #image_heatmap_2D_x_y()
-voxel_side_length = 25#(mm)
-filename = "/SteelSlab/SteelInteractionIntersect.h5"
-#voxelisation(voxel_side_length,detector_in_corners,detector_out_corners,filename)
-#image_heatmap_2D_x_z("/home/anthony/MastersThesis/Data/SteelSlab/SteelInteractionxzplane.csv")
+
+voxel_side_length = 20#(mm)
+filename = "/08.03.2023/Steel/SteelSlab.h5"
+df = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab1Interaction.h5")
+df2 = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab2Interaction.h5")
+
+df = pd.concat([df,df2])
+voxelisation(voxel_side_length,detector_in_corners,detector_out_corners,filename,df)
+image_heatmap_2D_x_z("/home/anthony/MastersThesis/Data/08.03.2023/Steel/SteelSlabxzplane.csv")
 #image_heatmap_2D_x_y("/home/anthony/MastersThesis/Data/SteelSlab/SteelInteractionxyplane.csv")
-image_heatmap_3D("/home/anthony/MastersThesis/Data/SteelSlab/SteelInteractionIntersect3D.csv")
+#image_heatmap_3D("/home/anthony/MastersThesis/Data/SteelSlab/SteelInteractionIntersect3D.csv")
 #voxelised = df.Sgroupby([pd.cut(df.x, np.linspace(0, 1, 10)), pd.cut(df.y, np.linspace(0, 1, 10)), pd.cut(df.z, np.linspace(0, 1, 10))])['val'].mean()
 #voxelised.to_csv("test.csv")
 #print(voxelised)
