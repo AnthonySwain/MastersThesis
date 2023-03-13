@@ -41,17 +41,17 @@ def voxelisation(voxel_side_length,detector_in_corners,detector_out_corners,file
     
     voxelised = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
                              pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no)),
-                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])['angle'].sum()
+                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])['angle'].mean()
     #print(voxelised)
     x_y_plane = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
-                             pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no))])['angle'].sum()
+                             pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no))])['angle'].mean()
     
     y_z_plane = df.groupby([pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no)),
-                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])['angle'].sum()
+                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])['angle'].mean()
     
 
     x_z_plane = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
-                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])['angle'].sum()
+                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])['angle'].mean()
     
     #print(x_y_plane[0])
     #sns.heatmap(x_y_plane)
@@ -68,8 +68,9 @@ def voxelisation(voxel_side_length,detector_in_corners,detector_out_corners,file
     return(None)
 
 def image_heatmap_2D_x_y(filepath):
-    df = pd.read_csv(filepath)
-
+    df = pd.read_csv(filepath,header=None)
+    df.rename(columns={0: 'x',  1: 'y', 2: 'angle'}, inplace=True)
+    
     df['x'] = df['x'].str.strip('(]')
     df['y'] = df['y'].str.strip('(]')
     df['angle'] = df['angle'].astype(float)
@@ -89,8 +90,9 @@ def image_heatmap_2D_x_y(filepath):
     
     return(None)
 def image_heatmap_2D_x_z(filepath):
-    df = pd.read_csv(filepath)
-    df.rename(columns={0: 'x', 1: 'z', 2: 'angle'}, inplace=True)
+    df = pd.read_csv(filepath,header=None)
+    
+    df.rename(columns={0: 'X',  1: 'Z', 2: 'angle'}, inplace=True)
     
     df['X'] = df['X'].str.strip('(]')
     df['Z'] = df['Z'].str.strip('(]')
@@ -175,15 +177,17 @@ def image_heatmap_3D(filepath):
     return(None)
 #image_heatmap_2D_x_y()
 
-voxel_side_length = 20#(mm)
-filename = "/08.03.2023/Steel/SteelSlab.h5"
-df = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab1Interaction.h5")
-df2 = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab2Interaction.h5")
+voxel_side_length = 10#(mm)
+filename = "/Concretewithrod/SteelRodInConcreteInteraction.h5"
+#df = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab1Interaction.h5")
+#df2 = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab2Interaction.h5")
 
-df = pd.concat([df,df2])
+#df = pd.concat([df,df2])
+
+df = ReadH5.pandas_read(filename)
 voxelisation(voxel_side_length,detector_in_corners,detector_out_corners,filename,df)
-image_heatmap_2D_x_z("/home/anthony/MastersThesis/Data/08.03.2023/Steel/SteelSlabxzplane.csv")
-#image_heatmap_2D_x_y("/home/anthony/MastersThesis/Data/SteelSlab/SteelInteractionxyplane.csv")
+image_heatmap_2D_x_z("/home/anthony/MastersThesis/Data/Concretewithrod/SteelRodInConcreteInteractionxzplane.csv")
+image_heatmap_2D_x_y("/home/anthony/MastersThesis/Data/Concretewithrod/SteelRodInConcreteInteractionxyplane.csv")
 #image_heatmap_3D("/home/anthony/MastersThesis/Data/SteelSlab/SteelInteractionIntersect3D.csv")
 #voxelised = df.Sgroupby([pd.cut(df.x, np.linspace(0, 1, 10)), pd.cut(df.y, np.linspace(0, 1, 10)), pd.cut(df.z, np.linspace(0, 1, 10))])['val'].mean()
 #voxelised.to_csv("test.csv")
