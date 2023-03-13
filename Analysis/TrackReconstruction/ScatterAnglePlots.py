@@ -34,14 +34,15 @@ def data_clean(data):
     return (x,y,z,angle,xyz)
 
 
+data_frame1steel = ReadH5.pandas_read("/1mmSample/Steel/SteelInteraction.h5")
+
+data_frame1concrete = ReadH5.pandas_read("/1mmSample/Concrete/ConcreteInteraction.h5")
+
+data_frame1lead = ReadH5.pandas_read("/1mmSample/Lead/LeadInteraction.h5")
 
 
 
-
-data_frame1lead = ReadH5.pandas_read("/100mmSample/Concrete/ConcreteInteraction.h5")
-data_frame1steel = ReadH5.pandas_read("/50mmSample/Concrete/50000PureConcreteSlab1Interaction.h5")
-data_frame1concrete = ReadH5.pandas_read("/10mmSample/Concrete/ConcreteInteraction.h5")
-data_frame_air = ReadH5.pandas_read("/1mmSample/Concrete/ConcreteInteraction.h5")
+data_frame_air = ReadH5.pandas_read("/50mmSample/Air/50000AirInteraction.h5")
 
 data_air = data_frame_air
 data_steel = data_frame1steel
@@ -83,10 +84,10 @@ def scat_angle_dist(angle1,angle2,angle3,angle4):
 
     #ax = plt.hist(angle1, bins = 2000, label = 'Steel', alpha = 0.5)
     #ax = plt.hist(angle2, bins = 2000, label = 'Concrete', alpha = 0.5)  
-    #ax = plt.hist(angle3, bins = 2000, label = 'Concrete',alpha = 0.5 )
+    #ax = plt.hist(angle3, bins = 2000, label = 'Lead',alpha = 0.5 )
     #ax = plt.hist(angle4, bins = 2000, label = 'Air',alpha = 1)
     #ax = plt.hist(angle5, bins = 20, label = 'Vacuum',alpha = 1 )
-    plt.title("Scatter angle PDF, Concrete Slab | Sample size = 50,000")
+    plt.title("Scatter angle PDF, 1mm material | Sample size = 50,000")
     plt.xlabel("Scattered angle / radians")
     angle1 = pd.Series(angle1)
     angle2 = pd.Series(angle2)
@@ -95,10 +96,10 @@ def scat_angle_dist(angle1,angle2,angle3,angle4):
     
     
     
-    ax = angle4.plot(kind = 'kde', label = '1mm')
-    ax = angle2.plot(kind = 'kde', label = '10mm')
-    ax = angle1.plot(kind = 'kde', label = '50mm')
-    ax = angle3.plot(kind = 'kde', label = '100mm')
+    ax = angle4.plot(kind = 'kde', label = 'Air')
+    ax = angle2.plot(kind = 'kde', label = 'Concrete')
+    ax = angle1.plot(kind = 'kde', label = 'Steel')
+    ax = angle3.plot(kind = 'kde', label = 'Lead')
     
     ax.legend()
     plt.xlim(0,math.pi/16)
