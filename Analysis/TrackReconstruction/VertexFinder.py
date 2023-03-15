@@ -11,7 +11,7 @@ from skspatial.objects import Line, Points, Vector
 
 from skspatial.plotting import plot_3d
 
-def vertex_angle_find(line1,line2):
+def vertex_angle_find(line1,line2,quality_factor):
     #Finds the intersection of the re-constructed tracks.
     angle = float
     vertex = [float,float,float]
@@ -53,23 +53,36 @@ def vertex_angle_find(line1,line2):
     x = np.linalg.solve(a,b)
     lambda1 = x[1]
     lambda2 = x[0]
-
+    
     #Finding the points of closest distance 
     vertex1 = line1pos + line1dir*lambda1
     vertex2 = line2pos + line2dir*lambda2
 
     #The middle of these points
     intersection = (vertex1 + vertex2) /2 
-
+    distance = np.linalg.norm(vertex1 - vertex2)
 
     #Find the angle between the lines
 
 
     angle = line1dir.angle_between(line2dir)
+    
+    #Making sure the angle is in the right quadrant
     if angle > math.pi/2:
         angle = math.pi - angle
     
     
+    #Putting a quality factor to vertex points based on closest intersect of the lines
+    #(i.e divide scattering angle by closest intersect) the closer the incoming and outgoing muon track lines
+    #are, the better constructed the line and more believeable it is. For lines that are further apart - likely
+    #to represent multiple scattering events which the track reconstruction algorithm doesn’t account for
+    #so it would give less weighting to them which could reduce the noise in the reconstructed images.
+    
+    if quality_factor:
+        angle = angle/distance    
+    
+    
+        
 
     return (angle, intersection)
 

@@ -109,7 +109,7 @@ def image_heatmap_2D_x_z(filepath, detector_corners):
     df['X'] = df['X'].str.strip('(]')
     df['Z'] = df['Z'].str.strip('(]')
     df['angle'] = df['angle'].astype(float)
-    #df['angle'] = df['angle'].fillna(0)
+    df['angle'] = df['angle'].fillna(0)
     for index, row in df.iterrows():
 
         df.loc[index,"X"] = math.ceil(np.average(np.fromstring(df.loc[index,"X"],sep=",")))
@@ -206,7 +206,7 @@ def image_heatmap_3D(filepath,detector_corners):
     return(None)
 #image_heatmap_2D_x_y()
 
-voxel_side_length = 50#(mm)
+voxel_side_length = 20#(mm)
 filename = "/50mmSample/Lead/50000PureLeadSlab1Interaction.h5"
 #df = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab1Interaction.h5")
 #df2 = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab2Interaction.h5")
@@ -214,7 +214,9 @@ filename = "/50mmSample/Lead/50000PureLeadSlab1Interaction.h5"
 #df = pd.concat([df,df2])
 
 df = ReadH5.pandas_read(filename)
+print(df)
+print(df.shape)
 voxelisation(voxel_side_length,detector_in_corners,detector_out_corners,filename,df)
-#image_heatmap_2D_x_z("/home/anthony/MastersThesis/Data/50mmSample/Steel/50000PureSteelSlab1Interactionxzplane.csv",detector_in_corners)
+image_heatmap_2D_x_z("/home/anthony/MastersThesis/Data/50mmSample/Lead/50000PureLeadSlab1Interactionxzplane.csv",detector_in_corners)
 #image_heatmap_2D_x_y("/home/anthony/MastersThesis/Data/Concretewithrod/SteelRodInConcreteInteractionxyplane.csv")
-image_heatmap_3D("/home/anthony/MastersThesis/Data/50mmSample/Lead/50000PureLeadSlab1Interaction3D.csv",detector_in_corners)
+#image_heatmap_3D("/home/anthony/MastersThesis/Data/50mmSample/Lead/50000PureLeadSlab1Interaction3D.csv",detector_in_corners)

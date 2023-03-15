@@ -10,6 +10,7 @@ import ReadH5 as ReadH5
 import sys
 import TrackReconstruction as trackrecon
 import VertexFinder as vfinder
+import h5py
 
 from skspatial.objects import Line, Points
 from skspatial.plotting import plot_3d
@@ -75,9 +76,14 @@ def with_intersection(filename):
     #scattering_data.to_csv('Interaction2.csv',index=False)
     return(None)
 
-def without_intersection(filename):
-    
+def without_intersection(filename,quality_check):
+    #Filename of the H5 file, Quality check  refines scattering angle based off of confidence of a single scattering event
     detector_data = ReadH5.get_detector_data(filename)
+        
+    #Create file_name for output
+    interaction_filename = "/home/anthony/MastersThesis/Data" + filename[:-3] + "Interaction.h5"
+    
+    detector_data.info(memory_usage="deep")
     #How many events are in that dataframe
     no_events = detector_data['event_no'].iloc[-1]
 
@@ -98,6 +104,8 @@ def without_intersection(filename):
         in_detector_hits = hits_data.loc[(hits_data['volume_ref'].isin([0,1]))]
 
         out_detector_hits = hits_data.loc[(hits_data['volume_ref'].isin([10,11]))]
+        
+        
 
         #If one of the in or out detectors wasn't hit in the event, hits_data is returned false, skip that event
         if in_detector_hits.empty or out_detector_hits.empty or (len(in_detector_hits.index) == 1) or (len(out_detector_hits.index) == 1):
@@ -119,7 +127,7 @@ def without_intersection(filename):
         #print((trackrecon.residues_get(line2,pos_hits_out)))
         
         #Finding the vertex of interaction (saying there is a single scattering incident)
-        interaction_vertex_angle = vfinder.vertex_angle_find(line1,line2)
+        interaction_vertex_angle = vfinder.vertex_angle_find(line1,line2,quality_check)
 
         scattering_angle = float(interaction_vertex_angle[0])
         interaction_vertex_x = float(interaction_vertex_angle[1][0])
@@ -127,15 +135,31 @@ def without_intersection(filename):
         interaction_vertex_z = float(interaction_vertex_angle[1][2])
         
         scattering_data.loc[i] = [i, interaction_vertex_x, interaction_vertex_y, interaction_vertex_z, scattering_angle]
+        
+        #every 10,000 data points, write to H5 file
+        if i%10000 == 0:
+            scattering_data.to_hdf(interaction_filename, key='Interactions', append=True, format = 'table', index=False)
+            
+            #Reset the dataframe
+            scattering_data = pd.DataFrame(
+                                {"event_no" : pd.Series(dtype='int'),
+                                    "X" : pd.Series(dtype='float'),
+                                    "Y" : pd.Series(dtype='float'),
+                                    "Z" : pd.Series(dtype='float'),
+                                    "angle" : pd.Series(dtype='float')})
+            print(scattering_data)
+    #Outputting remaining data into the frame
+    scattering_data.to_hdf(interaction_filename, key='Interactions', append=True, format = 'table', index=False)
+    
+    
+    
+    
 
-    #Make this a H5 file, in the end should just append it to the original H5 file.
-    
-    interaction_filename = "/home/anthony/MastersThesis/Data" + filename[:-3] + "Interaction.h5"
-    
-    scattering_data.to_hdf(interaction_filename, key='Interactions', format = 'table', index=False)
     #scattering_data.to_csv('Interaction2.csv',index=False)
+
     return(None)
 
-filename = "/100mmSample/Concrete/Concrete.h5"
+#filename = "/SteelRodInConcrete50mmRadius/2millionevents.h5"
+filename = "/50mmSample/Lead/50000PureLeadSlab1.h5"
 #with_intersection(filename)
-without_intersection(filename)
+without_intersection(filename,True)
