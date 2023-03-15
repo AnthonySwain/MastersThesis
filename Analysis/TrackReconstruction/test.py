@@ -1,26 +1,22 @@
+import h5py
 import numpy as np
-import plotly.graph_objects as go
 
-# Generate nicely looking random 3D-field
-np.random.seed(0)
-l = 30
-X, Y, Z = np.mgrid[:l, :l, :l]
-vol = np.zeros((l, l, l))
-pts = (l * np.random.rand(3, 15)).astype(np.int)
-vol[tuple(indices for indices in pts)] = 1
-from scipy import ndimage
-vol = ndimage.gaussian_filter(vol, 4)
-vol /= vol.max()
+with h5py.File('SO_57342918_h5py.h5','w') as h5f:
 
-fig = go.Figure(data=go.Volume(
-    x=X.flatten(), y=Y.flatten(), z=Z.flatten(),
-    value=vol.flatten(),
-    isomin=0.2,
-    isomax=0.7,
-    opacity=0.1,
-    surface_count=25,
-    ))
-fig.update_layout(scene_xaxis_showticklabels=False,
-                  scene_yaxis_showticklabels=False,
-                  scene_zaxis_showticklabels=False)
-fig.show()
+    i_arr=np.arange(10)
+    x_arr=np.arange(10.0)
+
+    my_dt = np.dtype([ ('i_arr', int), ('x_arr', float) ] )
+    table_arr = np.recarray( (10,), dtype=my_dt )
+    table_arr['i_arr'] = i_arr
+    table_arr['x_arr'] = x_arr
+
+    my_ds = h5f.create_dataset('/ds1',data=table_arr)
+
+# read 1 column using numpy slicing: 
+with h5py.File('SO_57342918_h5py.h5','r') as h5f:
+
+    h5_i_arr = h5f['ds1'][np.arange(5)]
+    h5_x_arr = h5f['ds1'][:,'x_arr']
+    print (h5_i_arr)
+    print (h5_x_arr)

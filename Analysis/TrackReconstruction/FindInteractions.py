@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import os
 import scipy
-from scipy.optimize import minimize
+#from scipy.optimize import minimize
 import math
 import ReadH5 as ReadH5
 import sys
@@ -32,8 +32,7 @@ def with_intersection(filename):
                                     "Y" : pd.Series(dtype='float'),
                                     "Z" : pd.Series(dtype='float'),
                                     "angle" : pd.Series(dtype='float')})
-    #index = np.arange(0,no_events),
-    print((scattering_data.dtypes))
+
     #So the idea is to split the data into events and then into in and out detectors for the concrete.
     for i in np.arange(0,no_events):
         
@@ -77,15 +76,21 @@ def with_intersection(filename):
     return(None)
 
 def without_intersection(filename,quality_check):
+    
     #Filename of the H5 file, Quality check  refines scattering angle based off of confidence of a single scattering event
-    detector_data = ReadH5.get_detector_data(filename)
-        
+    k = 1 #K keeps track of which set of 10,000 rows to read (the first 10,000 2nd 10,000 ect...ect...)
+    detector_data = ReadH5.get_detector_data_10000lines(filename,k)
+
+    get_index = ReadH5.get_event_index(filename,10000)
+    
     #Create file_name for output
     interaction_filename = "/home/anthony/MastersThesis/Data" + filename[:-3] + "Interaction.h5"
     
-    detector_data.info(memory_usage="deep")
     #How many events are in that dataframe
-    no_events = detector_data['event_no'].iloc[-1]
+    #no_events = detector_data['event_no'].iloc[-1]
+   
+    no_events = ReadH5.get_no_events(filename)
+    
 
     #Data to input scattering data, pre-allocating the number of rows
     scattering_data = pd.DataFrame(
@@ -95,7 +100,7 @@ def without_intersection(filename,quality_check):
                                     "Z" : pd.Series(dtype='float'),
                                     "angle" : pd.Series(dtype='float')})
     #index = np.arange(0,no_events),
-    print((scattering_data.dtypes))
+    
     #So the idea is to split the data into events and then into in and out detectors for the concrete.
     for i in np.arange(0,no_events):
         
@@ -109,11 +114,10 @@ def without_intersection(filename,quality_check):
 
         #If one of the in or out detectors wasn't hit in the event, hits_data is returned false, skip that event
         if in_detector_hits.empty or out_detector_hits.empty or (len(in_detector_hits.index) == 1) or (len(out_detector_hits.index) == 1):
-            print(i,"Missed!")
             scattering_data.loc[i] = [i,0,0,0,math.nan]
             #Write something to the dataframe like false or smth
             continue
-        print(i)
+        
         
         pos_hits_in = in_detector_hits[['PosX','PosY','PosZ']].to_numpy()
         pos_hits_out = out_detector_hits[['PosX','PosY','PosZ']].to_numpy()
@@ -137,7 +141,13 @@ def without_intersection(filename,quality_check):
         scattering_data.loc[i] = [i, interaction_vertex_x, interaction_vertex_y, interaction_vertex_z, scattering_angle]
         
         #every 10,000 data points, write to H5 file
-        if i%10000 == 0:
+        print(i)
+        if (i%10000 == 0):
+            print(i)
+            if i == 0:
+                continue
+            print(i)
+            k+=1
             scattering_data.to_hdf(interaction_filename, key='Interactions', append=True, format = 'table', index=False)
             
             #Reset the dataframe
@@ -147,19 +157,17 @@ def without_intersection(filename,quality_check):
                                     "Y" : pd.Series(dtype='float'),
                                     "Z" : pd.Series(dtype='float'),
                                     "angle" : pd.Series(dtype='float')})
-            print(scattering_data)
+            
+            detector_data = ReadH5.get_detector_data_10000lines(filename,k)
+            print("NEWDATASET")
     #Outputting remaining data into the frame
     scattering_data.to_hdf(interaction_filename, key='Interactions', append=True, format = 'table', index=False)
     
-    
-    
-    
-
     #scattering_data.to_csv('Interaction2.csv',index=False)
 
     return(None)
-
+filename = "/Concretewithrod/SteelRodInConcrete.h5"
 #filename = "/SteelRodInConcrete50mmRadius/2millionevents.h5"
-filename = "/50mmSample/Lead/50000PureLeadSlab1.h5"
+#filename = "/50mmSample/Lead/50000PureLeadSlab1.h5"
 #with_intersection(filename)
 without_intersection(filename,True)
