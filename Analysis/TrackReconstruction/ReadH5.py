@@ -1,3 +1,5 @@
+#File of functions for reading various H5 files for ease of use
+
 import h5py
 import pandas as pd
 import numpy as np
@@ -60,11 +62,13 @@ def get_event_index(filename,how_many_events):
     with h5py.File(filepath, "r") as f:
         events = f['DetectorOutput'][:,'event_no']
         events = np.array(events)
-
+        #print(np.shape(events))
+        #print(events)
         indices = np.where(events%how_many_events ==0)[0]
         index = []
         
         for i in range(indices.shape[0]):
+            print(index)
             if i == 0:
                 continue
             
@@ -73,4 +77,5 @@ def get_event_index(filename,how_many_events):
             
             else:
                 index.append(indices[i-1])
+        index.append(np.shape(events)[0]-1)
     return(index)

@@ -1,15 +1,12 @@
 
 #Track Reconstruction for data. 
 
-# Outline of the problem: 
-# Get Data from files (ideally this will be in a seperate file that I 
-# can call later but for now it will able be in this file)
 
 # Perform a Chi squared minimisation for incoming, outcoming tracks based off of particle hits on the detector
-# enforcing that they intersect at a point
-# (the point is a large scattering event / accumulation of coulomb scatterings) 
+# enforcing that they intersect at a point (if called upon to do this, takes significantly more computing power)
+# assuming single point of scattering 
 
-#This is merely a file of functions to do the above, it should be called from another file. 
+#This is merely a file of functions to do the above, it is called from FindInteractions.py
 
 import csv
 import matplotlib.pyplot as plt

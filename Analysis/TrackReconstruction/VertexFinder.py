@@ -1,3 +1,5 @@
+#Function file to be called from FindInteractions.py
+#Function takes two lines, finds the cloest approach and assigns the central point of the line that connects the closest points as the vertex of the single scattering action
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,7 +13,7 @@ from skspatial.objects import Line, Points, Vector
 
 from skspatial.plotting import plot_3d
 
-def vertex_angle_find(line1,line2,quality_factor):
+def vertex_angle_find(line1,line2):
     #Finds the intersection of the re-constructed tracks.
     angle = float
     vertex = [float,float,float]
@@ -78,12 +80,11 @@ def vertex_angle_find(line1,line2,quality_factor):
     #to represent multiple scattering events which the track reconstruction algorithm doesn’t account for
     #so it would give less weighting to them which could reduce the noise in the reconstructed images.
     
-    if quality_factor:
-        angle = angle/distance    
+    qual_angle =  angle/distance    
     
     
         
 
-    return (angle, intersection)
+    return (angle, intersection,qual_angle)
 
 
