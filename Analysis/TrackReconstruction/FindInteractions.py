@@ -24,7 +24,7 @@ from skspatial.plotting import plot_3d
 
 
 def with_intersection(filename):
-    #Redundant due to how long it takes to run / minimal improvement
+    #Redundant due to how long it takes to run / minimal improvement, have left the code here just in-case but it is outdated.
     detector_data = ReadH5.get_detector_data(filename)
     #How many events are in that dataframe
     no_events = detector_data['event_no'].iloc[-1]

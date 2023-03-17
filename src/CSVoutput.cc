@@ -1,5 +1,5 @@
 #include "CSVoutput.hh"
-
+//File is now redundant now H5 is setup.
 void CSVoutput::DetectorOutput(int event_no, 
                         int PDGnumb,
                         double x,
