@@ -202,7 +202,7 @@ def without_intersection(filename,error):
 
     return(None)
 #filename = "/Concretewithrod/SteelRodInConcrete.h5"
-filename = "/SteelRodInConcrete50mmRadius/2millionevents.h5"
+filename = "/ReferenceConcreteBlock/2milli.h5"
 #filename = "/50mmSample/Lead/50000PureLeadSlab1.h5"
 #with_intersection(filename)
 without_intersection(filename,False)

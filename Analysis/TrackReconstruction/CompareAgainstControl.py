@@ -7,42 +7,58 @@ import Voxel as Voxel
 import pandas as pd
 import statistics
 import scipy.stats
+import ReadH5 as ReadH5
 
 #Note this is filepaths:))
-control_concrete_filepath = ""
-steel_rod_concrete_filepath = ""
 
-def compare_control(control_filepath,object_imaging_filepath):
-    control_df = pd.read_csv(control_filepath)
-    imaging_df = pd.read_csv(object_imaging_filepath)
+def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_side_length):
+    
+    control_df = ReadH5.pandas_read(control_filepath)
+    imaging_df = ReadH5.pandas_read(object_imaging_filepath)
 
     #A good coder would make sure the dataframes match and exit out if they don't
-    
+    ctrl3D,ctrlXY,ctrlYZ,ctrlXZ = Voxel.voxelisation(voxel_side_length,control_filepath,control_df,qual_fact)
+    img3D,imgXY,imgYZ,imgXZ = Voxel.voxelisation(voxel_side_length,object_imaging_filepath,imaging_df,qual_fact)
     #Just some data cleaning ready to take the values away from eachother
-    control_df['angle'] = control_df['angle'].astype(float)
-    control_df['angle'] = control_df['angle'].fillna(0)
-
-    control_df['qualfactorangle'] = control_df['qualfactorangle'].astype(float)
-    control_df['qualfactorangle'] = control_df['qualfactorangle'].fillna(0)
-
-    imaging_df['angle'] = imaging_df['angle'].astype(float)
-    imaging_df['angle'] = imaging_df['angle'].fillna(0)
-
-    imaging_df['qualfactorangle'] = imaging_df['qualfactorangle'].astype(float)
-    imaging_df['qualfactorangle'] = imaging_df['qualfactorangle'].fillna(0)
     
-    #Dataframe to plot the difference between the control and 
-    difference_df = imaging_df
+    if qual_fact == True:
+        angle = "qualfactorangle"
+    
+    else:
+        angle= "angle"
+        
+    for i in [ctrl3D,ctrlXY,ctrlYZ,ctrlXZ,img3D,imgXY,imgYZ,imgXZ]:    
+        i[angle] = i[angle].astype(float)
+        i[angle] = i[angle].fillna(0)
 
-    difference_df['angle'] = imaging_df['angle'] - control_df['angle']
-    difference_df['qualfactorangle'] = imaging_df['qualfactorangle'] - control_df['qualfactorangle'] 
+        
+    #Setting the base dataframe
+    difference3D = img3D 
+    differenceXY = imgXY
+    differenceYZ= imgYZ
+    differenceXZ = imgXZ
 
-    filepath = object_imaging_filepath[:-4] + "AgainstControl.csv"
+    #Replacing angle with the difference
+    difference3D[angle] = img3D[angle] - ctrl3D[angle]
+    differenceXY[angle] = imgXY[angle] - ctrlXY[angle]
+    differenceYZ[angle] = imgYZ[angle] - ctrlYZ[angle]
+    differenceXZ[angle] = imgXZ[angle] - ctrlXZ[angle]
+        
+    #Filepaths to write to
+    filepath3D = object_imaging_filepath[:-3] + "AgainstControl3D.csv"
+    filepathXY = object_imaging_filepath[:-3] + "AgainstControlXY.csv"
+    filepathYZ = object_imaging_filepath[:-3] + "AgainstControlYZ.csv"
+    filepathXZ = object_imaging_filepath[:-3] + "AgainstControlXZ.csv"
 
-    difference_df.to_csv(filepath)
+    #Writing data to CSV
+    difference3D.to_csv(filepath3D)
+    differenceXY.to_csv(filepathXY)
+    differenceYZ.to_csv(filepathYZ)
+    differenceXZ.to_csv(filepathXZ)
+    
+    base_file_path = "/home/anthony/MastersThesis/Data"
 
-
-    return(difference_df)
+    return(None)
 
 def confidence_rating_basic(control_filepath,object_imaging_filepath):
     #Compares the imaged object hits to a control concrete block and gives a confidence rating of steel being in certain areas
@@ -85,7 +101,8 @@ def confidence_rating_basic(control_filepath,object_imaging_filepath):
     return(None)
 
 def confidence_rating_less_basic(control_filepath,object_imaging_filepath):
-    #Compares the imaged object hits to a control concrete block and gives a confidence rating of steel being in certain areas
+    # NOT FINISHED
+    # Compares the imaged object hits to a control concrete block and gives a confidence rating of steel being in certain areas
 
     #One concern is that the scattering throughout the uniform block of concrete won't be uniform which could cause issues because of the acceptance...
     #An basic approach would just to be to find the standard dev of angles across the whole block and then compare to the control above and assign 
@@ -126,3 +143,11 @@ def confidence_rating_less_basic(control_filepath,object_imaging_filepath):
     confidence_df.to_csv(filepath)
 
     return(None)
+
+
+control_concrete_filepath = "/ReferenceConcreteBlock/2milliInteraction.h5"
+steel_rod_concrete_filepath = "/SteelRodInConcrete50mmRadius/2millionevents2Interaction.h5"
+qual_fact = True
+voxel_side_length = 25 #mm
+
+compare_control(control_concrete_filepath,steel_rod_concrete_filepath,qual_fact,voxel_side_length)
