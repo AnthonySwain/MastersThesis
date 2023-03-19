@@ -10,6 +10,16 @@ import scipy.stats
 import ReadH5 as ReadH5
 
 #Note this is filepaths:))
+detector_in_corners = ([0.75*1000,0.6*1000,0.5*1000],
+                    [0.75*1000,-0.6*1000,0.5*1000],
+                     [-0.75*1000,-0.6*1000,0.5*1000],
+                     [-0.75*1000,0.6*1000,0.5*1000])
+
+detector_out_corners = ([0.75*1000,0.6*1000,-0.5*1000],
+                    [0.75*1000,-0.6*1000,-0.5*1000],
+                     [-0.75*1000,-0.6*1000,-0.5*1000],
+                     [-0.75*1000,0.6*1000,-0.5*1000])
+
 
 def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_side_length):
     
@@ -17,8 +27,8 @@ def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_sid
     imaging_df = ReadH5.pandas_read(object_imaging_filepath)
 
     #A good coder would make sure the dataframes match and exit out if they don't
-    ctrl3D,ctrlXY,ctrlYZ,ctrlXZ = Voxel.voxelisation(voxel_side_length,control_filepath,control_df,qual_fact)
-    img3D,imgXY,imgYZ,imgXZ = Voxel.voxelisation(voxel_side_length,object_imaging_filepath,imaging_df,qual_fact)
+    Voxel.voxelisation(voxel_side_length,control_filepath,control_df,qual_fact)
+    Voxel.voxelisation(voxel_side_length,object_imaging_filepath,imaging_df,qual_fact)
     #Just some data cleaning ready to take the values away from eachother
     
     if qual_fact == True:
@@ -26,10 +36,44 @@ def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_sid
     
     else:
         angle= "angle"
-        
-    for i in [ctrl3D,ctrlXY,ctrlYZ,ctrlXZ,img3D,imgXY,imgYZ,imgXZ]:    
-        i[angle] = i[angle].astype(float)
-        i[angle] = i[angle].fillna(0)
+    
+    base_file_path = "/home/anthony/MastersThesis/Data"
+    
+    ctrl3D = pd.read_csv(base_file_path + control_filepath[:-3] + "3D.csv")
+    ctrlXY = pd.read_csv(base_file_path + control_filepath[:-3] + "xyplane.csv")
+    ctrlYZ = pd.read_csv(base_file_path + control_filepath[:-3] + "yzplane.csv")
+    ctrlXZ = pd.read_csv(base_file_path + control_filepath[:-3] + "xzplane.csv")
+    
+    img3D = pd.read_csv(base_file_path + object_imaging_filepath[:-3] + "3D.csv")
+    imgXY = pd.read_csv(base_file_path + object_imaging_filepath[:-3] + "xyplane.csv")
+    imgYZ = pd.read_csv(base_file_path + object_imaging_filepath[:-3] + "yzplane.csv")
+    imgXZ = pd.read_csv(base_file_path + object_imaging_filepath[:-3] + "xzplane.csv")
+    
+    #for i in [ctrl3D,ctrlXY,ctrlYZ,ctrlXZ,img3D,imgXY,imgYZ,imgXZ]:    
+    
+    ctrl3D[angle] = ctrl3D[angle].astype(float)
+    ctrl3D[angle] = ctrl3D[angle].fillna(0)
+    
+    ctrlXY[angle] = ctrlXY[angle].astype(float)
+    ctrlXY[angle] = ctrlXY[angle].fillna(0)
+    
+    ctrlYZ[angle] = ctrlYZ[angle].astype(float)
+    ctrlYZ[angle] = ctrlYZ[angle].fillna(0)
+    
+    ctrlXZ[angle] = ctrlXZ[angle].astype(float)
+    ctrlXZ[angle] = ctrlXZ[angle].fillna(0)
+    
+    img3D[angle] = img3D[angle].astype(float)
+    img3D[angle] = img3D[angle].fillna(0)
+    
+    imgXY[angle] = imgXY[angle].astype(float)
+    imgXY[angle] = imgXY[angle].fillna(0)
+    
+    imgYZ[angle] = imgYZ[angle].astype(float)
+    imgYZ[angle] = imgYZ[angle].fillna(0)
+    
+    imgXZ[angle] = imgXZ[angle].astype(float)
+    imgXZ[angle] = imgXZ[angle].fillna(0)
 
         
     #Setting the base dataframe
@@ -37,18 +81,21 @@ def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_sid
     differenceXY = imgXY
     differenceYZ= imgYZ
     differenceXZ = imgXZ
-
+    print(ctrl3D)
+    print(img3D)
     #Replacing angle with the difference
-    difference3D[angle] = img3D[angle] - ctrl3D[angle]
-    differenceXY[angle] = imgXY[angle] - ctrlXY[angle]
-    differenceYZ[angle] = imgYZ[angle] - ctrlYZ[angle]
-    differenceXZ[angle] = imgXZ[angle] - ctrlXZ[angle]
-        
+    difference3D[angle] = abs(img3D[angle] - ctrl3D[angle])
+    differenceXY[angle] = abs(imgXY[angle] - ctrlXY[angle])
+    differenceYZ[angle] = abs(imgYZ[angle] - ctrlYZ[angle])
+    differenceXZ[angle] = abs(imgXZ[angle] - ctrlXZ[angle])
+    print("diffy")
+    print(difference3D)
+    print("diffy")
     #Filepaths to write to
-    filepath3D = object_imaging_filepath[:-3] + "AgainstControl3D.csv"
-    filepathXY = object_imaging_filepath[:-3] + "AgainstControlXY.csv"
-    filepathYZ = object_imaging_filepath[:-3] + "AgainstControlYZ.csv"
-    filepathXZ = object_imaging_filepath[:-3] + "AgainstControlXZ.csv"
+    filepath3D = base_file_path + object_imaging_filepath[:-3] + "AgainstControl3D.csv"
+    filepathXY = base_file_path + object_imaging_filepath[:-3] + "AgainstControlXY.csv"
+    filepathYZ = base_file_path + object_imaging_filepath[:-3] + "AgainstControlYZ.csv"
+    filepathXZ = base_file_path + object_imaging_filepath[:-3] + "AgainstControlXZ.csv"
 
     #Writing data to CSV
     difference3D.to_csv(filepath3D)
@@ -56,7 +103,7 @@ def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_sid
     differenceYZ.to_csv(filepathYZ)
     differenceXZ.to_csv(filepathXZ)
     
-    base_file_path = "/home/anthony/MastersThesis/Data"
+    
 
     return(None)
 
@@ -144,10 +191,22 @@ def confidence_rating_less_basic(control_filepath,object_imaging_filepath):
 
     return(None)
 
-
 control_concrete_filepath = "/ReferenceConcreteBlock/2milliInteraction.h5"
-steel_rod_concrete_filepath = "/SteelRodInConcrete50mmRadius/2millionevents2Interaction.h5"
-qual_fact = True
-voxel_side_length = 25 #mm
+object_imaging_filepath = "/SteelRodInConcrete50mmRadius/2millionevents2Interaction.h5"
+base_file_path = "/home/anthony/MastersThesis/Data"
 
-compare_control(control_concrete_filepath,steel_rod_concrete_filepath,qual_fact,voxel_side_length)
+filepath3D = base_file_path + object_imaging_filepath[:-3] + "AgainstControl3D.csv"
+filepathXY = base_file_path + object_imaging_filepath[:-3] + "AgainstControlXY.csv"
+filepathYZ = base_file_path + object_imaging_filepath[:-3] + "AgainstControlYZ.csv"
+filepathXZ = base_file_path + object_imaging_filepath[:-3] + "AgainstControlXZ.csv"
+
+
+qual_fact = False
+voxel_side_length = 50 #mm
+
+compare_control(control_concrete_filepath,object_imaging_filepath,qual_fact,voxel_side_length)
+
+Voxel.image_heatmap_2D_x_z(filepathXZ,detector_in_corners,qual_fact)
+Voxel.image_heatmap_2D_x_y(filepathXY ,qual_fact)
+Voxel.image_heatmap_2D_y_z(filepathYZ ,qual_fact)
+Voxel.image_heatmap_3D(filepath3D,detector_in_corners,qual_fact)
