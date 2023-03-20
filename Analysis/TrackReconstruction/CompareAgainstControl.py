@@ -23,9 +23,14 @@ detector_out_corners = ([0.75*1000,0.6*1000,-0.5*1000],
 
 def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_side_length):
     
-    control_df = ReadH5.pandas_read(control_filepath)
-    imaging_df = ReadH5.pandas_read(object_imaging_filepath)
-
+    control_df1 = ReadH5.pandas_read(control_filepath)
+    control_df2 = ReadH5.pandas_read("/ReferenceConcreteBlock/2milli2Interaction.h5")
+    imaging_df1 = ReadH5.pandas_read(object_imaging_filepath)
+    imaging_df2 = ReadH5.pandas_read("/SteelRodInConcrete50mmRadius/2millioneventsInteraction.h5")
+    
+    imaging_df = pd.concat([imaging_df1,imaging_df2])
+    control_df = pd.concat([control_df1,control_df2])
+    
     #A good coder would make sure the dataframes match and exit out if they don't
     Voxel.voxelisation(voxel_side_length,control_filepath,control_df,qual_fact)
     Voxel.voxelisation(voxel_side_length,object_imaging_filepath,imaging_df,qual_fact)
@@ -81,16 +86,25 @@ def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_sid
     differenceXY = imgXY
     differenceYZ= imgYZ
     differenceXZ = imgXZ
-    print(ctrl3D)
-    print(img3D)
+   
     #Replacing angle with the difference
     difference3D[angle] = abs(img3D[angle] - ctrl3D[angle])
     differenceXY[angle] = abs(imgXY[angle] - ctrlXY[angle])
     differenceYZ[angle] = abs(imgYZ[angle] - ctrlYZ[angle])
     differenceXZ[angle] = abs(imgXZ[angle] - ctrlXZ[angle])
-    print("diffy")
-    print(difference3D)
-    print("diffy")
+    
+    if qual_fact == False:
+        difference3D = difference3D.loc[(difference3D.angle >=0)]
+        differenceXY = differenceXY.loc[(differenceXY.angle >=0)]
+        differenceYZ = differenceYZ.loc[(differenceYZ.angle >=0)]
+        differenceXZ = differenceXZ.loc[(differenceXZ.angle >=0)]
+        
+    if qual_fact == True:
+        difference3D = difference3D.loc[(difference3D.qualfactorangle >=0)]
+        differenceXY = differenceXY.loc[(differenceXY.qualfactorangle >=0)]
+        differenceYZ = differenceYZ.loc[(differenceYZ.qualfactorangle >=0)]
+        differenceXZ = differenceXZ.loc[(differenceXZ.qualfactorangle >=0)]
+        
     #Filepaths to write to
     filepath3D = base_file_path + object_imaging_filepath[:-3] + "AgainstControl3D.csv"
     filepathXY = base_file_path + object_imaging_filepath[:-3] + "AgainstControlXY.csv"
@@ -193,6 +207,7 @@ def confidence_rating_less_basic(control_filepath,object_imaging_filepath):
 
 control_concrete_filepath = "/ReferenceConcreteBlock/2milliInteraction.h5"
 object_imaging_filepath = "/SteelRodInConcrete50mmRadius/2millionevents2Interaction.h5"
+
 base_file_path = "/home/anthony/MastersThesis/Data"
 
 filepath3D = base_file_path + object_imaging_filepath[:-3] + "AgainstControl3D.csv"
@@ -206,7 +221,14 @@ voxel_side_length = 50 #mm
 
 compare_control(control_concrete_filepath,object_imaging_filepath,qual_fact,voxel_side_length)
 
-Voxel.image_heatmap_2D_x_z(filepathXZ,detector_in_corners,qual_fact)
-Voxel.image_heatmap_2D_x_y(filepathXY ,qual_fact)
-Voxel.image_heatmap_2D_y_z(filepathYZ ,qual_fact)
-Voxel.image_heatmap_3D(filepath3D,detector_in_corners,qual_fact)
+#Voxel.image_heatmap_2D_x_z(filepathXZ,detector_in_corners,qual_fact)
+#Voxel.image_heatmap_2D_x_y(filepathXY ,qual_fact)
+#Voxel.image_heatmap_2D_y_z(filepathYZ ,qual_fact)
+#Voxel.image_heatmap_3D(filepath3D,detector_in_corners,qual_fact)
+Voxel.heatmap_slices(filepath3D,qual_fact)
+
+#I think sum gives the best contrast as it takes density into account, but I need to make sure
+#That if finding the difference between the sum of each that each dataset has the same number of muons accepted
+
+#i also think that finding the mean is actually masking where the bar really is when showing 2D planes
+#Need to split the 3D dataset into 2D planes and iterate through them

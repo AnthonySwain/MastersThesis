@@ -34,14 +34,9 @@ def data_clean(data):
     return (x,y,z,angle,xyz)
 
 
-data_frame1steel = ReadH5.pandas_read("/1mmSample/Steel/SteelInteraction.h5")
-
+data_frame1steel = ReadH5.pandas_read("/100mmSample/Steel/SteelInteraction.h5")
 data_frame1concrete = ReadH5.pandas_read("/1mmSample/Concrete/ConcreteInteraction.h5")
-
 data_frame1lead = ReadH5.pandas_read("/1mmSample/Lead/LeadInteraction.h5")
-
-
-
 data_frame_air = ReadH5.pandas_read("/50mmSample/Air/50000AirInteraction.h5")
 
 data_air = data_frame_air
@@ -96,10 +91,10 @@ def scat_angle_dist(angle1,angle2,angle3,angle4):
     
     
     
-    ax = angle4.plot(kind = 'kde', label = 'Air')
-    ax = angle2.plot(kind = 'kde', label = 'Concrete')
-    ax = angle1.plot(kind = 'kde', label = 'Steel')
-    ax = angle3.plot(kind = 'kde', label = 'Lead')
+    #ax = angle4.plot(kind = 'kde', label = 'Air')
+    ax = angle2.plot(kind = 'kde', label = 'ConcreteBlock')
+    ax = angle1.plot(kind = 'kde', label = 'SteelRod')
+    #ax = angle3.plot(kind = 'kde', label = 'Lead')
     
     ax.legend()
     plt.xlim(0,math.pi/16)
@@ -125,7 +120,13 @@ lead_angle = clean_lead[3]
 #angle_diff = abs(interaction_angle - no_interaction_angle)
 
 
-scat_angle_dist(steel_angle,concrete_angle,lead_angle,air_angle)
+#df_steel_rod = ReadH5.pandas_read("/50mmRadius SteelRod/SteelRodInteraction.h5")
+df_concrete_block = ReadH5.pandas_read("/ReferenceConcreteBlock/2milliInteraction.h5")
+
+#clean_rod = data_clean(df_steel_rod)
+clean_block = data_clean(df_concrete_block)
+
+scat_angle_dist(steel_angle,clean_block[3],lead_angle,air_angle)
 
 #scatter_map(x,y,z,angle)
 #voxel_map(data)

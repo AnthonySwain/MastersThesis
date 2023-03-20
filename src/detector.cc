@@ -46,6 +46,7 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory */*ROh
     auto preStepPoint = aStep->GetPreStepPoint();
     G4ThreeVector PositionPreStep = preStepPoint->GetPosition();
 
+    double momentum = aStep -> GetDeltaEnergy();
     auto time = aStep ->GetTrack()->GetGlobalTime();
     auto event_no = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
     
@@ -98,7 +99,8 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory */*ROh
             .PosZ = PositionPreStep[2],
             .time = time,
             .volume_ref = volume_ref_no,
-            .volume_no = volume_copy 
+            .volume_no = volume_copy,
+            .momentum = momentum
             };
         
         m_writer.write(data);

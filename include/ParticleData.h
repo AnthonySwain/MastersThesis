@@ -35,6 +35,7 @@ namespace H5CompositesStructures {
         double time;
         int volume_ref;
         int volume_no;
+        double momentum;
         
         H5COMPOSITES_DECLARE_STRUCT_DTYPE()
     };
