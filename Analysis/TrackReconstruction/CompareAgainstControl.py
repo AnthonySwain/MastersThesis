@@ -88,22 +88,23 @@ def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_sid
     differenceXZ = imgXZ
    
     #Replacing angle with the difference
-    difference3D[angle] = abs(img3D[angle] - ctrl3D[angle])
-    differenceXY[angle] = abs(imgXY[angle] - ctrlXY[angle])
-    differenceYZ[angle] = abs(imgYZ[angle] - ctrlYZ[angle])
-    differenceXZ[angle] = abs(imgXZ[angle] - ctrlXZ[angle])
+    difference3D[angle] = (img3D[angle] - ctrl3D[angle])
+    differenceXY[angle] = (imgXY[angle] - ctrlXY[angle])
+    differenceYZ[angle] = (imgYZ[angle] - ctrlYZ[angle])
+    differenceXZ[angle] = (imgXZ[angle] - ctrlXZ[angle])
     
-    if qual_fact == False:
-        difference3D = difference3D.loc[(difference3D.angle >=0)]
-        differenceXY = differenceXY.loc[(differenceXY.angle >=0)]
-        differenceYZ = differenceYZ.loc[(differenceYZ.angle >=0)]
-        differenceXZ = differenceXZ.loc[(differenceXZ.angle >=0)]
-        
-    if qual_fact == True:
-        difference3D = difference3D.loc[(difference3D.qualfactorangle >=0)]
-        differenceXY = differenceXY.loc[(differenceXY.qualfactorangle >=0)]
-        differenceYZ = differenceYZ.loc[(differenceYZ.qualfactorangle >=0)]
-        differenceXZ = differenceXZ.loc[(differenceXZ.qualfactorangle >=0)]
+   # if qual_fact == False:
+    difference3D[angle] = difference3D[angle].clip(lower=0)
+    differenceXY[angle] = differenceXY[angle].clip(lower=0)
+    differenceYZ[angle] = differenceYZ[angle].clip(lower=0)
+    differenceXZ[angle] = differenceXZ[angle].clip(lower=0)
+    
+    print(difference3D)
+   #if qual_fact == True:
+   #     difference3D = difference3D[(difference3D.qualfactorangle >=0)] =0
+   #     differenceXY = differenceXY[(differenceXY.qualfactorangle >=0)] =0
+    #    differenceYZ = differenceYZ[(differenceYZ.qualfactorangle >=0)] =0
+    #    differenceXZ = differenceXZ[(differenceXZ.qualfactorangle >=0)] =0
         
     #Filepaths to write to
     filepath3D = base_file_path + object_imaging_filepath[:-3] + "AgainstControl3D.csv"
@@ -119,43 +120,45 @@ def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_sid
     
     
 
-    return(None)
+    return(difference3D,ctrl3D)
 
-def confidence_rating_basic(control_filepath,object_imaging_filepath):
+def confidence_rating_basic(control_filepath,object_imaging_filepath,qual_fact,voxel_side_length):
     #Compares the imaged object hits to a control concrete block and gives a confidence rating of steel being in certain areas
 
     #One concern is that the scattering throughout the uniform block of concrete won't be uniform which could cause issues because of the acceptance...
     #An basic approach would just to be to find the standard dev of angles across the whole block and then compare to the control above and assign 
+    if qual_fact == True:
+        angle = "qualfactorangle"
     
+    else:
+        angle= "angle"
     #Getting the data that shows the differences 
-    difference_df = compare_control(control_filepath,object_imaging_filepath)
+    difference_df, control_df = compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_side_length)
     confidence_df = difference_df
-    difference_angles = abs(difference_df['angle'].to_numpy())
-    difference_qual = abs(difference_df['qualfactorangle'].to_numpy())
+    difference_angles = (difference_df[angle].to_numpy())
+    #
+    # difference_qual = (difference_df['qualfactorangle'].to_numpy())
 
     #inefficient as it's already been read in compare_control but for ease of use / it doesn't take long to open
-    control_df = pd.read_csv(control_filepath)
-    control_df['angle'] = control_df['angle'].astype(float)
-    control_df['angle'] = control_df['angle'].fillna(0)
+    
+    control_df[angle] = control_df[angle].astype(float)
+    control_df[angle] = control_df[angle].fillna(0)
 
-    control_df['qualfactorangle'] = control_df['qualfactorangle'].astype(float)
-    control_df['qualfactorangle'] = control_df['qualfactorangle'].fillna(0)
 
-    angle_values = control_df['angle'].to_numpy()
+
+    angle_values = control_df[angle].to_numpy()
     angle_stdev = statistics.stdev(angle_values)
     
-    qualfact_values = control_df['qualfactorangle'].to_numpy()
-    qual_factor_stdev = statistics.stdev(qualfact_values)
+
 
     #Confidence 
     angle_confidence = scipy.stats.norm(0,angle_stdev).cdf(difference_angles)
-    qualfact_confidence = scipy.stats.norm(0,qual_factor_stdev).cdf(difference_qual)
 
 
-    confidence_df['angle'] = angle_confidence
-    confidence_df['qualfactorangle'] = qualfact_confidence
 
-    filepath = object_imaging_filepath[:-4] + "Confidence.csv"
+    confidence_df[angle] = angle_confidence
+    base_file_path = "/home/anthony/MastersThesis/Data"
+    filepath = base_file_path + object_imaging_filepath[:-4] + "Confidence.csv"
 
     confidence_df.to_csv(filepath)
 
@@ -219,13 +222,15 @@ filepathXZ = base_file_path + object_imaging_filepath[:-3] + "AgainstControlXZ.c
 qual_fact = False
 voxel_side_length = 50 #mm
 
-compare_control(control_concrete_filepath,object_imaging_filepath,qual_fact,voxel_side_length)
-
+#compare_control(control_concrete_filepath,object_imaging_filepath,qual_fact,voxel_side_length)
+confidence_rating_basic(control_concrete_filepath,object_imaging_filepath,qual_fact,voxel_side_length)
 #Voxel.image_heatmap_2D_x_z(filepathXZ,detector_in_corners,qual_fact)
 #Voxel.image_heatmap_2D_x_y(filepathXY ,qual_fact)
 #Voxel.image_heatmap_2D_y_z(filepathYZ ,qual_fact)
 #Voxel.image_heatmap_3D(filepath3D,detector_in_corners,qual_fact)
-Voxel.heatmap_slices(filepath3D,qual_fact)
+#Voxel.heatmap_slices(filepath3D,qual_fact)
+
+Voxel.heatmap_slices(base_file_path + "/SteelRodInConcrete50mmRadius/2millionevents2InteractioConfidence.csv",qual_fact)
 
 #I think sum gives the best contrast as it takes density into account, but I need to make sure
 #That if finding the difference between the sum of each that each dataset has the same number of muons accepted
