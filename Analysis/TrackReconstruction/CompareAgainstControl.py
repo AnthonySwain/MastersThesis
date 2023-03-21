@@ -147,12 +147,12 @@ def confidence_rating_basic(control_filepath,object_imaging_filepath,qual_fact,v
 
 
     angle_values = control_df[angle].to_numpy()
-    angle_stdev = statistics.stdev(angle_values)
-    
+    #angle_stdev = statistics.stdev(angle_values)
+    angle_stdev = statistics.stdev(difference_angles)
 
 
     #Confidence 
-    angle_confidence = scipy.stats.norm(0,angle_stdev).cdf(difference_angles)
+    angle_confidence = scipy.stats.norm(0,5*angle_stdev).cdf(difference_angles)
 
 
 
@@ -220,7 +220,7 @@ filepathXZ = base_file_path + object_imaging_filepath[:-3] + "AgainstControlXZ.c
 
 
 qual_fact = False
-voxel_side_length = 50 #mm
+voxel_side_length = 30 #mm
 
 #compare_control(control_concrete_filepath,object_imaging_filepath,qual_fact,voxel_side_length)
 confidence_rating_basic(control_concrete_filepath,object_imaging_filepath,qual_fact,voxel_side_length)
@@ -229,7 +229,7 @@ confidence_rating_basic(control_concrete_filepath,object_imaging_filepath,qual_f
 #Voxel.image_heatmap_2D_y_z(filepathYZ ,qual_fact)
 #Voxel.image_heatmap_3D(filepath3D,detector_in_corners,qual_fact)
 #Voxel.heatmap_slices(filepath3D,qual_fact)
-
+print("test")
 Voxel.heatmap_slices(base_file_path + "/SteelRodInConcrete50mmRadius/2millionevents2InteractioConfidence.csv",qual_fact)
 
 #I think sum gives the best contrast as it takes density into account, but I need to make sure

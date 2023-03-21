@@ -293,7 +293,7 @@ def heatmap_slices(filepath,qual_angle):
         print(df_plot)
         
         pivot = df_plot.pivot(values = angle,columns='X',index='Y')
-        sns.heatmap(pivot,cmap = 'Spectral_r').axis('equal')
+        sns.heatmap(pivot,cmap = 'bwr').axis('equal')
         plt.title("Z= " +str(i)+ " mm")
         
         plt.savefig("/home/anthony/MastersThesis/Data/DumpFolder/xyZ=" +str(i)+".png")

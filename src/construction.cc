@@ -53,6 +53,14 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     //this is the mother volume,
     G4VPhysicalVolume *physWorld = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicWorld, "physWorld",0,false,0,true);
 
+
+    //Making the concrete volume
+    G4Material *Concrete = nist->FindOrBuildMaterial("G4_CONCRETE");
+    G4MaterialPropertiesTable *mptConcrete = new G4MaterialPropertiesTable();
+    G4Box *solidConcrete = new G4Box("solidConcrete", 1.0*m, 0.5*m, 0.5*m);
+    G4LogicalVolume *logicConcrete = new G4LogicalVolume(solidConcrete, Concrete,"logicConcrete");
+    G4VPhysicalVolume *physConcrete = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicConcrete, "physConcrete",logicWorld,false,0,true);
+
     
     //Making the steel volume inside the concrete volume
     //Steel is a mixture of elements so need to comprise it of carbon and iron
@@ -90,7 +98,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
                                                 G4ThreeVector(0.,0.,0.), //its position
                                                 logicSteel, //its logical volume
                                                 "physSteel", //name
-                                                logicWorld, //mothervolume
+                                                logicConcrete, //mothervolume
                                                 false, //no boolean operation
                                                 0, //copy number
                                                 true); //check for overlaps
@@ -111,7 +119,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 
     
     //Creating layers of particle detectors either side of the sample
-    for(G4int i = 0; i<2; i++)
+    for(G4int i = 0; i<3; i++)
     {
     //Detectors on one side
         G4VPhysicalVolume *physDetector00 = new G4PVPlacement(
