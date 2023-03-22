@@ -89,7 +89,6 @@ def without_intersection(filename,error):
        
     k = 1 #K keeps track of which set of 10,000 rows to read (the first 10,000 2nd 10,000 ect...ect...)
     detector_data = ReadH5.get_detector_data_between_indices(filename,index[k-1],index[k])
-    print(len(detector_data))
     
     if error == True:
         #this is mm
@@ -112,20 +111,49 @@ def without_intersection(filename,error):
     no_events = ReadH5.get_no_events(filename)
     
     #Data to input scattering data, pre-allocating the number of rows
-    scattering_data = pd.DataFrame(
+    scattering_data_poca = pd.DataFrame(
                                 {"event_no" : pd.Series(dtype='int'),
                                     "X" : pd.Series(dtype='float'),
                                     "Y" : pd.Series(dtype='float'),
                                     "Z" : pd.Series(dtype='float'),
                                     "angle" : pd.Series(dtype='float'),
-                                    "qualfactorangle" : pd.Series(dtype='float')})
+                                    "qualfactorangle" : pd.Series(dtype='float'),
+                                    "momentumweighted" : pd.Series(dtype='float'),
+                                    "MDweighted" : pd.Series(dtype='float')})
+    #Data for ASR
+    line_values = pd.DataFrame(
+                        {"event_no" : pd.Series(dtype='int'),
+                        "outgoinglinepointx" : pd.Series(dtype='float'),
+                        "outgoinglinepointy" : pd.Series(dtype='float'),
+                        "outgoinglinepointz" : pd.Series(dtype='float'),
+                        
+                        "outgoinglinedirectionx" : pd.Series(dtype='float'),
+                        "outgoinglinedirectiony" : pd.Series(dtype='float'),
+                        "outgoinglinedirectionz" : pd.Series(dtype='float'),
+                        
+                        "ingoinglinepointx" : pd.Series(dtype='float'),
+                        "ingoinglinepointy" : pd.Series(dtype='float'),
+                        "ingoinglinepointz" : pd.Series(dtype='float'),
+                        
+                        "ingoinglinedirectionx" : pd.Series(dtype='float'),
+                        "ingoinglinedirectiony" : pd.Series(dtype='float'),
+                        "ingoinglinedirectionz" : pd.Series(dtype='float'),
+            
+                        "xangle" : pd.Series(dtype='float'),
+                        "yangle" : pd.Series(dtype='float'),
+                        "momentum" : pd.Series(dtype='float')})
+    
+    
+    
     #index = np.arange(0,no_events),
-    print(scattering_data)
+    
     #So the idea is to split the data into events and then into in and out detectors for the concrete.
     for i in np.arange(0,no_events):
         
-        hits_data = detector_data.loc[detector_data.event_no == i]
         
+        
+        hits_data = detector_data.loc[detector_data.event_no == i]
+        momentum = hits_data['momentum'].iloc[0]
         in_detector_hits = hits_data.loc[(hits_data['volume_ref'].isin([0,1]))]
 
         out_detector_hits = hits_data.loc[(hits_data['volume_ref'].isin([10,11]))]
@@ -134,23 +162,50 @@ def without_intersection(filename,error):
 
         #If one of the in or out detectors wasn't hit in the event, hits_data is returned false, skip that event
         if (i%event_chunk == 0):
-            print(i)
+            
             if i == 0:
                 continue
             print(i)
             k+=1
             if k >= np.size(index):
                 break
-            scattering_data.to_hdf(interaction_filename, key='Interactions', append=True, format = 'table', index=False)
+            
+            #every event_chunk data points, write to H5 file
+            scattering_data_poca.to_hdf(interaction_filename, key='POCA', append=True, format = 'table', index=False)
             
             #Reset the dataframe
-            scattering_data = pd.DataFrame(
+            scattering_data_poca = pd.DataFrame(
                                 {"event_no" : pd.Series(dtype='int'),
                                     "X" : pd.Series(dtype='float'),
                                     "Y" : pd.Series(dtype='float'),
                                     "Z" : pd.Series(dtype='float'),
                                     "angle" : pd.Series(dtype='float'),
-                                    "qualfactorangle" : pd.Series(dtype='float')})
+                                    "qualfactorangle" : pd.Series(dtype='float'),
+                                    "momentumweighted" : pd.Series(dtype='float'),
+                                    "MDweighted" : pd.Series(dtype='float')})
+            
+            line_values = pd.DataFrame(
+                        {"event_no" : pd.Series(dtype='int'),
+                        "outgoinglinepointx" : pd.Series(dtype='float'),
+                        "outgoinglinepointy" : pd.Series(dtype='float'),
+                        "outgoinglinepointz" : pd.Series(dtype='float'),
+                        
+                        "outgoinglinedirectionx" : pd.Series(dtype='float'),
+                        "outgoinglinedirectiony" : pd.Series(dtype='float'),
+                        "outgoinglinedirectionz" : pd.Series(dtype='float'),
+                        
+                        "ingoinglinepointx" : pd.Series(dtype='float'),
+                        "ingoinglinepointy" : pd.Series(dtype='float'),
+                        "ingoinglinepointz" : pd.Series(dtype='float'),
+                        
+                        "ingoinglinedirectionx" : pd.Series(dtype='float'),
+                        "ingoinglinedirectiony" : pd.Series(dtype='float'),
+                        "ingoinglinedirectionz" : pd.Series(dtype='float'),
+            
+                        "xangle" : pd.Series(dtype='float'),
+                        "yangle" : pd.Series(dtype='float'),
+                        "xanglemomentumweighted" : pd.Series(dtype='float'),
+                        "yanglemomentumweighted" : pd.Series(dtype='float')})
             
             detector_data = ReadH5.get_detector_data_between_indices(filename,index[k-1],index[k])
             print("NEWDATASET")
@@ -165,8 +220,8 @@ def without_intersection(filename,error):
                 detector_data['PosZ'] = detector_data['PosZ'] - noise[:,2]
             
         if in_detector_hits.empty or out_detector_hits.empty or (len(in_detector_hits.index) == 1) or (len(out_detector_hits.index) == 1):
-            scattering_data.loc[i] = [i,0,0,0,math.nan,math.nan]
-            #Write something to the dataframe like false or smth
+            scattering_data_poca.loc[i] = [i,0,0,0,math.nan,math.nan,math.nan,math.nan]
+            #Still write to dataframe but no data if not enough data collected to form in and out lines (i.e muon misses one of in/out detectors)
             continue
             
         
@@ -189,18 +244,24 @@ def without_intersection(filename,error):
         interaction_vertex_y = float(interaction_vertex_angle[1][1])
         interaction_vertex_z = float(interaction_vertex_angle[1][2])
         qual_angle = float(interaction_vertex_angle[2])
+        momentumweighted = scattering_angle * momentum
+        MDweighted = qual_angle * momentum
         
-        scattering_data.loc[i] = [i, interaction_vertex_x, interaction_vertex_y, interaction_vertex_z, scattering_angle,qual_angle]
+        scattering_data_poca.loc[i] = [i, interaction_vertex_x, interaction_vertex_y, interaction_vertex_z, scattering_angle,qual_angle,momentumweighted,MDweighted]
         
-        #every event_chunk data points, write to H5 file
-        print(i)
+        
+    
         
     #Outputting remaining data into the frame
-    scattering_data.to_hdf(interaction_filename, key='Interactions', append=True, format = 'table', index=False)
+    scattering_data_poca.to_hdf(interaction_filename, key='POCA', append=True, format = 'table', index=False)
     
     #scattering_data.to_csv('Interaction2.csv',index=False)
 
     return(None)
+
+
+    
+
 #filename = "/Concretewithrod/SteelRodInConcrete.h5"
 #filename = "/ReferenceConcreteBlock/2milli2.h5"
 filename = "/50mmRadius SteelRod/SteelRod.h5"
