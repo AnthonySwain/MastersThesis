@@ -141,7 +141,8 @@ def without_intersection(filename,error):
             
                         "xangle" : pd.Series(dtype='float'),
                         "yangle" : pd.Series(dtype='float'),
-                        "momentum" : pd.Series(dtype='float')})
+                        "xanglemom" : pd.Series(dtype='float'),
+                        "yanglemom" : pd.Series(dtype='float')})
     
     
     
@@ -149,17 +150,13 @@ def without_intersection(filename,error):
     
     #So the idea is to split the data into events and then into in and out detectors for the concrete.
     for i in np.arange(0,no_events):
-        
-        
-        
+                
         hits_data = detector_data.loc[detector_data.event_no == i]
         momentum = hits_data['momentum'].iloc[0]
         in_detector_hits = hits_data.loc[(hits_data['volume_ref'].isin([0,1]))]
 
         out_detector_hits = hits_data.loc[(hits_data['volume_ref'].isin([10,11]))]
         
-        
-
         #If one of the in or out detectors wasn't hit in the event, hits_data is returned false, skip that event
         if (i%event_chunk == 0):
             
@@ -172,8 +169,8 @@ def without_intersection(filename,error):
             
             #every event_chunk data points, write to H5 file
             scattering_data_poca.to_hdf(interaction_filename, key='POCA', append=True, format = 'table', index=False)
-            
-            #Reset the dataframe
+            line_values.to_hdf(interaction_filename, key='ASR', append=True, format = 'table', index=False)
+            #Reset the dataframes
             scattering_data_poca = pd.DataFrame(
                                 {"event_no" : pd.Series(dtype='int'),
                                     "X" : pd.Series(dtype='float'),
@@ -204,8 +201,8 @@ def without_intersection(filename,error):
             
                         "xangle" : pd.Series(dtype='float'),
                         "yangle" : pd.Series(dtype='float'),
-                        "xanglemomentumweighted" : pd.Series(dtype='float'),
-                        "yanglemomentumweighted" : pd.Series(dtype='float')})
+                        "xanglemom" : pd.Series(dtype='float'),
+                        "yanglemom" : pd.Series(dtype='float')})
             
             detector_data = ReadH5.get_detector_data_between_indices(filename,index[k-1],index[k])
             print("NEWDATASET")
@@ -221,6 +218,7 @@ def without_intersection(filename,error):
             
         if in_detector_hits.empty or out_detector_hits.empty or (len(in_detector_hits.index) == 1) or (len(out_detector_hits.index) == 1):
             scattering_data_poca.loc[i] = [i,0,0,0,math.nan,math.nan,math.nan,math.nan]
+            line_values.loc[i] = [i,math.nan,math.nan,math.nan,math.nan,math.nan,math.nan,math.nan,math.nan,math.nan,math.nan,math.nan,math.nan,math.nan,math.nan,math.nan,math.nan]
             #Still write to dataframe but no data if not enough data collected to form in and out lines (i.e muon misses one of in/out detectors)
             continue
             
@@ -246,14 +244,25 @@ def without_intersection(filename,error):
         qual_angle = float(interaction_vertex_angle[2])
         momentumweighted = scattering_angle * momentum
         MDweighted = qual_angle * momentum
+
+        xscat = float(interaction_vertex_angle[3])
+        yscat = float(interaction_vertex_angle[4])
+        
+        xscatmomentum = xscat * momentum
+        yscatmomentum = yscat * momentum
         
         scattering_data_poca.loc[i] = [i, interaction_vertex_x, interaction_vertex_y, interaction_vertex_z, scattering_angle,qual_angle,momentumweighted,MDweighted]
-        
+        line_values.loc[i] = [i,line1.point[0],line1.point[1],line1.point[2],
+                              line1.dir[0],line1.dir[1],line1.dir[2],
+                              line2.point[0],line2.point[1],line2.point[2],
+                              line2.dir[0],line2.dir[1],line2.dir[2],
+                              xscat,yscat,xscatmomentum,yscatmomentum]
         
     
         
     #Outputting remaining data into the frame
     scattering_data_poca.to_hdf(interaction_filename, key='POCA', append=True, format = 'table', index=False)
+    line_values.to_hdf(interaction_filename, key='ASR', append=True, format = 'table', index=False)
     
     #scattering_data.to_csv('Interaction2.csv',index=False)
 

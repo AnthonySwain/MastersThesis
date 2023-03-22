@@ -68,10 +68,29 @@ def vertex_angle_find(line1,line2):
 
 
     angle = line1dir.angle_between(line2dir)
+    scattered_angle_x_1 = line1dir.angle_between([1,0,0]) 
+    scattered_angle_y_1 = line1dir.angle_between([0,1,0]) 
+
+    scattered_angle_x_2= line2dir.angle_between([1,0,0]) 
+    scattered_angle_y_2 = line2dir.angle_between([0,1,0])
+
+    if scattered_angle_x_1 > math.pi/2:
+        scattered_angle_x_1 = math.pi - scattered_angle_x_1
     
+    if scattered_angle_y_1 > math.pi/2:
+        scattered_angle_y_1 = math.pi - scattered_angle_y_1
+
+    if scattered_angle_x_2 > math.pi/2:
+        scattered_angle_x_2 = math.pi - scattered_angle_x_2
+
+    if scattered_angle_y_2 > math.pi/2:
+        scattered_angle_y_2 = math.pi - scattered_angle_y_2
     #Making sure the angle is in the right quadrant
     if angle > math.pi/2:
         angle = math.pi - angle
+
+    xscat = abs(scattered_angle_x_1-scattered_angle_x_2)
+    yscat = abs(scattered_angle_y_1-scattered_angle_y_2)
     
     
     #Putting a quality factor to vertex points based on closest intersect of the lines
@@ -85,6 +104,6 @@ def vertex_angle_find(line1,line2):
     
         
 
-    return (angle, intersection,qual_angle)
+    return (angle, intersection,qual_angle,xscat,yscat)
 
 

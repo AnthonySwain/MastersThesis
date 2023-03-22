@@ -1,6 +1,4 @@
-
 #Track Reconstruction for data. 
-
 
 # Perform a Chi squared minimisation for incoming, outcoming tracks based off of particle hits on the detector
 # enforcing that they intersect at a point (if called upon to do this, takes significantly more computing power)
