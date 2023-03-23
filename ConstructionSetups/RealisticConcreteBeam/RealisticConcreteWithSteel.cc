@@ -117,7 +117,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     
     G4VPhysicalVolume *physSteel2 = new G4PVPlacement(
                                                 rotm1, //rotation
-                                                G4ThreeVector(0.,-72.5*mm,72.5*mm), //its position
+                                                G4ThreeVector(0.,-60*mm,60*mm), //its position
                                                 logicSteel, //its logical volume
                                                 "physSteel2", //name
                                                 logicConcrete, //mothervolume
@@ -127,7 +127,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 
     G4VPhysicalVolume *physSteel3 = new G4PVPlacement(
                                                 rotm1, //rotation
-                                                G4ThreeVector(0.,72.5*mm,-72.5*mm), //its position
+                                                G4ThreeVector(0.,60*mm,-60*mm), //its position
                                                 logicSteel, //its logical volume
                                                 "physSteel3", //name
                                                 logicConcrete, //mothervolume
@@ -137,7 +137,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 
     G4VPhysicalVolume *physSteel4 = new G4PVPlacement(
                                                 rotm1, //rotation
-                                                G4ThreeVector(0.,-72.5*mm,-72.5*mm), //its position
+                                                G4ThreeVector(0.,-60*mm,-60*mm), //its position
                                                 logicSteel, //its logical volume
                                                 "physSteel4", //name
                                                 logicConcrete, //mothervolume
@@ -148,7 +148,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     
     G4VPhysicalVolume *physSteel1 = new G4PVPlacement(
                                                 rotm1, //rotation
-                                                G4ThreeVector(0.,72.5*mm,72.5*mm), //its position
+                                                G4ThreeVector(0.,60*mm,60*mm), //its position
                                                 logicSteel, //its logical volume
                                                 "physSteel1", //name
                                                 logicConcrete, //mothervolume
