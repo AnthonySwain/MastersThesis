@@ -152,9 +152,9 @@ def without_intersection(filename,error):
     for i in np.arange(0,no_events):
                 
         hits_data = detector_data.loc[detector_data.event_no == i]
-        momentum = hits_data['momentum'].iloc[0]
+    
         in_detector_hits = hits_data.loc[(hits_data['volume_ref'].isin([0,1]))]
-
+                
         out_detector_hits = hits_data.loc[(hits_data['volume_ref'].isin([10,11]))]
         
         #If one of the in or out detectors wasn't hit in the event, hits_data is returned false, skip that event
@@ -222,6 +222,7 @@ def without_intersection(filename,error):
             #Still write to dataframe but no data if not enough data collected to form in and out lines (i.e muon misses one of in/out detectors)
             continue
             
+        momentum = in_detector_hits['momentum'].to_numpy()[0]
         
         pos_hits_in = in_detector_hits[['PosX','PosY','PosZ']].to_numpy()
         pos_hits_out = out_detector_hits[['PosX','PosY','PosZ']].to_numpy()
@@ -253,9 +254,9 @@ def without_intersection(filename,error):
         
         scattering_data_poca.loc[i] = [i, interaction_vertex_x, interaction_vertex_y, interaction_vertex_z, scattering_angle,qual_angle,momentumweighted,MDweighted]
         line_values.loc[i] = [i,line1.point[0],line1.point[1],line1.point[2],
-                              line1.dir[0],line1.dir[1],line1.dir[2],
+                              line1.direction[0],line1.direction[1],line1.direction[2],
                               line2.point[0],line2.point[1],line2.point[2],
-                              line2.dir[0],line2.dir[1],line2.dir[2],
+                              line2.direction[0],line2.direction[1],line2.direction[2],
                               xscat,yscat,xscatmomentum,yscatmomentum]
         
     
@@ -273,7 +274,7 @@ def without_intersection(filename,error):
 
 #filename = "/Concretewithrod/SteelRodInConcrete.h5"
 #filename = "/ReferenceConcreteBlock/2milli2.h5"
-filename = "/50mmRadius SteelRod/SteelRod.h5"
+filename = "/SteelRodInConcreteMomentumBased/SteelRodInConcrete2.h5"
 #filename = "/50mmSample/Lead/50000PureLeadSlab1.h5"
 #with_intersection(filename)
 without_intersection(filename,False)

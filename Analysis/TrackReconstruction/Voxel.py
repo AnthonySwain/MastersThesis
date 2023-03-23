@@ -24,7 +24,7 @@ detector_out_corners = ([0.75*1000,0.6*1000,-0.5*1000],
                      [-0.75*1000,-0.6*1000,-0.5*1000],
                      [-0.75*1000,0.6*1000,-0.5*1000])
 
-def voxelisation(voxel_side_length,filename,df,qual_angle):
+def voxelisation(voxel_side_length,filename,df,angle_type):
     detector_in_corners = ([0.75*1000,0.6*1000,0.5*1000],
                     [0.75*1000,-0.6*1000,0.5*1000],
                      [-0.75*1000,-0.6*1000,0.5*1000],
@@ -38,12 +38,17 @@ def voxelisation(voxel_side_length,filename,df,qual_angle):
     
     
     
-    if qual_angle == True:
-        angle = "qualfactorangle"
+    if angle_type == 1:
+        angle = "angle"
     
-    else:
-        angle= "angle"
+    if angle_type == 2:
+        angle= "qualfactorangle"
     
+    if angle_type == 3:
+        angle = "momentumweighted"
+    if angle_type == 4:
+        angle = "MDweighted"
+        
     df = df.loc[(df.X > -750) &
                             (df.X < 750) &
                             (df.Y > -600) &
@@ -62,136 +67,15 @@ def voxelisation(voxel_side_length,filename,df,qual_angle):
     voxelised = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
                              pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no)),
                              pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])[angle].sum()
-    
-    #x_y_plane = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
-    #                         pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no))])[angle].sum()
-    
-    
-    #y_z_plane = df.groupby([pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no)),
-          #                   pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])[angle].sum()
-    #
-    
-
-    #x_z_plane = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
-     #                        pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])[angle].sum()
-    
-    
+       
     
     Vol = "/home/anthony/MastersThesis/Data" + filename[:-3] + "3D.csv"
-    xyplane = "/home/anthony/MastersThesis/Data" + filename[:-3] + "xyplane.csv"
-    xzplane = "/home/anthony/MastersThesis/Data" + filename[:-3] + "xzplane.csv"
-    yzplane = "/home/anthony/MastersThesis/Data" + filename[:-3] + "yzplane.csv"
 
     voxelised.to_csv(Vol)
 
     return(None)
 
-def image_heatmap_2D_x_y(filepath,qual_angle):
-    #Average of the voxels normal to the plane plotted
-    if qual_angle == True:
-        angle = "qualfactorangle"
-    
-    else:
-        angle= "angle"
-        
-    df = pd.read_csv(filepath)
-    print(df)
-    df['X'] = df['X'].str.strip('(]')
-    df['Y'] = df['Y'].str.strip('(]')
-    df[angle] = df[angle].astype(float)
-    df[angle] = df[angle].fillna(0)
-    for index, row in df.iterrows():
 
-        df.loc[index,"X"] = math.ceil(np.average(np.fromstring(df.loc[index,"X"],sep=",")))
-        df.loc[index,"Y"] = math.ceil(np.average(np.fromstring(df.loc[index,"Y"],sep=",")))
-
-    x_val = df.loc[:,"X"]
-    y_val = df.loc[:,"Y"]
-    angles = df.loc[:,angle]
-    
-    pivot = df.pivot(values = angle,columns='X',index='Y')
-    sns.heatmap(pivot,cmap = 'Spectral_r').axis('equal')
-    
-    plt.savefig(filepath[:-4]+"xy.png")
-    plt.show()
-    return(None)
-def image_heatmap_2D_x_z(filepath, detector_corners,qual_angle):
-    #Average of the voxels normal to the plane plotted
-    if qual_angle == True:
-        angle = "qualfactorangle"
-    
-    else:
-        angle= "angle"
-        
-    xticksww = np.linspace(-detector_corners[0][0],detector_corners[0][0],29)
-    xticksww = np.around(xticksww,-1)
-    
-    zticks = np.linspace(-detector_corners[0][2],detector_corners[0][2],19)
-    zticks = np.around(zticks,-1)
-    
-    
-    
-    df = pd.read_csv(filepath)
-    
-    #df.rename(columns={0: 'X',  1: 'Z', 2: 'angle'}, inplace=True)
-    print(df)
-    df['X'] = df['X'].str.strip('(]')
-    df['Z'] = df['Z'].str.strip('(]')
-    df[angle] = df[angle].astype(float)
-    df[angle] = df[angle].fillna(0)
-    for index, row in df.iterrows():
-
-        df.loc[index,"X"] = math.ceil(np.average(np.fromstring(df.loc[index,"X"],sep=",")))
-        df.loc[index,"Z"] = math.ceil(np.average(np.fromstring(df.loc[index,"Z"],sep=",")))
-
-    x_val = df.loc[:,"X"]
-    y_val = df.loc[:,"Z"]
-    angles = df.loc[:,angle]
-    
-    #object_outline
-    #outline_x = [1000,1000,-1000,-1000]
-    #outline_z = [-75,75,75,-75]
-    
-    
-    pivot = df.pivot(values = angle,columns='X',index='Z')
-    #plt.plot(outline_x, outline_z, linestyle='dashed', color='black')
-    #sns.heatmap(pivot,cmap = 'Spectral_r',yticklabels = zticks, xticklabels=xticksww).axis('equal')
-    sns.heatmap(pivot,cmap = 'Spectral_r').axis('equal')
-    #, yticklabels = zticks,
-    
-    plt.savefig(filepath[:-4]+"xz.png")
-    plt.show()
-    return(None)
-def image_heatmap_2D_y_z(filepath,qual_angle):
-    #Average of the voxels normal to the plane plotted
-    if qual_angle == True:
-        angle = "qualfactorangle"
-    
-    else:
-        angle= "angle"
-    
-    df = pd.read_csv(filepath)
-    
-
-    df['Y'] = df['Y'].str.strip('(]')
-    df['Z'] = df['Z'].str.strip('(]')
-    df[angle] = df[angle].astype(float)
-    df[angle] = df[angle].fillna(0)
-    for index, row in df.iterrows():
-
-        df.loc[index,"Y"] = math.ceil(np.average(np.fromstring(df.loc[index,"Y"],sep=",")))
-        df.loc[index,"Z"] = math.ceil(np.average(np.fromstring(df.loc[index,"Z"],sep=",")))
-
-    x_val = df.loc[:,"Y"]
-    y_val = df.loc[:,"Z"]
-    angles = df.loc[:,angle]
-    
-    pivot = df.pivot(values = angle,columns='Y',index='Z')
-    sns.heatmap(pivot,cmap = 'Spectral_r').axis('equal')
-    
-    plt.savefig(filepath[:-4]+"yz.png")
-    plt.show()
-    return(None)
 def image_heatmap_3D(filepath,detector_corners,qual_angle):
     if qual_angle == True:
         angle = "qualfactorangle"
@@ -252,13 +136,18 @@ def image_heatmap_3D(filepath,detector_corners,qual_angle):
     return(None)
 #image_heatmap_2D_x_y()
 
-def heatmap_slices(filepath,qual_angle):
+def heatmap_slices(filepath,angle_type):
     #Slices through the concrete in the xy plane, a bit like a CT scan.
-    if qual_angle == True:
-        angle = "qualfactorangle"
+    if angle_type == 1:
+       angle = "angle"
     
-    else:
-        angle= "angle"
+    if angle_type == 2:
+        angle= "qualfactorangle"
+    
+    if angle_type == 3:
+        angle = "momentumweighted"
+    if angle_type == 4:
+        angle = "MDweighted"
     
     
     df = pd.read_csv(filepath)
@@ -272,17 +161,15 @@ def heatmap_slices(filepath,qual_angle):
     df[angle] = df[angle].astype(float)
     df[angle] = df[angle].fillna(0)
     
-    
+    print("test")
     for index, row in df.iterrows():
         df.loc[index,"X"] = math.ceil(np.average(np.fromstring(df.loc[index,"X"],sep=",")))
         df.loc[index,"Y"] = math.ceil(np.average(np.fromstring(df.loc[index,"Y"],sep=",")))
         df.loc[index,"Z"] = math.ceil(np.average(np.fromstring(df.loc[index,"Z"],sep=",")))
-        
-    x_val = df.loc[:,"X"].to_numpy()
-    y_val = df.loc[:,"Y"].to_numpy()
+    
+    print("test2")
+   
     z_val = df.loc[:,"Z"].to_numpy()
-    print(z_val)
-    angles = df.loc[:,angle].to_numpy()
     z_val=np.unique(z_val)
     for i in z_val:
         df_plot = df.loc[(df.Z == i)]
@@ -364,21 +251,21 @@ voxel_side_length = 50#(mm)
 #filename = "/50mmSample/Lead/50000PureLeadSlab1Interaction.h5"
 #filename = "/SteelRodInConcrete50mmRadius/2millionevents2Interaction.h5"
 #filename = "/ReferenceConcreteBlock/2milliInteraction.h5"
-filename = "/SteelSlab/SteelInteraction.h5"
-
+filename = "/SteelRodInConcreteMomentumBased/SteelRodInConcrete2Interaction.h5"
+key = "POCA"
 #df = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab1Interaction.h5")
 #df2 = ReadH5.pandas_read("/SteelRodInConcrete50mmRadius/2millioneventsInteraction.h5")
-df = ReadH5.pandas_read(filename)
+df = ReadH5.pandas_read(filename,key)
 
 #df = pd.concat([df,df2])
 base_filepath = "/home/anthony/MastersThesis/Data/"
 
-qualfact = False
-#voxelisation(voxel_side_length,filename,df,qualfact)
-binned_clustered(voxel_side_length,filename,df,qualfact)
+angle_type = 3
+voxelisation(voxel_side_length,filename,df,angle_type)
+#binned_clustered(voxel_side_length,filename,df,qualfact)
 print("hi")
 #image_heatmap_2D_x_z(base_filepath + filename[:-3] + "xzplane.csv",detector_in_corners,qualfact)
 #image_heatmap_2D_x_y(base_filepath + filename[:-3] + "xyplane.csv",qualfact)
 #image_heatmap_2D_y_z(base_filepath + filename[:-3] + "yzplane.csv",qualfact)
 #image_heatmap_3D(base_filepath + filename[:-3] + "3D.csv",detector_in_corners,qualfact)
-#heatmap_slices(base_filepath + filename[:-3] + "3D.csv",qualfact)
+heatmap_slices(base_filepath + filename[:-3] + "3D.csv",angle_type)

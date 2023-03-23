@@ -38,9 +38,9 @@ def get_initial_data(filename):
         gen_data_panda = pd.DataFrame(np.array(gen_data))
     return(gen_data_panda)
 
-def pandas_read(filename):
+def pandas_read(filename,key):
     filepath = "/home/anthony/MastersThesis/Data" + filename
-    interaction_data = pd.read_hdf(filepath)
+    interaction_data = pd.read_hdf(filepath,key=key)
     return(interaction_data)
 
 def get_no_events(filename):
@@ -68,7 +68,7 @@ def get_event_index(filename,how_many_events):
         index = []
         
         for i in range(indices.shape[0]):
-            print(index)
+        
             if i == 0:
                 continue
             
