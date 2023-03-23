@@ -14,6 +14,23 @@
 #include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/GroupWrapper.h"
 #include "/home/anthony/MastersThesis/lib/H5Composites/include/H5Composites/TypedWriter.h"
 
+/*
+###############################################################################################################################
+###############################################################################################################################
+
+
+
+        REMEMBER TO CHANGE THE AREA THAT THE MUONS ARE GENERATED OVER, OTHERWISE YOU ARE WASTING SO MUCH CPU TIME!!
+
+
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+###############################################################################################################################
+###############################################################################################################################
+
+*/
 
 //Constructor
 MyDetectorConstruction::MyDetectorConstruction(H5::Group* output) : group{output}
