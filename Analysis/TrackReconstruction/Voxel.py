@@ -77,11 +77,16 @@ def voxelisation(voxel_side_length,filename,df,angle_type):
 
 
 def image_heatmap_3D(filepath,detector_corners,qual_angle):
-    if qual_angle == True:
-        angle = "qualfactorangle"
+    if angle_type == 1:
+       angle = "angle"
     
-    else:
-        angle= "angle"
+    if angle_type == 2:
+        angle= "qualfactorangle"
+    
+    if angle_type == 3:
+        angle = "momentumweighted"
+    if angle_type == 4:
+        angle = "MDweighted"
     
     
     df = pd.read_csv(filepath)
@@ -145,7 +150,7 @@ def heatmap_slices(filepath,angle_type):
         angle= "qualfactorangle"
     
     if angle_type == 3:
-        angle = "momentumweighted"
+        angle = "0"
     if angle_type == 4:
         angle = "MDweighted"
     
@@ -177,7 +182,7 @@ def heatmap_slices(filepath,angle_type):
         print(df_plot)
         
         pivot = df_plot.pivot(values = angle,columns='X',index='Y')
-        sns.heatmap(pivot,cmap = 'bwr').axis('equal')
+        sns.heatmap(pivot,cmap = 'Spectral_r').axis('equal')
         plt.title("Z= " +str(i)+ " mm")
         
         plt.savefig("/home/anthony/MastersThesis/Data/DumpFolder/xyZ=" +str(i)+".png")
@@ -196,11 +201,16 @@ def binned_clustered(voxel_side_length,filename,df,qual_angle):
                      [-0.75*1000,-0.6*1000,-0.5*1000],
                      [-0.75*1000,0.6*1000,-0.5*1000])
     
-    if qual_angle == True:
-        angle = "qualfactorangle"
+    if angle_type == 1:
+        angle = "angle"
     
-    else:
-        angle= "angle"
+    if angle_type == 2:
+        angle= "qualfactorangle"
+    
+    if angle_type == 3:
+        angle = "momentumweighted"
+    if angle_type == 4:
+        angle = "MDweighted"
     
     df = df.loc[(df.X > -750) &
                             (df.X < 750) &
@@ -220,16 +230,19 @@ def binned_clustered(voxel_side_length,filename,df,qual_angle):
     voxelised = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
                              pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no)),
                              pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))]).apply(metric)  
+    
+    
     BinnedClustered = "/home/anthony/MastersThesis/Data" + filename[:-3] + "BinnedClustered.csv"
     voxelised.to_csv(BinnedClustered)
     return(None)
 
 
 def metric(sub_vol_df):
-
+    
     #We don't care about only 1 interaction
-    if (sub_vol_df.shape[0]) <=1:
+    if (sub_vol_df.shape[0]) <=5:
         return(0)
+    
     
     coords = (sub_vol_df[['X','Y','Z']].to_numpy())
     angleweight = sub_vol_df[['momentumweighted']].to_numpy()
@@ -245,27 +258,28 @@ def metric(sub_vol_df):
     median = np.median(flattened[flattened != 0])
     
 
-    return(median)
+    return(1/median)
 
-voxel_side_length = 50#(mm)
+voxel_side_length = 20#(mm)
 #filename = "/50mmSample/Lead/50000PureLeadSlab1Interaction.h5"
 #filename = "/SteelRodInConcrete50mmRadius/2millionevents2Interaction.h5"
 #filename = "/ReferenceConcreteBlock/2milliInteraction.h5"
-filename = "/SteelRodInConcreteMomentumBased/SteelRodInConcrete2Interaction.h5"
+filename = "/RealisticConcreteBeam/RealisticBeamInteraction.h5"
 key = "POCA"
 #df = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab1Interaction.h5")
-#df2 = ReadH5.pandas_read("/SteelRodInConcrete50mmRadius/2millioneventsInteraction.h5")
+df2 = ReadH5.pandas_read("/RealisticConcreteBeam/RealisticBeam2Interaction.h5",key)
 df = ReadH5.pandas_read(filename,key)
 
-#df = pd.concat([df,df2])
+df = pd.concat([df,df2])
 base_filepath = "/home/anthony/MastersThesis/Data/"
+print(df)
 
 angle_type = 3
-voxelisation(voxel_side_length,filename,df,angle_type)
-#binned_clustered(voxel_side_length,filename,df,qualfact)
+#voxelisation(voxel_side_length,filename,df,angle_type)
+binned_clustered(voxel_side_length,filename,df,angle_type)
 print("hi")
 #image_heatmap_2D_x_z(base_filepath + filename[:-3] + "xzplane.csv",detector_in_corners,qualfact)
 #image_heatmap_2D_x_y(base_filepath + filename[:-3] + "xyplane.csv",qualfact)
 #image_heatmap_2D_y_z(base_filepath + filename[:-3] + "yzplane.csv",qualfact)
-#image_heatmap_3D(base_filepath + filename[:-3] + "3D.csv",detector_in_corners,qualfact)
-heatmap_slices(base_filepath + filename[:-3] + "3D.csv",angle_type)
+#image_heatmap_3D(base_filepath + filename[:-3] + "3D.csv",detector_in_corners,angle_type)
+heatmap_slices(base_filepath + filename[:-3] + "BinnedClustered.csv",angle_type)

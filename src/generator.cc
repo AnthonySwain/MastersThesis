@@ -19,8 +19,8 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
 {   
     EcoMug gen; //initialises Ecomug generator
     gen.SetUseSky(); //plane surface to generate the muons on
-    gen.SetSkySize({{0.75*m,0.6*m}}); //x and y size of the sky
-    gen.SetSkyCenterPosition({{0.,0.,0.8*m}}); //set center of the sky
+    gen.SetSkySize({{0.75*m,0.2*m}}); //x and y size of the sky
+    gen.SetSkyCenterPosition({{0.,0.,370*mm}}); //set center of the sky
 
     // The array storing muon generation position
     std::array<double, 3> muon_position_array;
