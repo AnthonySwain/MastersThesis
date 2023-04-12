@@ -9,6 +9,7 @@ import math
 import ReadH5 as ReadH5
 import seaborn as sns
 import matplotlib.pyplot as plt
+import math
 import plotly.graph_objects as go
 import sys
 from matplotlib.ticker import (AutoMinorLocator, MultipleLocator)
@@ -332,7 +333,7 @@ def metric(sub_vol_df):
     
     #We don't care about only 1 interaction
     if (sub_vol_df.shape[0]) <=5:
-        return(0)
+        return(math.nan)
     
     
     coords = (sub_vol_df[['X','Y','Z']].to_numpy())
