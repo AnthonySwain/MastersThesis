@@ -5,7 +5,7 @@ import numpy as np
 
 def top_hat(width,size):
     #Imitates a tophat error in the detector hits
-    noise = np.random.Generator.uniform(low=-width/2, high=width/2, size=size)
+    noise = np.random.Generator.uniform(low = -width/2, high = width/2, size=size)
     return(noise)
 
 def gaussian(standard_dev,size):

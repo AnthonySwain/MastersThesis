@@ -10,18 +10,90 @@ import scipy.stats
 import ReadH5 as ReadH5
 
 #Note this is filepaths:))
-detector_in_corners = ([0.75*1000,0.6*1000,0.5*1000],
-                    [0.75*1000,-0.6*1000,0.5*1000],
-                     [-0.75*1000,-0.6*1000,0.5*1000],
-                     [-0.75*1000,0.6*1000,0.5*1000])
+detector_in_corners = ([0.75*1000,0.1125*1000,0.1125*1000],
+                    [0.75*1000,-0.1125*1000,0.1125*1000],
+                     [-0.75*1000,-0.1125*1000,0.1125*1000],
+                     [-0.75*1000,0.1125*1000,0.1125*1000])
 
-detector_out_corners = ([0.75*1000,0.6*1000,-0.5*1000],
-                    [0.75*1000,-0.6*1000,-0.5*1000],
-                     [-0.75*1000,-0.6*1000,-0.5*1000],
-                     [-0.75*1000,0.6*1000,-0.5*1000])
+detector_out_corners = ([0.75*1000,0.1125*1000,-0.1125*1000],
+                    [0.75*1000,-0.1125*1000,-0.1125*1000],
+                     [-0.75*1000,-0.1125*1000,-0.1125*1000],
+                     [-0.75*1000,0.1125*1000,-0.1125*1000])
 
 
-def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_side_length):
+
+def confidence_values(control1df,control1filename,control2df,control2filename,imaging,imagingfilename,angle_type,binned_clustered):
+    if angle_type == 1:
+       angle = "angle"
+    
+    if angle_type == 2:
+        angle= "qualfactorangle"
+    
+    if angle_type == 3:
+        angle = "0"
+
+    if binned_clustered == True:
+        Voxel.binned_clustered(voxel_side_length,control1filename,control1df,angle_type)
+        Voxel.binned_clustered(voxel_side_length,control2filename,control2df,angle_type)
+        Voxel.binned_clustered(voxel_side_length,imagingfilename,imaging,angle_type)
+        ending = "BinnedClustered.csv"
+        
+    
+    if binned_clustered == False:
+        Voxel.voxelisation(voxel_side_length,control1filename,control1df,angle_type)
+        Voxel.voxelisation(voxel_side_length,control2filename,control2df,angle_type)
+        Voxel.voxelisation(voxel_side_length,imagingfilename,imaging,angle_type)
+        ending = "3D.csv"
+   
+    base_file_path = "/home/anthony/MastersThesis/Data/"
+    
+    control1dfvoxel = pd.read_csv(base_file_path + control1filename[:-3] + ending)
+    control2dfvoxel = pd.read_csv(base_file_path + control2filename[:-3] + ending)
+    imagingvoxel = pd.read_csv(base_file_path + imagingfilename[:-3] + ending) 
+        
+    control1dfvoxel[angle] = control1dfvoxel[angle].astype(float)
+    control1dfvoxel[angle] = control1dfvoxel[angle].fillna(0)
+    print(control1dfvoxel.info)
+    
+      
+    control2dfvoxel[angle] = control2dfvoxel[angle].astype(float)
+    control2dfvoxel[angle] = control2dfvoxel[angle].fillna(0)
+    print(control2dfvoxel.info)
+    
+    imagingvoxel[angle] = imagingvoxel[angle].astype(float)
+    imagingvoxel[angle] = imagingvoxel[angle].fillna(0)
+    print(imagingvoxel.info)
+    
+    #Setting the base dataframes
+    difference_control = control1dfvoxel
+    mean = control1dfvoxel
+    difference = control1dfvoxel
+    
+    difference_control[angle] = control1dfvoxel[angle] - control2dfvoxel[angle]
+    mean[angle] = (control1dfvoxel[angle] + control2dfvoxel[angle])/2
+    difference = imagingvoxel[angle] - mean[angle]
+    
+    
+    #Noise calculated between the 2 control concrete dataframes
+    difference_angles = (difference_control[angle].to_numpy())
+    
+    
+    print(difference_angles)
+    angle_stdev = statistics.stdev(difference_angles)
+    print(angle_stdev)
+    
+    angle_confidence = scipy.stats.norm(0,5*angle_stdev).cdf(difference)
+    
+    confidence = control1dfvoxel
+    confidence[angle] = angle_confidence
+    
+    filepath = base_file_path + imagingfilename[:-3] + "Confidence.csv"
+    confidence.to_csv(filepath)
+    print(confidence)
+    return(None)
+
+
+def compare_control(control_filepath,object_imaging_filepath,angle_type,voxel_side_length):
     
     control_df1 = ReadH5.pandas_read(control_filepath)
     control_df2 = ReadH5.pandas_read("/ReferenceConcreteBlock/2milli2Interaction.h5")
@@ -32,73 +104,47 @@ def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_sid
     control_df = pd.concat([control_df1,control_df2])
     
     #A good coder would make sure the dataframes match and exit out if they don't
-    Voxel.voxelisation(voxel_side_length,control_filepath,control_df,qual_fact)
-    Voxel.voxelisation(voxel_side_length,object_imaging_filepath,imaging_df,qual_fact)
+    Voxel.voxelisation(voxel_side_length,control_filepath,control_df,angle_type)
+    Voxel.voxelisation(voxel_side_length,object_imaging_filepath,imaging_df,angle_type)
     #Just some data cleaning ready to take the values away from eachother
     
-    if qual_fact == True:
-        angle = "qualfactorangle"
+    if angle_type == 1:
+       angle = "angle"
     
-    else:
-        angle= "angle"
+    if angle_type == 2:
+        angle= "qualfactorangle"
+    
+    if angle_type == 3:
+        angle = "0"
+    if angle_type == 4:
+        angle = "MDweighted"
     
     base_file_path = "/home/anthony/MastersThesis/Data"
     
     ctrl3D = pd.read_csv(base_file_path + control_filepath[:-3] + "3D.csv")
-    ctrlXY = pd.read_csv(base_file_path + control_filepath[:-3] + "xyplane.csv")
-    ctrlYZ = pd.read_csv(base_file_path + control_filepath[:-3] + "yzplane.csv")
-    ctrlXZ = pd.read_csv(base_file_path + control_filepath[:-3] + "xzplane.csv")
     
     img3D = pd.read_csv(base_file_path + object_imaging_filepath[:-3] + "3D.csv")
-    imgXY = pd.read_csv(base_file_path + object_imaging_filepath[:-3] + "xyplane.csv")
-    imgYZ = pd.read_csv(base_file_path + object_imaging_filepath[:-3] + "yzplane.csv")
-    imgXZ = pd.read_csv(base_file_path + object_imaging_filepath[:-3] + "xzplane.csv")
-    
+
     #for i in [ctrl3D,ctrlXY,ctrlYZ,ctrlXZ,img3D,imgXY,imgYZ,imgXZ]:    
     
     ctrl3D[angle] = ctrl3D[angle].astype(float)
     ctrl3D[angle] = ctrl3D[angle].fillna(0)
     
-    ctrlXY[angle] = ctrlXY[angle].astype(float)
-    ctrlXY[angle] = ctrlXY[angle].fillna(0)
-    
-    ctrlYZ[angle] = ctrlYZ[angle].astype(float)
-    ctrlYZ[angle] = ctrlYZ[angle].fillna(0)
-    
-    ctrlXZ[angle] = ctrlXZ[angle].astype(float)
-    ctrlXZ[angle] = ctrlXZ[angle].fillna(0)
-    
     img3D[angle] = img3D[angle].astype(float)
     img3D[angle] = img3D[angle].fillna(0)
-    
-    imgXY[angle] = imgXY[angle].astype(float)
-    imgXY[angle] = imgXY[angle].fillna(0)
-    
-    imgYZ[angle] = imgYZ[angle].astype(float)
-    imgYZ[angle] = imgYZ[angle].fillna(0)
-    
-    imgXZ[angle] = imgXZ[angle].astype(float)
-    imgXZ[angle] = imgXZ[angle].fillna(0)
 
         
     #Setting the base dataframe
     difference3D = img3D 
-    differenceXY = imgXY
-    differenceYZ= imgYZ
-    differenceXZ = imgXZ
+
    
     #Replacing angle with the difference
     difference3D[angle] = (img3D[angle] - ctrl3D[angle])
-    differenceXY[angle] = (imgXY[angle] - ctrlXY[angle])
-    differenceYZ[angle] = (imgYZ[angle] - ctrlYZ[angle])
-    differenceXZ[angle] = (imgXZ[angle] - ctrlXZ[angle])
+
     
    # if qual_fact == False:
     difference3D[angle] = difference3D[angle].clip(lower=0)
-    differenceXY[angle] = differenceXY[angle].clip(lower=0)
-    differenceYZ[angle] = differenceYZ[angle].clip(lower=0)
-    differenceXZ[angle] = differenceXZ[angle].clip(lower=0)
-    
+   
     print(difference3D)
    #if qual_fact == True:
    #     difference3D = difference3D[(difference3D.qualfactorangle >=0)] =0
@@ -108,16 +154,10 @@ def compare_control(control_filepath,object_imaging_filepath,qual_fact,voxel_sid
         
     #Filepaths to write to
     filepath3D = base_file_path + object_imaging_filepath[:-3] + "AgainstControl3D.csv"
-    filepathXY = base_file_path + object_imaging_filepath[:-3] + "AgainstControlXY.csv"
-    filepathYZ = base_file_path + object_imaging_filepath[:-3] + "AgainstControlYZ.csv"
-    filepathXZ = base_file_path + object_imaging_filepath[:-3] + "AgainstControlXZ.csv"
 
     #Writing data to CSV
     difference3D.to_csv(filepath3D)
-    differenceXY.to_csv(filepathXY)
-    differenceYZ.to_csv(filepathYZ)
-    differenceXZ.to_csv(filepathXZ)
-    
+
     
 
     return(difference3D,ctrl3D)
@@ -164,76 +204,44 @@ def confidence_rating_basic(control_filepath,object_imaging_filepath,qual_fact,v
 
     return(None)
 
-def confidence_rating_less_basic(control_filepath,object_imaging_filepath):
-    # NOT FINISHED
-    # Compares the imaged object hits to a control concrete block and gives a confidence rating of steel being in certain areas
 
-    #One concern is that the scattering throughout the uniform block of concrete won't be uniform which could cause issues because of the acceptance...
-    #An basic approach would just to be to find the standard dev of angles across the whole block and then compare to the control above and assign 
+angle_type = 1
+voxel_side_length = 15 #mm
+binned_clustered = False
+key = "POCA"
 
-    #A less_basic approach would be to take the same idea but instead of taking stdev across the whole control block of concrete. Compare sections of the control and imaging block
-    #this would hopefully reduce the effect of the non-uniformities 
+base_filepath = "/home/anthony/MastersThesis/Data/"
+control1filename = "/JustConcreteBeam/JustBeam1Interaction.h5"
 
-    #Getting the data that shows the differences 
-    difference_df = compare_control(control_filepath,object_imaging_filepath)
-    confidence_df = difference_df
-    difference_angles = abs(difference_df['angle'].to_numpy())
-    difference_qual = abs(difference_df['qualfactorangle'].to_numpy())
+df1 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam1Interaction.h5",key)
+df2 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam2Interaction.h5",key)
+df3 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam3Interaction.h5",key)
+df4 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam4Interaction.h5",key)
 
-    #inefficient as it's already been read in compare_control but for ease of use / it doesn't take long to open
-    control_df = pd.read_csv(control_filepath)
-    control_df['angle'] = control_df['angle'].astype(float)
-    control_df['angle'] = control_df['angle'].fillna(0)
+control1df = pd.concat([df1,df2,df3,df4])
 
-    control_df['qualfactorangle'] = control_df['qualfactorangle'].astype(float)
-    control_df['qualfactorangle'] = control_df['qualfactorangle'].fillna(0)
+control2filename = "/JustConcreteBeam2/JustBeam1Interaction.h5"
 
-    angle_values = control_df['angle'].to_numpy()
-    angle_stdev = statistics.stdev(angle_values)
-    
-    qualfact_values = control_df['qualfactorangle'].to_numpy()
-    qual_factor_stdev = statistics.stdev(qualfact_values)
+df1 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam1Interaction.h5",key)
+df2 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam2Interaction.h5",key)
+df3 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam3Interaction.h5",key)
+df4 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam4Interaction.h5",key)
 
-    #Confidence 
-    angle_confidence = scipy.stats.norm(0,angle_stdev).cdf(difference_angles)
-    qualfact_confidence = scipy.stats.norm(0,qual_factor_stdev).cdf(difference_qual)
+control2df = pd.concat([df1,df2,df3,df4])
 
+imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5"
 
-    confidence_df['angle'] = angle_confidence
-    confidence_df['qualfactorangle'] = qualfact_confidence
+df1 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5",key)
+df2 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam2Interaction.h5",key)
+df3 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam3Interaction.h5",key)
+df4 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam4Interaction.h5",key)
 
-    filepath = object_imaging_filepath[:-4] + "Confidence.csv"
-
-    confidence_df.to_csv(filepath)
-
-    return(None)
-
-control_concrete_filepath = "/ReferenceConcreteBlock/2milliInteraction.h5"
-object_imaging_filepath = "/SteelRodInConcrete50mmRadius/2millionevents2Interaction.h5"
-
-base_file_path = "/home/anthony/MastersThesis/Data"
-
-filepath3D = base_file_path + object_imaging_filepath[:-3] + "AgainstControl3D.csv"
-filepathXY = base_file_path + object_imaging_filepath[:-3] + "AgainstControlXY.csv"
-filepathYZ = base_file_path + object_imaging_filepath[:-3] + "AgainstControlYZ.csv"
-filepathXZ = base_file_path + object_imaging_filepath[:-3] + "AgainstControlXZ.csv"
+imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5"
+imaging = pd.concat([df1,df2,df3,df4])
 
 
-qual_fact = False
-voxel_side_length = 30 #mm
+confidence_values(control1df,control1filename,control2df,control2filename,imaging,imagingfilename,angle_type,binned_clustered)
 
-#compare_control(control_concrete_filepath,object_imaging_filepath,qual_fact,voxel_side_length)
-confidence_rating_basic(control_concrete_filepath,object_imaging_filepath,qual_fact,voxel_side_length)
-#Voxel.image_heatmap_2D_x_z(filepathXZ,detector_in_corners,qual_fact)
-#Voxel.image_heatmap_2D_x_y(filepathXY ,qual_fact)
-#Voxel.image_heatmap_2D_y_z(filepathYZ ,qual_fact)
-#Voxel.image_heatmap_3D(filepath3D,detector_in_corners,qual_fact)
-#Voxel.heatmap_slices(filepath3D,qual_fact)
-print("test")
-Voxel.heatmap_slices(base_file_path + "/SteelRodInConcrete50mmRadius/2millionevents2InteractioConfidence.csv",qual_fact)
-
-#I think sum gives the best contrast as it takes density into account, but I need to make sure
-#That if finding the difference between the sum of each that each dataset has the same number of muons accepted
-
-#i also think that finding the mean is actually masking where the bar really is when showing 2D planes
-#Need to split the 3D dataset into 2D planes and iterate through them
+Voxel.heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "Confidence.csv",1)
+Voxel.heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "Confidence.csv",1)
+Voxel.heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "Confidence.csv",1)

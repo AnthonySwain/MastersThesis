@@ -79,7 +79,7 @@ def with_intersection(filename):
     #scattering_data.to_csv('Interaction2.csv',index=False)
     return(None)
 
-def without_intersection(filename,error):
+def without_intersection(filename,uncertantity):
     #Filename of the H5 file, Quality check  refines scattering angle based off of confidence of a single scattering event
     event_chunk = 9999
     #Get the indicies for the every x event numbers given
@@ -90,22 +90,26 @@ def without_intersection(filename,error):
     k = 1 #K keeps track of which set of 10,000 rows to read (the first 10,000 2nd 10,000 ect...ect...)
     detector_data = ReadH5.get_detector_data_between_indices(filename,index[k-1],index[k])
     
-    if error == True:
+    if uncertantity == True:
         #this is mm
-        top_hat_width = 4
-        standard_dev =  2   
+        top_hat_width = 1
+        standard_dev =  1  
         
         rows = (len(detector_data))
         noise = IntroduceError.gaussian(standard_dev, (rows,3))
-        noise = IntroduceError.top_hat(top_hat_width,(rows,3))
+        #noise = IntroduceError.top_hat(top_hat_width,(rows,3))
         
         detector_data['PosX'] = detector_data['PosX'] - noise[:,0]
         detector_data['PosY'] = detector_data['PosY'] - noise[:,1]
         detector_data['PosZ'] = detector_data['PosZ'] - noise[:,2]
         
+        uncertantity_filename = "Uncertantity"
 
+    else:
+        uncertantity_filename = ""
     #Create file_name for output
-    interaction_filename = "/home/anthony/MastersThesis/Data" + filename[:-3] + "Interaction.h5"
+    
+    interaction_filename = "/home/anthony/MastersThesis/Data" + filename[:-3] + "Interaction" + uncertantity_filename + ".h5"
     
     #How many events are in that dataframe
     no_events = ReadH5.get_no_events(filename)
@@ -206,11 +210,12 @@ def without_intersection(filename,error):
             
             detector_data = ReadH5.get_detector_data_between_indices(filename,index[k-1],index[k])
             print("NEWDATASET")
-            if error == True:
+            
+            if uncertantity == True:
                 #this is mm                
                 rows = (len(detector_data))
                 noise = IntroduceError.gaussian(standard_dev, (rows,3))
-                noise = IntroduceError.top_hat(top_hat_width,(rows,3))
+                #noise = IntroduceError.top_hat(top_hat_width,(rows,3))
                 
                 detector_data['PosX'] = detector_data['PosX'] - noise[:,0]
                 detector_data['PosY'] = detector_data['PosY'] - noise[:,1]
@@ -274,7 +279,8 @@ def without_intersection(filename,error):
 
 #filename = "/Concretewithrod/SteelRodInConcrete.h5"
 #filename = "/ReferenceConcreteBlock/2milli2.h5"
-filename = "/RealisticConcreteBeam/RealisticBeam4.h5"
+#filename = "/RealisticConcreteBeam/RealisticBeam4.h5"
 #filename = "/50mmSample/Lead/50000PureLeadSlab1.h5"
+filename = "/RealisticConcreteBeam10mmRadius/RealisticBeam10mmRad3.h5"
 #with_intersection(filename)
 without_intersection(filename,False)
