@@ -281,6 +281,6 @@ def without_intersection(filename,uncertantity):
 #filename = "/ReferenceConcreteBlock/2milli2.h5"
 #filename = "/RealisticConcreteBeam/RealisticBeam4.h5"
 #filename = "/50mmSample/Lead/50000PureLeadSlab1.h5"
-filename = "/RealisticConcreteBeam10mmRadius/RealisticBeam10mmRad3.h5"
+filename = "/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad3.h5"
 #with_intersection(filename)
 without_intersection(filename,False)

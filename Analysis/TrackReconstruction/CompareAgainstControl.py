@@ -10,15 +10,15 @@ import scipy.stats
 import ReadH5 as ReadH5
 
 #Note this is filepaths:))
-detector_in_corners = ([0.75*1000,0.1125*1000,0.1125*1000],
-                    [0.75*1000,-0.1125*1000,0.1125*1000],
-                     [-0.75*1000,-0.1125*1000,0.1125*1000],
-                     [-0.75*1000,0.1125*1000,0.1125*1000])
+detector_in_corners = ([0.6*1000,0.1125*1000,0.1125*1000],
+                    [0.6*1000,-0.1125*1000,0.1125*1000],
+                     [-0.6*1000,-0.1125*1000,0.1125*1000],
+                     [-0.6*1000,0.1125*1000,0.1125*1000])
 
-detector_out_corners = ([0.75*1000,0.1125*1000,-0.1125*1000],
-                    [0.75*1000,-0.1125*1000,-0.1125*1000],
-                     [-0.75*1000,-0.1125*1000,-0.1125*1000],
-                     [-0.75*1000,0.1125*1000,-0.1125*1000])
+detector_out_corners = ([0.6*1000,0.1125*1000,-0.1125*1000],
+                    [0.6*1000,-0.1125*1000,-0.1125*1000],
+                     [-0.6*1000,-0.1125*1000,-0.1125*1000],
+                     [-0.6*1000,0.1125*1000,-0.1125*1000])
 
 
 
@@ -48,21 +48,29 @@ def confidence_values(control1df,control1filename,control2df,control2filename,im
     base_file_path = "/home/anthony/MastersThesis/Data/"
     
     control1dfvoxel = pd.read_csv(base_file_path + control1filename[:-3] + ending)
+   
+    control1dfvoxel.rename(index={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
+    
+    print(control1dfvoxel, "control1dfvoxel")
+    
     control2dfvoxel = pd.read_csv(base_file_path + control2filename[:-3] + ending)
+    control2dfvoxel.rename(index={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
+    
     imagingvoxel = pd.read_csv(base_file_path + imagingfilename[:-3] + ending) 
+    imagingvoxel.rename(index={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
         
     control1dfvoxel[angle] = control1dfvoxel[angle].astype(float)
     control1dfvoxel[angle] = control1dfvoxel[angle].fillna(0)
-    print(control1dfvoxel.info)
+    
     
       
     control2dfvoxel[angle] = control2dfvoxel[angle].astype(float)
     control2dfvoxel[angle] = control2dfvoxel[angle].fillna(0)
-    print(control2dfvoxel.info)
+    
     
     imagingvoxel[angle] = imagingvoxel[angle].astype(float)
     imagingvoxel[angle] = imagingvoxel[angle].fillna(0)
-    print(imagingvoxel.info)
+    
     
     #Setting the base dataframes
     difference_control = control1dfvoxel
@@ -76,13 +84,15 @@ def confidence_values(control1df,control1filename,control2df,control2filename,im
     
     #Noise calculated between the 2 control concrete dataframes
     difference_angles = (difference_control[angle].to_numpy())
-    
+    difference_angles = difference_angles[difference_angles != 0]
     
     print(difference_angles)
     angle_stdev = statistics.stdev(difference_angles)
     print(angle_stdev)
     
     angle_confidence = scipy.stats.norm(0,5*angle_stdev).cdf(difference)
+    angle_confidence[angle_confidence < 0.8] = 0
+    
     
     confidence = control1dfvoxel
     confidence[angle] = angle_confidence
@@ -205,9 +215,9 @@ def confidence_rating_basic(control_filepath,object_imaging_filepath,qual_fact,v
     return(None)
 
 
-angle_type = 1
-voxel_side_length = 15 #mm
-binned_clustered = False
+angle_type = 3
+voxel_side_length = 20#mm
+binned_clustered = True
 key = "POCA"
 
 base_filepath = "/home/anthony/MastersThesis/Data/"
@@ -240,8 +250,9 @@ imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam
 imaging = pd.concat([df1,df2,df3,df4])
 
 
+
 confidence_values(control1df,control1filename,control2df,control2filename,imaging,imagingfilename,angle_type,binned_clustered)
 
-Voxel.heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "Confidence.csv",1)
-Voxel.heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "Confidence.csv",1)
-Voxel.heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "Confidence.csv",1)
+Voxel.heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type)
+Voxel.heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type)
+Voxel.heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type)

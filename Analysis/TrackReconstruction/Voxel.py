@@ -15,26 +15,26 @@ import sys
 from matplotlib.ticker import (AutoMinorLocator, MultipleLocator)
 #This is all working in mm!!!!!!!!
 
-detector_in_corners = ([0.75*1000,0.1125*1000,0.1125*1000],
-                    [0.75*1000,-0.1125*1000,0.1125*1000],
-                     [-0.75*1000,-0.1125*1000,0.1125*1000],
-                     [-0.75*1000,0.1125*1000,0.1125*1000])
+detector_in_corners = ([0.6*1000,0.1125*1000,0.1125*1000],
+                    [0.6*1000,-0.1125*1000,0.1125*1000],
+                     [-0.6*1000,-0.1125*1000,0.1125*1000],
+                     [-0.6*1000,0.1125*1000,0.1125*1000])
 
-detector_out_corners = ([0.75*1000,0.1125*1000,-0.1125*1000],
-                    [0.75*1000,-0.1125*1000,-0.1125*1000],
-                     [-0.75*1000,-0.1125*1000,-0.1125*1000],
-                     [-0.75*1000,0.1125*1000,-0.1125*1000])
+detector_out_corners = ([0.6*1000,0.1125*1000,-0.1125*1000],
+                    [0.6*1000,-0.1125*1000,-0.1125*1000],
+                     [-0.6*1000,-0.1125*1000,-0.1125*1000],
+                     [-0.6*1000,0.1125*1000,-0.1125*1000])
 
 def voxelisation(voxel_side_length,filename,df,angle_type):
-    detector_in_corners = ([0.75*1000,0.1125*1000,0.1125*1000],
-                    [0.75*1000,-0.1125*1000,0.1125*1000],
-                     [-0.75*1000,-0.1125*1000,0.1125*1000],
-                     [-0.75*1000,0.1125*1000,0.1125*1000])
+    detector_in_corners = ([0.6*1000,0.1125*1000,0.1125*1000],
+                    [0.6*1000,-0.1125*1000,0.1125*1000],
+                     [-0.6*1000,-0.1125*1000,0.1125*1000],
+                     [-0.6*1000,0.1125*1000,0.1125*1000])
 
-    detector_out_corners = ([0.75*1000,0.1125*1000,-0.1125*1000],
-                    [0.75*1000,-0.1125*1000,-0.1125*1000],
-                     [-0.75*1000,-0.1125*1000,-0.1125*1000],
-                     [-0.75*1000,0.1125*1000,-0.1125*1000])
+    detector_out_corners = ([0.6*1000,0.1125*1000,-0.1125*1000],
+                    [0.6*1000,-0.1125*1000,-0.1125*1000],
+                     [-0.6*1000,-0.1125*1000,-0.1125*1000],
+                     [-0.6*1000,0.1125*1000,-0.1125*1000])
         
     if angle_type == 1:
         angle = "angle"
@@ -61,6 +61,13 @@ def voxelisation(voxel_side_length,filename,df,angle_type):
     x_voxel_no = math.ceil((detector_in_corners[0][0] - detector_in_corners[2][0]) / (voxel_side_length))
     y_voxel_no = math.ceil((detector_in_corners[0][1] - detector_in_corners[2][1]) / (voxel_side_length))
     z_voxel_no = math.ceil((detector_in_corners[0][2] - detector_out_corners[0][2]) / (voxel_side_length))
+    
+    x_coords = np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no*4)
+    y_coords = np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no*4)
+    z_coords = np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no*4)
+    
+    
+    
     
     voxelised = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
                              pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no)),
@@ -97,7 +104,7 @@ def image_heatmap_3D(filepath,detector_corners,angle_type):
     
     df[angle] = df[angle].astype(float)
     df[angle] = df[angle].fillna(0.00001)
-    
+    df[angle] = df[angle].abs()
     
     for index, row in df.iterrows():
         df.loc[index,"X"] = math.ceil(np.average(np.fromstring(df.loc[index,"X"],sep=",")))
@@ -137,8 +144,6 @@ def image_heatmap_3D(filepath,detector_corners,angle_type):
     
     
     return(None)
-#image_heatmap_2D_x_y()
-
 
 def heatmap_slices_zx(filepath,angle_type):
     #Slices through the concrete in the xy plane, a bit like a CT scan.
@@ -164,7 +169,7 @@ def heatmap_slices_zx(filepath,angle_type):
     
     df[angle] = df[angle].astype(float)
     df[angle] = df[angle].fillna(0)
-    
+    df[angle] = df[angle].abs()
     
     for index, row in df.iterrows():
         df.loc[index,"X"] = math.ceil(np.average(np.fromstring(df.loc[index,"X"],sep=",")))
@@ -179,9 +184,10 @@ def heatmap_slices_zx(filepath,angle_type):
         df_plot.drop(columns = ['Y'],inplace=True)
                 
         pivot = df_plot.pivot(values = angle,columns='Z',index='X')
-        sns.heatmap(pivot,cmap = 'Spectral_r',cbar = False).axis('equal')
+        sns.heatmap(pivot,cmap = 'Spectral_r',xticklabels=7, yticklabels=6).axis('equal')
         plt.title("Y= " +str(i)+ " mm")
         plt.autoscale()
+        
         plt.savefig("/home/anthony/MastersThesis/Data/DumpFolder/zx_Y=" +str(i)+".png",bbox_inches='tight')
         plt.close()
         #plt.show()
@@ -211,7 +217,7 @@ def heatmap_slices_zy(filepath,angle_type):
     
     df[angle] = df[angle].astype(float)
     df[angle] = df[angle].fillna(0)
-    
+    df[angle] = df[angle].abs()
     
     for index, row in df.iterrows():
         df.loc[index,"X"] = math.ceil(np.average(np.fromstring(df.loc[index,"X"],sep=",")))
@@ -226,7 +232,7 @@ def heatmap_slices_zy(filepath,angle_type):
         df_plot.drop(columns = ['X'],inplace=True)
                 
         pivot = df_plot.pivot(values = angle,columns='Z',index='Y')
-        sns.heatmap(pivot,cmap = 'Spectral_r',cbar = False).axis('equal')
+        sns.heatmap(pivot,cmap = 'Spectral_r',xticklabels=2, yticklabels=2).axis('equal')
         plt.title("X= " +str(i)+ " mm")
         plt.autoscale()
         plt.savefig("/home/anthony/MastersThesis/Data/DumpFolder/zy_X=" +str(i)+".png",bbox_inches='tight')
@@ -258,7 +264,7 @@ def heatmap_slices_xy(filepath,angle_type):
     
     df[angle] = df[angle].astype(float)
     df[angle] = df[angle].fillna(0)
-    
+    df[angle] = df[angle].abs()
     
     for index, row in df.iterrows():
         df.loc[index,"X"] = math.ceil(np.average(np.fromstring(df.loc[index,"X"],sep=",")))
@@ -274,24 +280,25 @@ def heatmap_slices_xy(filepath,angle_type):
                 
         pivot = df_plot.pivot(values = angle,columns='X',index='Y')
         fig, ax = plt.subplots(figsize = (12, 8))
-        sns.heatmap(pivot,cmap = 'Spectral_r',xticklabels=3, yticklabels=3, cbar = False).axis('equal')
+        sns.heatmap(pivot,cmap = 'Spectral_r',xticklabels=4, yticklabels=4).axis('equal')
         plt.title("Z= " +str(i)+ " mm")
         plt.autoscale()
+
         plt.savefig("/home/anthony/MastersThesis/Data/DumpFolder/xy_Z=" +str(i)+".png",bbox_inches='tight')
         plt.close()
         #plt.show()
     return(None)
 
 def binned_clustered(voxel_side_length,filename,df,qual_angle):
-    detector_in_corners = ([0.75*1000,0.1125*1000,0.1125*1000],
-                    [0.75*1000,-0.1125*1000,0.1125*1000],
-                     [-0.75*1000,-0.1125*1000,0.1125*1000],
-                     [-0.75*1000,0.1125*1000,0.1125*1000])
+    detector_in_corners = ([0.6*1000,0.1125*1000,0.1125*1000],
+                    [0.6*1000,-0.1125*1000,0.1125*1000],
+                     [-0.6*1000,-0.1125*1000,0.1125*1000],
+                     [-0.6*1000,0.1125*1000,0.1125*1000])
 
-    detector_out_corners = ([0.75*1000,0.1125*1000,-0.1125*1000],
-                    [0.75*1000,-0.1125*1000,-0.1125*1000],
-                     [-0.75*1000,-0.1125*1000,-0.1125*1000],
-                     [-0.75*1000,0.1125*1000,-0.1125*1000])
+    detector_out_corners = ([0.6*1000,0.1125*1000,-0.1125*1000],
+                    [0.6*1000,-0.1125*1000,-0.1125*1000],
+                     [-0.6*1000,-0.1125*1000,-0.1125*1000],
+                     [-0.6*1000,0.1125*1000,-0.1125*1000])
     
     if angle_type == 1:
         angle = "angle"
@@ -306,22 +313,47 @@ def binned_clustered(voxel_side_length,filename,df,qual_angle):
     
     df = df.loc[(df.X > -750) &
                             (df.X < 750) &
-                            (df.Y > -115) &
-                            (df.Y < 115) &
-                            (df.Z > -115) &
-                            (df.Z < 115) &
+                            (df.Y > -112.5) &
+                            (df.Y < 112.5) &
+                            (df.Z > -112.5) &
+                            (df.Z < 112.5) &
                             #(data.angle < math.pi) &
                             (df.angle >= 0)]
     #print(df)
+    #print(df)
     #Dataframe should be in [x,y,z,angle] format:) 
     #Working out the number of voxels in each direction, given the side length:) 
+   
     x_voxel_no = math.ceil((detector_in_corners[0][0] - detector_in_corners[2][0]) / (voxel_side_length))
     y_voxel_no = math.ceil((detector_in_corners[0][1] - detector_in_corners[2][1]) / (voxel_side_length))
     z_voxel_no = math.ceil((detector_in_corners[0][2] - detector_out_corners[0][2]) / (voxel_side_length))
     
+    xticks = pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no))
+    yticks = pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no))
+    zticks = pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))
+    
+    
+    #x_coords = np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)
+    #y_coords = np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no)
+    #z_coords = np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no)
+    
+   # for i in x_coords:
+   #     for j in y_coords:
+   #         for k in z_coords:
+   #             df.loc[len(df)] = [0,i,j,k,0,0,0,0]
+                #df.loc[len(df)] = [0,i*1.0001,j*1.0001,k*1.001,0,0,0,0]
+                
+    print(x_voxel_no, "xvox")
+    print(y_voxel_no, "yvox")
+    print(z_voxel_no, "zvox")
     voxelised = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
                              pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no)),
                              pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))]).apply(metric)  
+    
+    
+    voxelised = voxelised.reindex(pd.MultiIndex.from_product([xticks.cat.categories, yticks.cat.categories, zticks.cat.categories])).fillna(0)
+    voxelised.rename(index={0: "X", 1: "Y", 2: "Z", 3: "0"}, inplace = True)
+    print(voxelised)
     
     
     BinnedClustered = "/home/anthony/MastersThesis/Data" + filename[:-3] + "BinnedClustered.csv"
@@ -332,27 +364,27 @@ def binned_clustered(voxel_side_length,filename,df,qual_angle):
 def metric(sub_vol_df):
     
     #We don't care about only 1 interaction
-    if (sub_vol_df.shape[0]) <=5:
-        return(math.nan)
+    if (sub_vol_df.shape[0]) <=2:
+        return(0)
     
-    
-    coords = (sub_vol_df[['X','Y','Z']].to_numpy())
-    angleweight = sub_vol_df[['momentumweighted']].to_numpy()
-    
-    angleweight_multiplied = angleweight * angleweight.T
-    
-    diff = coords - coords[:,np.newaxis]
-    
-    metric = np.linalg.norm(diff,axis=-1)
-    
-    weighted_metric = metric/angleweight_multiplied
-    flattened = weighted_metric.flatten()
-    median = np.median(flattened[flattened != 0])
-    
+    else:
+        coords = (sub_vol_df[['X','Y','Z']].to_numpy())
+        angleweight = sub_vol_df[['momentumweighted']].to_numpy()
+        
+        angleweight_multiplied = angleweight * angleweight.T
+        
+        diff = coords - coords[:,np.newaxis]
+        
+        metric = np.linalg.norm(diff,axis=-1)
+        
+        weighted_metric = metric/angleweight_multiplied
+        flattened = weighted_metric.flatten()
+        median = np.median(flattened[flattened != 0])
+        
 
-    return(1/median)
+        return(1/median)
 
-voxel_side_length = 15#(mm)
+voxel_side_length = 10#(mm)
 #filename = "/50mmSample/Lead/50000PureLeadSlab1Interaction.h5"
 #filename = "/SteelRodInConcrete50mmRadius/2millionevents2Interaction.h5"
 #filename = "/ReferenceConcreteBlock/2milliInteraction.h5"
@@ -367,7 +399,6 @@ df4 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/Realis
 
 df = pd.concat([df,df2,df3,df4])
 base_filepath = "/home/anthony/MastersThesis/Data/"
-print(df)
 
 angle_type = 3
 #voxelisation(voxel_side_length,filename,df,angle_type)
@@ -375,7 +406,7 @@ angle_type = 3
 print("hi")
 
 #image_heatmap_3D(base_filepath + filename[:-3] + "BinnedClustered.csv",detector_in_corners,angle_type)
-#heatmap_slices_xy(base_filepath + filename[:-3] + "BinnedClustered.csv",3)
-#heatmap_slices_zy(base_filepath + filename[:-3] + "BinnedClustered.csv",3)
-#heatmap_slices_zx(base_filepath + filename[:-3] + "BinnedClustered.csv",3)
+#heatmap_slices_xy(base_filepath + filename[:-3] + "BinnedClustered.csv",angle_type)
+#heatmap_slices_zy(base_filepath + filename[:-3] + "BinnedClustered.csv",angle_type)
+#heatmap_slices_zx(base_filepath + filename[:-3] + "BinnedClustered.csv",angle_type)
 

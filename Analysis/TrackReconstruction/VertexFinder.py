@@ -99,6 +99,7 @@ def vertex_angle_find(line1,line2):
     #to represent multiple scattering events which the track reconstruction algorithm doesn’t account for
     #so it would give less weighting to them which could reduce the noise in the reconstructed images.
     
+    #Maybe include a bit of softening
     qual_angle =  angle/distance    
     
     
