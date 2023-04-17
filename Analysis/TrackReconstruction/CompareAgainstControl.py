@@ -49,15 +49,15 @@ def confidence_values(control1df,control1filename,control2df,control2filename,im
     
     control1dfvoxel = pd.read_csv(base_file_path + control1filename[:-3] + ending)
    
-    control1dfvoxel.rename(index={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
+    control1dfvoxel.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
     
     print(control1dfvoxel, "control1dfvoxel")
     
     control2dfvoxel = pd.read_csv(base_file_path + control2filename[:-3] + ending)
-    control2dfvoxel.rename(index={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
+    control2dfvoxel.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
     
     imagingvoxel = pd.read_csv(base_file_path + imagingfilename[:-3] + ending) 
-    imagingvoxel.rename(index={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
+    imagingvoxel.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
         
     control1dfvoxel[angle] = control1dfvoxel[angle].astype(float)
     control1dfvoxel[angle] = control1dfvoxel[angle].fillna(0)
@@ -91,7 +91,7 @@ def confidence_values(control1df,control1filename,control2df,control2filename,im
     print(angle_stdev)
     
     angle_confidence = scipy.stats.norm(0,5*angle_stdev).cdf(difference)
-    angle_confidence[angle_confidence < 0.8] = 0
+    angle_confidence[angle_confidence < 0.7] = 0
     
     
     confidence = control1dfvoxel
@@ -216,7 +216,7 @@ def confidence_rating_basic(control_filepath,object_imaging_filepath,qual_fact,v
 
 
 angle_type = 3
-voxel_side_length = 20#mm
+voxel_side_length = 10#mm
 binned_clustered = True
 key = "POCA"
 
