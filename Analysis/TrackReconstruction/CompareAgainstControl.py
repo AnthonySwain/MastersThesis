@@ -8,7 +8,7 @@ import pandas as pd
 import statistics
 import scipy.stats
 import ReadH5 as ReadH5
-
+from scipy.stats import halfnorm
 #Note this is filepaths:))
 detector_in_corners = ([0.6*1000,0.1125*1000,0.1125*1000],
                     [0.6*1000,-0.1125*1000,0.1125*1000],
@@ -48,17 +48,16 @@ def confidence_values(control1df,control1filename,control2df,control2filename,im
     base_file_path = "/home/anthony/MastersThesis/Data/"
     
     control1dfvoxel = pd.read_csv(base_file_path + control1filename[:-3] + ending)
-   
-    control1dfvoxel.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
-    
-    print(control1dfvoxel, "control1dfvoxel")
     
     control2dfvoxel = pd.read_csv(base_file_path + control2filename[:-3] + ending)
-    control2dfvoxel.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
     
     imagingvoxel = pd.read_csv(base_file_path + imagingfilename[:-3] + ending) 
-    imagingvoxel.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
+    
         
+    if binned_clustered == True:
+        control1dfvoxel.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
+        control2dfvoxel.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
+        imagingvoxel.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z", 3: "0"}, inplace = True)
     control1dfvoxel[angle] = control1dfvoxel[angle].astype(float)
     control1dfvoxel[angle] = control1dfvoxel[angle].fillna(0)
     
@@ -87,16 +86,16 @@ def confidence_values(control1df,control1filename,control2df,control2filename,im
     difference_angles = difference_angles[difference_angles != 0]
     
     print(difference_angles)
-    angle_stdev = statistics.stdev(difference_angles)
+    angle_stdev = statistics.stdev(np.absolute(difference_angles))
     print(angle_stdev)
     
-    angle_confidence = scipy.stats.norm(0,5*angle_stdev).cdf(difference)
-    angle_confidence[angle_confidence < 0.7] = 0
+    angle_confidence = (scipy.stats.norm(0,1*angle_stdev).cdf(np.absolute(difference)) - 0.5)*2
+    angle_confidence[angle_confidence < 0.8] = 0
     
     
     confidence = control1dfvoxel
     confidence[angle] = angle_confidence
-    
+    print(confidence)
     filepath = base_file_path + imagingfilename[:-3] + "Confidence.csv"
     confidence.to_csv(filepath)
     print(confidence)
@@ -216,7 +215,7 @@ def confidence_rating_basic(control_filepath,object_imaging_filepath,qual_fact,v
 
 
 angle_type = 3
-voxel_side_length = 10#mm
+voxel_side_length = 8#mm
 binned_clustered = True
 key = "POCA"
 
@@ -245,8 +244,21 @@ df1 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/Realis
 df2 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam2Interaction.h5",key)
 df3 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam3Interaction.h5",key)
 df4 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam4Interaction.h5",key)
-
 imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5"
+
+
+#df1 = ReadH5.pandas_read("/RealisticConcreteBeam10mmRadius/RealisticBeam10mmRad1Interaction.h5",key)
+#df2 = ReadH5.pandas_read("/RealisticConcreteBeam10mmRadius/RealisticBeam10mmRad2Interaction.h5",key)
+#df3 = ReadH5.pandas_read("/RealisticConcreteBeam10mmRadius/RealisticBeam10mmRad3Interaction.h5",key)
+#df4 = ReadH5.pandas_read("/RealisticConcreteBeam10mmRadius/RealisticBeam10mmRad4Interaction.h5",key)
+#imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5"
+
+#df1 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad1Interaction.h5",key)
+#df2 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad2Interaction.h5",key)
+#df3 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad3Interaction.h5",key)
+#df4 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad4Interaction.h5",key)
+imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5"
+
 imaging = pd.concat([df1,df2,df3,df4])
 
 

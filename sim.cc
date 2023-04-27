@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 {   
 
     //Create the output file
-    H5Composites::GroupWrapper fOut = H5Composites::GroupWrapper::createFile("/home/anthony/MastersThesis/Data/RealisticBeam5mmRad3.h5",true);
+    H5Composites::GroupWrapper fOut = H5Composites::GroupWrapper::createFile("/home/anthony/MastersThesis/Data/Disconnected10cmGap.h5",true);
     
     //Getting the group from the group wrapper
     H5::Group group = fOut.group();
@@ -45,16 +45,16 @@ int main(int argc, char** argv)
 
     mgr.Initialize();
 
-    
+    /*
     //User interface
-    //G4UIExecutive *ui = new G4UIExecutive(argc, argv);
+    G4UIExecutive *ui = new G4UIExecutive(argc, argv);
 
     //Visualisation Manager
-    //G4VisManager *visManager = new G4VisExecutive();
+    G4VisManager *visManager = new G4VisExecutive();
     
     //Initialize visualisation
-    //visManager->Initialize();
-
+    visManager->Initialize();
+    */
     //Get the pointer tp the UI manager, set verbosities
     G4UImanager *UImanager = G4UImanager::GetUIpointer();
     

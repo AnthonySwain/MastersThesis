@@ -80,65 +80,69 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     G4VPhysicalVolume *physConcrete = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicConcrete, "physConcrete",logicWorld,false,0,true);
 
     
-    //Making the steel volume inside the concrete volume
-    //Steel is a mixture of elements so need to comprise it of carbon and iron
-    G4Element *C = nist->FindOrBuildElement("C"); //Carbon
-    G4Element *Fe = nist->FindOrBuildElement("Fe"); //Iron
-    
-    //Steel Composition & Properties
-    G4Material *Steel = new G4Material("Steel", 7.800*g/cm3,2);
-    Steel->AddElement(C, 1*perCent);
-    Steel->AddElement(Fe, 99*perCent);
-    G4MaterialPropertiesTable *mptSteel = new G4MaterialPropertiesTable();
+    //Rust Composition & Properties
+    G4Material *Rust = nist->FindOrBuildMaterial("G4_FERRIC_OXIDE");
+    G4MaterialPropertiesTable *mptRust= new G4MaterialPropertiesTable();
 
-    //Adding the steel Rod      
-    G4Tubs *solidSteel = new G4Tubs("solidSteel",
+
+    //RustedSteelRod
+    G4Tubs *solidRust = new G4Tubs("solidRust",
                                     0., //inner radius
-                                    15*mm, //outer radius
-                                    49*cm, // half z distance
+                                    21.2*mm, //outer radius
+                                    0.95*m, // half z distance
                                     0., //start Phi angle
                                     2*M_PI*rad); //End Phi Angle
 
-    /*
-    //The rotation matrix
-    G4double phi = 30*deg;
-    // u, v, w are the daughter axes, projected on the mother frame     
-    G4ThreeVector u = G4ThreeVector(0, 0, -1);
-    G4ThreeVector v = G4ThreeVector(-std::sin(phi), std::cos(phi),0.);
-    G4ThreeVector w = G4ThreeVector( std::cos(phi), std::sin(phi),0.);
-    */
 
     G4RotationMatrix* rotm1 = new G4RotationMatrix();
     rotm1->rotateY(90.*deg); 
 
     G4cout << rotm1 << "\n";
 
-    G4LogicalVolume *logicSteel = new G4LogicalVolume(solidSteel, Steel,"Steel");
+    G4LogicalVolume *logicRust = new G4LogicalVolume(solidRust, Rust,"Rust");
     
-    G4VPhysicalVolume *physSteel2 = new G4PVPlacement(
+    G4VPhysicalVolume *physRust2 = new G4PVPlacement(
                                                 rotm1, //rotation
-                                                G4ThreeVector(0.5*m,10*cm,0.), //its position
-                                                logicSteel, //its logical volume
-                                                "physSteel2", //name
+                                                G4ThreeVector(0.,-60*mm,60*mm), //its position
+                                                logicRust, //its logical volume
+                                                "physRust2", //name
                                                 logicConcrete, //mothervolume
                                                 false, //no boolean operation
                                                 0, //copy number
                                                 true); //check for overlaps
 
-    G4VPhysicalVolume *physSteel3 = new G4PVPlacement(
+    G4VPhysicalVolume *physRust3 = new G4PVPlacement(
                                                 rotm1, //rotation
-                                                G4ThreeVector(-0.5*m,0.,0.), //its position
-                                                logicSteel, //its logical volume
-                                                "physSteel3", //name
+                                                G4ThreeVector(0.,60*mm,-60*mm), //its position
+                                                logicRust, //its logical volume
+                                                "physRust3", //name
                                                 logicConcrete, //mothervolume
                                                 false, //no boolean operation
                                                 0, //copy number
                                                 true); //check for overlaps                                            
 
-                                                                          
+    G4VPhysicalVolume *physRust4 = new G4PVPlacement(
+                                                rotm1, //rotation
+                                                G4ThreeVector(0.,-60*mm,-60*mm), //its position
+                                                logicRust, //its logical volume
+                                                "physRust4", //name
+                                                logicConcrete, //mothervolume
+                                                false, //no boolean operation
+                                                0, //copy number
+                                                true); //check for overlaps
+
+    
+    G4VPhysicalVolume *physRust1 = new G4PVPlacement(
+                                                rotm1, //rotation
+                                                G4ThreeVector(0.,60*mm,60*mm), //its position
+                                                logicRust, //its logical volume
+                                                "physRust1", //name
+                                                logicConcrete, //mothervolume
+                                                false, //no boolean operation
+                                                0, //copy number
+                                                true); //check for overlaps                                                                                
 
     //Adding sensitive detector 
-    
 
     //Physical Properties of the detector
     G4Element *Si = nist->FindOrBuildElement("Si"); //Silicon

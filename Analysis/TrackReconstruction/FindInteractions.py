@@ -96,8 +96,8 @@ def without_intersection(filename,uncertantity):
         standard_dev =  1  
         
         rows = (len(detector_data))
-        noise = IntroduceError.gaussian(standard_dev, (rows,3))
-        #noise = IntroduceError.top_hat(top_hat_width,(rows,3))
+        #noise = IntroduceError.gaussian(standard_dev, (rows,3))
+        noise = IntroduceError.top_hat(standard_dev,(rows,3))
         
         detector_data['PosX'] = detector_data['PosX'] - noise[:,0]
         detector_data['PosY'] = detector_data['PosY'] - noise[:,1]
@@ -214,8 +214,8 @@ def without_intersection(filename,uncertantity):
             if uncertantity == True:
                 #this is mm                
                 rows = (len(detector_data))
-                noise = IntroduceError.gaussian(standard_dev, (rows,3))
-                #noise = IntroduceError.top_hat(top_hat_width,(rows,3))
+                #noise = IntroduceError.gaussian(standard_dev, (rows,3))
+                noise = IntroduceError.top_hat(standard_dev,(rows,3))
                 
                 detector_data['PosX'] = detector_data['PosX'] - noise[:,0]
                 detector_data['PosY'] = detector_data['PosY'] - noise[:,1]
@@ -281,6 +281,7 @@ def without_intersection(filename,uncertantity):
 #filename = "/ReferenceConcreteBlock/2milli2.h5"
 #filename = "/RealisticConcreteBeam/RealisticBeam4.h5"
 #filename = "/50mmSample/Lead/50000PureLeadSlab1.h5"
-filename = "/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad3.h5"
+#filename = "/RustedBeam15mm/RustedBeam15mmOG4.h5"
+filename = "/DisconnectedRebar10cmGap/Disconnected10cmGap4.h5"
 #with_intersection(filename)
-without_intersection(filename,False)
+without_intersection(filename,True) 

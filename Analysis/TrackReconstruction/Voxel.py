@@ -13,6 +13,8 @@ import math
 import plotly.graph_objects as go
 import sys
 from matplotlib.ticker import (AutoMinorLocator, MultipleLocator)
+from scipy import ndimage
+from scipy.signal import convolve2d
 #This is all working in mm!!!!!!!!
 
 detector_in_corners = ([0.6*1000,0.1125*1000,0.1125*1000],
@@ -89,13 +91,14 @@ def image_heatmap_3D(filepath,detector_corners,angle_type):
         angle= "qualfactorangle"
     
     if angle_type == 3:
-        angle = "0"
+        angle = "momentumweighted"
     if angle_type == 4:
         angle = "MDweighted"
     
     
     df = pd.read_csv(filepath)
-    print(df)
+    df.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z","0": angle}, inplace = True)
+
     #df.rename(columns={0: 'x',  1: 'y', 2: 'z',3: 'angle'}, inplace=True)
     
     df['Y'] = df['Y'].str.strip('(]')
@@ -145,8 +148,10 @@ def image_heatmap_3D(filepath,detector_corners,angle_type):
     
     return(None)
 
-def heatmap_slices_zx(filepath,angle_type):
+def heatmap_slices_zx(filepath,angle_type,neighbour_average,filter_confidence):
     #Slices through the concrete in the xy plane, a bit like a CT scan.
+    #Neighbour average, bool, specifies whether to perform a nearest neighbour average of voxels
+    #Filter confidence, any values less than this in the neighbour average will be set to 0
     if angle_type == 1:
        angle = "angle"
     
@@ -160,7 +165,7 @@ def heatmap_slices_zx(filepath,angle_type):
     
     
     df = pd.read_csv(filepath)
-    
+    #df.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z","0": angle}, inplace = True)
     #df.rename(columns={0: 'x',  1: 'y', 2: 'z',3: 'angle'}, inplace=True)
     
     df['Y'] = df['Y'].str.strip('(]')
@@ -184,6 +189,20 @@ def heatmap_slices_zx(filepath,angle_type):
         df_plot.drop(columns = ['Y'],inplace=True)
                 
         pivot = df_plot.pivot(values = angle,columns='Z',index='X')
+        
+        if neighbour_average == True:
+            values = pivot.to_numpy()
+            result = eight_neighbor_average_convolve2d(values)
+            
+            result1d = result.flatten('F')
+            normalised = normalise(result1d)
+            
+            #Any values less than 0.5 are set to 0 
+            normalised[normalised < filter_confidence] = 0
+            
+            df_plot[angle] = normalised
+            pivot = df_plot.pivot(values = angle,columns='Z',index='X')
+        
         sns.heatmap(pivot,cmap = 'Spectral_r',xticklabels=7, yticklabels=6).axis('equal')
         plt.title("Y= " +str(i)+ " mm")
         plt.autoscale()
@@ -193,8 +212,10 @@ def heatmap_slices_zx(filepath,angle_type):
         #plt.show()
     return(None)
 
-def heatmap_slices_zy(filepath,angle_type):
+def heatmap_slices_zy(filepath,angle_type,neighbour_average,filter_confidence):
     #Slices through the concrete in the xy plane, a bit like a CT scan.
+    #Neighbour average, bool, specifies whether to perform a nearest neighbour average of voxels
+    #Filter confidence, any values less than this in the neighbour average will be set to 0
     if angle_type == 1:
        angle = "angle"
     
@@ -208,7 +229,7 @@ def heatmap_slices_zy(filepath,angle_type):
     
     
     df = pd.read_csv(filepath)
-    
+    #df.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z","0": angle}, inplace = True)
     #df.rename(columns={0: 'x',  1: 'y', 2: 'z',3: 'angle'}, inplace=True)
     
     df['Y'] = df['Y'].str.strip('(]')
@@ -232,6 +253,20 @@ def heatmap_slices_zy(filepath,angle_type):
         df_plot.drop(columns = ['X'],inplace=True)
                 
         pivot = df_plot.pivot(values = angle,columns='Z',index='Y')
+        
+        if neighbour_average == True:
+            values = pivot.to_numpy()
+            result = eight_neighbor_average_convolve2d(values)
+            
+            result1d = result.flatten('F')
+            normalised = normalise(result1d)
+            
+            #Any values less than 0.5 are set to 0 
+            normalised[normalised < filter_confidence] = 0
+            
+            df_plot[angle] = normalised
+            pivot = df_plot.pivot(values = angle,columns='Z',index='Y')
+        
         sns.heatmap(pivot,cmap = 'Spectral_r',xticklabels=2, yticklabels=2).axis('equal')
         plt.title("X= " +str(i)+ " mm")
         plt.autoscale()
@@ -240,8 +275,11 @@ def heatmap_slices_zy(filepath,angle_type):
         #plt.show()
     return(None)
 
-def heatmap_slices_xy(filepath,angle_type):
+def heatmap_slices_xy(filepath,angle_type,neighbour_average,filter_confidence):
     #Slices through the concrete in the xy plane, a bit like a CT scan.
+    #Neighbour average, bool, specifies whether to perform a nearest neighbour average of voxels
+    #Filter confidence, any values less than this in the neighbour average will be set to 0
+    
     if angle_type == 1:
        angle = "angle"
     
@@ -256,8 +294,9 @@ def heatmap_slices_xy(filepath,angle_type):
     
     df = pd.read_csv(filepath)
     
-    #df.rename(columns={0: 'x',  1: 'y', 2: 'z',3: 'angle'}, inplace=True)
-    
+    #df.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z","0": angle}, inplace = True)
+    df.rename(index={0: 'X',  1: 'Y', 2: 'Z',3: angle}, inplace=True)
+    print(df)
     df['Y'] = df['Y'].str.strip('(]')
     df['Z'] = df['Z'].str.strip('(]')
     df['X'] = df['X'].str.strip('(]')
@@ -279,13 +318,31 @@ def heatmap_slices_xy(filepath,angle_type):
         df_plot.drop(columns = ['Z'],inplace=True)
                 
         pivot = df_plot.pivot(values = angle,columns='X',index='Y')
-        fig, ax = plt.subplots(figsize = (12, 8))
-        sns.heatmap(pivot,cmap = 'Spectral_r',xticklabels=4, yticklabels=4).axis('equal')
+        
+        if neighbour_average == True:
+            values = pivot.to_numpy()
+            result = eight_neighbor_average_convolve2d(values)
+            
+            result1d = result.flatten('F')
+            normalised = normalise(result1d)
+            
+            #Any values less than 0.5 are set to 0 
+            normalised[normalised < filter_confidence] = 0
+            
+            df_plot[angle] = normalised
+            pivot = df_plot.pivot(values = angle,columns='X',index='Y')
+        
+       
+        fig, ax = plt.subplots(figsize = (12, 4))
+        sns.heatmap(pivot,cmap = 'Spectral_r',xticklabels=4, yticklabels=4, square = True)
+        #sns.jointplot(x=df['X'], y=df['X'], data=df[angle] , height = 10 , kind="hist" ,color="#FF6600" , marginal_kws={'lw':5})
         plt.title("Z= " +str(i)+ " mm")
         plt.autoscale()
+    
 
         plt.savefig("/home/anthony/MastersThesis/Data/DumpFolder/xy_Z=" +str(i)+".png",bbox_inches='tight')
         plt.close()
+        
         #plt.show()
     return(None)
 
@@ -360,9 +417,8 @@ def binned_clustered(voxel_side_length,filename,df,qual_angle):
     voxelised.to_csv(BinnedClustered)
     return(None)
 
-
 def metric(sub_vol_df):
-    
+    #Metric Used in Binned Clustering Algorithm
     #We don't care about only 1 interaction
     if (sub_vol_df.shape[0]) <=2:
         return(0)
@@ -384,26 +440,58 @@ def metric(sub_vol_df):
 
         return(1/median)
 
-voxel_side_length = 10#(mm)
+def eight_neighbor_average_convolve2d(x):
+    #https://gis.stackexchange.com/questions/254753/calculate-the-average-of-neighbor-pixels-for-raster-edge
+    #Function to average the values of nearest pixels
+    kernel = np.ones((3, 3))
+    #kernel[1, 1] = 0
+
+    neighbor_sum = convolve2d(
+        x, kernel, mode='same',
+        boundary='fill', fillvalue=0)
+
+    num_neighbor = convolve2d(
+        np.ones(x.shape), kernel, mode='same',
+        boundary='fill', fillvalue=0)
+
+    return neighbor_sum / num_neighbor
+
+def normalise(data):
+    #Normalises array to go between 0 and 1
+    normalised_data = (data-np.min(data))/(np.max(data)-np.min(data))
+    
+    return(normalised_data)
+voxel_side_length = 5#(mm)
 #filename = "/50mmSample/Lead/50000PureLeadSlab1Interaction.h5"
 #filename = "/SteelRodInConcrete50mmRadius/2millionevents2Interaction.h5"
 #filename = "/ReferenceConcreteBlock/2milliInteraction.h5"
 filename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5"
 key = "POCA"
+
 #df = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab1Interaction.h5")
+
 df = ReadH5.pandas_read(filename,key)
 df2 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam2Interaction.h5",key)
 df3 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam3Interaction.h5",key)
 df4 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam4Interaction.h5",key)
-
-
 df = pd.concat([df,df2,df3,df4])
+
 base_filepath = "/home/anthony/MastersThesis/Data/"
+
+
+#df1 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad1Interaction.h5",key)
+#df2 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad2Interaction.h5",key)
+#df3 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad3Interaction.h5",key)
+#df4 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad4Interaction.h5",key)
+#filename = "/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad1Interaction.h5"
+
+#df = pd.concat([df1,df2,df3,df4])
+
 
 angle_type = 3
 #voxelisation(voxel_side_length,filename,df,angle_type)
-#binned_clustered(voxel_side_length,filename,df,angle_type)
-print("hi")
+#binned_clustered(voxel_side_length,filename,df,angle_type) 
+#print("hi")
 
 #image_heatmap_3D(base_filepath + filename[:-3] + "BinnedClustered.csv",detector_in_corners,angle_type)
 #heatmap_slices_xy(base_filepath + filename[:-3] + "BinnedClustered.csv",angle_type)
