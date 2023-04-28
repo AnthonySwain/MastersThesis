@@ -13,3 +13,4 @@ def gaussian(standard_dev,size):
     noise = np.random.normal(0,standard_dev,size=size)
     
     return(noise)
+

@@ -70,7 +70,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     //this is the mother volume,
     G4VPhysicalVolume *physWorld = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicWorld, "physWorld",0,false,0,true);
 
-
+/*
     //Making the concrete volume
     G4Material *Concrete = nist->FindOrBuildMaterial("G4_CONCRETE");
     G4MaterialPropertiesTable *mptConcrete = new G4MaterialPropertiesTable();
@@ -78,7 +78,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     G4Box *solidConcrete = new G4Box("solidConcrete", 1*m, 112.5*mm, 112.5*mm);
     G4LogicalVolume *logicConcrete = new G4LogicalVolume(solidConcrete, Concrete,"logicConcrete");
     G4VPhysicalVolume *physConcrete = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.), logicConcrete, "physConcrete",logicWorld,false,0,true);
-
+*/
     
     //Making the steel volume inside the concrete volume
     //Steel is a mixture of elements so need to comprise it of carbon and iron
@@ -95,7 +95,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     G4Tubs *solidSteel = new G4Tubs("solidSteel",
                                     0., //inner radius
                                     15*mm, //outer radius
-                                    49*cm, // half z distance
+                                    0.95*m, // half z distance
                                     0., //start Phi angle
                                     2*M_PI*rad); //End Phi Angle
 
@@ -117,28 +117,46 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     
     G4VPhysicalVolume *physSteel2 = new G4PVPlacement(
                                                 rotm1, //rotation
-                                                G4ThreeVector(0.5*m,10*cm,0.), //its position
+                                                G4ThreeVector(0.,-60*mm,60*mm), //its position
                                                 logicSteel, //its logical volume
                                                 "physSteel2", //name
-                                                logicConcrete, //mothervolume
+                                                logicWorld, //mothervolume
                                                 false, //no boolean operation
                                                 0, //copy number
                                                 true); //check for overlaps
 
     G4VPhysicalVolume *physSteel3 = new G4PVPlacement(
                                                 rotm1, //rotation
-                                                G4ThreeVector(-0.5*m,0.,0.), //its position
+                                                G4ThreeVector(0.,60*mm,-60*mm), //its position
                                                 logicSteel, //its logical volume
                                                 "physSteel3", //name
-                                                logicConcrete, //mothervolume
+                                                logicWorld, //mothervolume
                                                 false, //no boolean operation
                                                 0, //copy number
                                                 true); //check for overlaps                                            
 
-                                                                          
+    G4VPhysicalVolume *physSteel4 = new G4PVPlacement(
+                                                rotm1, //rotation
+                                                G4ThreeVector(0.,-60*mm,-60*mm), //its position
+                                                logicSteel, //its logical volume
+                                                "physSteel4", //name
+                                                logicWorld, //mothervolume
+                                                false, //no boolean operation
+                                                0, //copy number
+                                                true); //check for overlaps
+
+    
+    G4VPhysicalVolume *physSteel1 = new G4PVPlacement(
+                                                rotm1, //rotation
+                                                G4ThreeVector(0.,60*mm,60*mm), //its position
+                                                logicSteel, //its logical volume
+                                                "physSteel1", //name
+                                                logicWorld, //mothervolume
+                                                false, //no boolean operation
+                                                0, //copy number
+                                                true); //check for overlaps                                                                                
 
     //Adding sensitive detector 
-    
 
     //Physical Properties of the detector
     G4Element *Si = nist->FindOrBuildElement("Si"); //Silicon
@@ -207,9 +225,9 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     logicWorld->SetVisAttributes (G4VisAttributes::GetInvisible()); 
 
 
-    auto ConcreteVisAtt = new G4VisAttributes(G4Colour(128,128,128,0.5)); 
+    //auto ConcreteVisAtt = new G4VisAttributes(G4Colour(128,128,128,0.5)); 
     //ConcreteVisAtt->SetForceWireframe(true);
-    logicConcrete->SetVisAttributes(ConcreteVisAtt);
+    //logicConcrete->SetVisAttributes(ConcreteVisAtt);
     //make the detectors red
     auto DetectorVisAtt = new G4VisAttributes(G4Colour(0.8,0.8,0.1,1)); 
     DetectorVisAtt->SetVisibility(true);
