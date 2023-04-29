@@ -283,6 +283,37 @@ def without_intersection(filename,uncertantity):
 #filename = "/RealisticConcreteBeam/RealisticBeam4.h5"
 #filename = "/50mmSample/Lead/50000PureLeadSlab1.h5"
 #filename = "/RustedBeam15mm/RustedBeam15mmOG4.h5"
-filename = "/NOCONCRETEREBAR/JustRebar15mmRadius1milli.h5"
+filename = "/Disconnected3cmGap/Disconnected3cmGap.h5"
 #with_intersection(filename)
 without_intersection(filename,False) 
+without_intersection(filename,True) 
+filename = "/Disconnected3cmGap/Disconnected3cmGap2.h5"
+without_intersection(filename,False) 
+without_intersection(filename,True) 
+
+
+######################################################
+filename = "/JustConcreteBeam/JustBeam1.h5"
+without_intersection(filename,True)
+
+filename = "/JustConcreteBeam/JustBeam2.h5"
+without_intersection(filename,True) 
+
+filename = "/JustConcreteBeam/JustBeam3.h5"
+without_intersection(filename,True) 
+
+filename = "/JustConcreteBeam/JustBeam4.h5"
+without_intersection(filename,True) 
+##########################################################
+
+filename = "/JustConcreteBeam2/JustBeam1.h5"
+without_intersection(filename,True)
+
+filename = "/JustConcreteBeam2/JustBeam2.h5"
+without_intersection(filename,True) 
+
+filename = "/JustConcreteBeam2/JustBeam3.h5"
+without_intersection(filename,True) 
+
+filename = "/JustConcreteBeam2/JustBeam4.h5"
+without_intersection(filename,True) 

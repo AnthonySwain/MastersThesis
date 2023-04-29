@@ -168,7 +168,7 @@ def heatmap_slices_zx(filepath,angle_type,neighbour_average,filter_confidence,di
     
     df = pd.read_csv(filepath)
     df.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z","0": angle}, inplace = True)
-    #df.rename(columns={0: 'x',  1: 'y', 2: 'z',3: 'angle'}, inplace=True)
+    #df.rename(columns={0: 'X',  1: 'Y', 2: 'Z',3: angle}, inplace=True)
     
     df['Y'] = df['Y'].str.strip('(]')
     df['Z'] = df['Z'].str.strip('(]')
@@ -234,7 +234,7 @@ def heatmap_slices_zy(filepath,angle_type,neighbour_average,filter_confidence,di
     
     df = pd.read_csv(filepath)
     df.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z","0": angle}, inplace = True)
-    #df.rename(columns={0: 'x',  1: 'y', 2: 'z',3: 'angle'}, inplace=True)
+    #df.rename(columns={0: 'X',  1: 'Y', 2: 'Z',3: angle}, inplace=True)
     
     df['Y'] = df['Y'].str.strip('(]')
     df['Z'] = df['Z'].str.strip('(]')
@@ -300,8 +300,8 @@ def heatmap_slices_xy(filepath,angle_type,neighbour_average,filter_confidence,di
     
     df = pd.read_csv(filepath)
     
-    #df.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z","0": angle}, inplace = True)
-    df.rename(index={0: 'X',  1: 'Y', 2: 'Z',3: angle}, inplace=True)
+    df.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z","0": angle}, inplace = True)
+    #df.rename(columns={0: 'X',  1: 'Y', 2: 'Z',3: angle}, inplace=True)
     #print(df)
     df['Y'] = df['Y'].str.strip('(]')
     df['Z'] = df['Z'].str.strip('(]')
@@ -736,3 +736,96 @@ for l in neighbour_average:
     heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "BinnedClustered.csv",angle_type,l,0.7,Directory_slicesZY)
     heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "BinnedClustered.csv",angle_type,l,0.7,Directory_slicesZX)
 '''
+
+
+
+neighbour_average = [True,False]
+binned_clustered_algo = True
+angle_type = 3
+key = "POCA"
+
+base_data_directory = "/home/anthony/MastersThesis/Data/"
+ParentFolderPath = "/home/anthony/MastersThesis/Figures/MassOutput/NoConfidenceValues"
+#interaction_name = ["RealisticConcreteBeam15mmRadius","RealisticConcreteBeam10mmRadius","RealisticConcreteBeam5mmRadius","Disconnected10cmGap","RustedBeam15mm"]
+interaction_name = ["Disconnected10cmGap","RustedBeam15mm"]
+def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter,binned_clustered_algo,angle_type,key,ParentFolderPath):
+    
+    #Makes the figures on mass
+    #ParentFolderPath is where the output files will go 
+    try: 
+        os.mkdir(ParentFolderPath) 
+    except OSError as error: 
+        print(ParentFolderPath)
+        
+    ParticleDetectorUncertantity = ["ExactPrecision","Gaussian","TopHat"]
+    
+    for i in interaction_name:
+        try: 
+            os.mkdir(ParentFolderPath + "/" + i) 
+        except OSError as error: 
+            print(error)
+            
+        for j in ParticleDetectorUncertantity:
+            data_dir = base_data_directory + i + "/" + j + "/"
+            print(j)
+            if j == "Gaussian" or j == "TopHat":
+                df1 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "InteractionUncertantity.h5",key)
+                df2 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "2InteractionUncertantity.h5",key)
+                df3 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "3InteractionUncertantity.h5",key)
+                df4 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "4InteractionUncertantity.h5",key)
+                imagingfilename = "/" + i + "/" + j + "/" + i + "InteractionUncertantity.h5"
+                imaging = pd.concat([df1,df2,df3,df4])
+            
+            else:
+                df1 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "Interaction.h5",key)
+                df2 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "2Interaction.h5",key)
+                df3 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "3Interaction.h5",key)
+                df4 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "4Interaction.h5",key)
+                imagingfilename = "/" + i + "/" + j + "/" + i + "Interaction.h5"
+                imaging = pd.concat([df1,df2,df3,df4])
+            
+            
+            binned_clustered(VoxelSize,imagingfilename,imaging,angle_type) 
+            try: 
+                os.mkdir(ParentFolderPath + "/" + i + "/" + j) 
+            except OSError as error: 
+                print(error)
+
+
+            for l in neighbour_average:
+                if l == True:
+                    neighbour_path = "NeighbourAverage"           
+                else: 
+                    neighbour_path = "NotNeighbourAverage"
+                    
+                try:
+                    os.mkdir(ParentFolderPath + "/" + i + "/" + j + "/" + neighbour_path)
+                    print("done")
+                except OSError as error: 
+                    print(error)
+                    
+                Directory_slicesXY = ParentFolderPath + "/" + i + "/" + j + "/" + neighbour_path +"/XYHeatMapSlices"
+                Directory_slicesZX = ParentFolderPath + "/" + i + "/" + j + "/" + neighbour_path +"/ZXHeatMapSlices"
+                Directory_slicesZY = ParentFolderPath + "/" + i + "/" + j + "/"+ neighbour_path +"/ZYHeatMapSlices"
+                
+                try: 
+                    os.mkdir(Directory_slicesXY) 
+                except OSError as error: 
+                    print(error)
+                    
+                try: 
+                    os.mkdir(Directory_slicesZX) 
+                except OSError as error: 
+                    print(error)
+                    
+                try: 
+                    os.mkdir(Directory_slicesZY) 
+                except OSError as error: 
+                    print(error)
+                base_filepath = "/home/anthony/MastersThesis/Data"
+                heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "BinnedClustered.csv",angle_type,l,0,Directory_slicesXY)
+                heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "BinnedClustered.csv",angle_type,l,0,Directory_slicesZY)
+                heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "BinnedClustered.csv",angle_type,l,0,Directory_slicesZX)
+    return(None)
+
+make_heatmaps(base_data_directory,interaction_name,15,5,0,binned_clustered,angle_type,key,ParentFolderPath)

@@ -12,15 +12,15 @@ from scipy.stats import halfnorm
 import os
 
 #Note this is filepaths:))
-detector_in_corners = ([0.6*1000,0.1125*1000,0.1125*1000],
-                    [0.6*1000,-0.1125*1000,0.1125*1000],
-                     [-0.6*1000,-0.1125*1000,0.1125*1000],
-                     [-0.6*1000,0.1125*1000,0.1125*1000])
+detector_in_corners = ([0.5*1000,0.1125*1000,0.1125*1000],
+                    [0.5*1000,-0.1125*1000,0.1125*1000],
+                     [-0.5*1000,-0.1125*1000,0.1125*1000],
+                     [-0.5*1000,0.1125*1000,0.1125*1000])
 
-detector_out_corners = ([0.6*1000,0.1125*1000,-0.1125*1000],
-                    [0.6*1000,-0.1125*1000,-0.1125*1000],
-                     [-0.6*1000,-0.1125*1000,-0.1125*1000],
-                     [-0.6*1000,0.1125*1000,-0.1125*1000])
+detector_out_corners = ([0.5*1000,0.1125*1000,-0.1125*1000],
+                    [0.5*1000,-0.1125*1000,-0.1125*1000],
+                     [-0.5*1000,-0.1125*1000,-0.1125*1000],
+                     [-0.5*1000,0.1125*1000,-0.1125*1000])
 
 
 
@@ -288,7 +288,7 @@ key = "POCA"
 
 base_data_directory = "/home/anthony/MastersThesis/Data/"
 ParentFolderPath = "/home/anthony/MastersThesis/Figures/MassOutput"
-interaction_name = ["RealisticConcreteBeam15mmRadius","RealisticConcreteBeam10mmRadius","RealisticConcreteBeam5mmRadius","Disconnected10cmGap","RustedBeam15mm"]
+interaction_names = ["RealisticConcreteBeam15mmRadius","RealisticConcreteBeam10mmRadius","RealisticConcreteBeam5mmRadius","Disconnected10cmGap","RustedBeam15mm"]
 
 def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter,binned_clustered,angle_type,key,ParentFolderPath):
     df1 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam1Interaction.h5",key)
@@ -314,9 +314,9 @@ def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter
     except OSError as error: 
         print(ParentFolderPath)
         
-    ParticleDetectorUncertantity = ["ExactPrecision","Gaussian","TopHat"]
+    ParticleDetectorUncertantity = ["ExactPrecision"]
     
-    for i  in interaction_name:
+    for i in interaction_name:
         try: 
             os.mkdir(ParentFolderPath + "/" + i) 
         except OSError as error: 
@@ -324,14 +324,15 @@ def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter
             
         for j in ParticleDetectorUncertantity:
             data_dir = base_data_directory + i + "/" + j + "/"
-            
-            if j == "Gaussian" or "TopHat":
+            print(j)
+            if j == "Gaussian" or j == "TopHat":
                 df1 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "InteractionUncertantity.h5",key)
                 df2 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "2InteractionUncertantity.h5",key)
                 df3 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "3InteractionUncertantity.h5",key)
                 df4 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "4InteractionUncertantity.h5",key)
                 imagingfilename = "/" + i + "/" + j + "/" + i + "InteractionUncertantity.h5"
                 imaging = pd.concat([df1,df2,df3,df4])
+            
             else:
                 df1 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "Interaction.h5",key)
                 df2 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "2Interaction.h5",key)
@@ -350,7 +351,7 @@ def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter
                             control2df,control2filename,
                             imaging,imagingfilename,
                             angle_type,binned_clustered,
-                            STDcheck,filter,VoxelSize)
+                            STDcheck,0,VoxelSize)
 
             for l in neighbour_average:
                 if l == True:
@@ -382,13 +383,13 @@ def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter
                     os.mkdir(Directory_slicesZY) 
                 except OSError as error: 
                     print(error)
-                    
-                Voxel.heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0.7,Directory_slicesXY)
-                Voxel.heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0.7,Directory_slicesZY)
-                Voxel.heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0.7,Directory_slicesZX)
-        return(None)
+                base_filepath = "/home/anthony/MastersThesis/Data"
+                Voxel.heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0,Directory_slicesXY)
+                Voxel.heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0,Directory_slicesZY)
+                Voxel.heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0,Directory_slicesZX)
+    return(None)
 
-make_heatmaps(base_data_directory,interaction_name,15,5,0,binned_clustered,angle_type,key,ParentFolderPath)
+make_heatmaps(base_data_directory,interaction_names,15,5,0,binned_clustered,angle_type,key,ParentFolderPath)
 '''    
 for i in VoxelSize:
     for j in STDcheck: 
