@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 {   
 
     //Create the output file
-    H5Composites::GroupWrapper fOut = H5Composites::GroupWrapper::createFile("/home/anthony/MastersThesis/Data/JustRebar15mmRadius1milli.h5",true);
+    H5Composites::GroupWrapper fOut = H5Composites::GroupWrapper::createFile("/home/anthony/MastersThesis/Data/Disconnected3cmGap4.h5",true);
     
     //Getting the group from the group wrapper
     H5::Group group = fOut.group();

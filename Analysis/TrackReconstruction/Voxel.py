@@ -199,7 +199,7 @@ def heatmap_slices_zx(filepath,angle_type,neighbour_average,filter_confidence,di
             result1d = result.flatten('F')
             normalised = normalise(result1d)
             
-            #Any values less than 0.5 are set to 0 
+            #Any values less than filter value are set to 0 
             #normalised[normalised < filter_confidence] = 0
             
             df_plot[angle] = normalised
@@ -207,6 +207,8 @@ def heatmap_slices_zx(filepath,angle_type,neighbour_average,filter_confidence,di
         
         sns.heatmap(pivot,cmap = 'Spectral_r',xticklabels=7, yticklabels=6).axis('equal')
         plt.title("Y= " +str(i)+ " mm")
+        plt.xlabel("Z / mm")
+        plt.ylabel("X / mm")
         plt.autoscale()
         
         plt.savefig(directory+ "/zx_Y=" +str(i)+".png",bbox_inches='tight')
@@ -271,6 +273,8 @@ def heatmap_slices_zy(filepath,angle_type,neighbour_average,filter_confidence,di
         
         sns.heatmap(pivot,cmap = 'Spectral_r',xticklabels=2, yticklabels=2).axis('equal')
         plt.title("X= " +str(i)+ " mm")
+        plt.xlabel("Z / mm")
+        plt.ylabel("Y / mm")
         plt.autoscale()
         plt.savefig(directory+ "/zy_X=" +str(i)+".png",bbox_inches='tight')
         plt.close()
@@ -296,8 +300,8 @@ def heatmap_slices_xy(filepath,angle_type,neighbour_average,filter_confidence,di
     
     df = pd.read_csv(filepath)
     
-    df.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z","0": angle}, inplace = True)
-    #df.rename(index={0: 'X',  1: 'Y', 2: 'Z',3: angle}, inplace=True)
+    #df.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z","0": angle}, inplace = True)
+    df.rename(index={0: 'X',  1: 'Y', 2: 'Z',3: angle}, inplace=True)
     #print(df)
     df['Y'] = df['Y'].str.strip('(]')
     df['Z'] = df['Z'].str.strip('(]')
@@ -329,7 +333,7 @@ def heatmap_slices_xy(filepath,angle_type,neighbour_average,filter_confidence,di
             normalised = normalise(result1d)
             
             #Any values less than 0.5 are set to 0 
-            #normalised[normalised < filter_confidence] = 0
+            normalised[normalised < filter_confidence] = 0
             
             df_plot[angle] = normalised
             pivot = df_plot.pivot(values = angle,columns='X',index='Y')
@@ -339,9 +343,10 @@ def heatmap_slices_xy(filepath,angle_type,neighbour_average,filter_confidence,di
         sns.heatmap(pivot,cmap = 'Spectral_r',xticklabels=4, yticklabels=4, square = True)
         #sns.jointplot(x=df['X'], y=df['X'], data=df[angle] , height = 10 , kind="hist" ,color="#FF6600" , marginal_kws={'lw':5})
         plt.title("Z= " +str(i)+ " mm")
+        
+        plt.xlabel("X / mm")
+        plt.ylabel("Y / mm")
         plt.autoscale()
-    
-
         plt.savefig(directory + "/xy_Z=" +str(i)+".png",bbox_inches='tight')
         plt.close()
         
@@ -463,7 +468,7 @@ def normalise(data):
     normalised_data = (data-np.min(data))/(np.max(data)-np.min(data))
     
     return(normalised_data)
-
+'''
 def heatmap_planar_x_y(filepath,angle_type,neighbour_average,filter_confidence,directory):
     #Creates planar image in xy plane, much like a planar xray scan
     if angle_type == 1:
@@ -620,7 +625,7 @@ def heatmap_planar_y_z(filepath,angle_type,neighbour_average,filter_confidence,d
     plt.savefig(directory + "/YZPlanar.png",bbox_inches='tight')
     plt.close()
     return(None)
-
+'''
 
 
 
@@ -674,15 +679,15 @@ key = "POCA"
 #heatmap_planar_x_z(base_filepath + filename[:-3] + ending,angle_type)
 #heatmap_planar_y_z(base_filepath + filename[:-3] + ending,angle_type)
 
-base_filepath = "/home/anthony/MastersThesis/Data/"
-angle_type = 3
-voxel_side_length = 15
+#base_filepath = "/home/anthony/MastersThesis/Data/"
+#angle_type = 3
+#voxel_side_length = 15
 
-df1 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGapInteractionUncertantity.h5",key)
-df2 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap2InteractionUncertantity.h5",key)
-df3 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap3InteractionUncertantity.h5",key)
-df4 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap4InteractionUncertantity.h5",key)
-imagingfilename = "/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGapInteractionUncertantity.h5"
+#df1 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGapInteractionUncertantity.h5",key)
+#df2 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap2InteractionUncertantity.h5",key)
+#df3 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap3InteractionUncertantity.h5",key)
+#df4 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap4InteractionUncertantity.h5",key)
+#imagingfilename = "/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGapInteractionUncertantity.h5"
 
 
 #df1 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/ExactPrecision/Disconnected10cmGapInteraction.h5",key)
@@ -690,10 +695,10 @@ imagingfilename = "/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGapInterac
 #df3 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/ExactPrecision/Disconnected10cmGap3Interaction.h5",key)
 #df4 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/ExactPrecision/Disconnected10cmGap4Interaction.h5",key)
 #imagingfilename = "/DisconnectedRebar10cmGap/ExactPrecision/Disconnected10cmGapInteraction.h5"
-df = pd.concat([df1,df2,df3,df4])
-binned_clustered(voxel_side_length,imagingfilename,df,angle_type) 
+#df = pd.concat([df1,df2,df3,df4])
+#binned_clustered(voxel_side_length,imagingfilename,df,angle_type) 
 
-
+'''
 neighbour_average = [True,False]
 directory = "/home/anthony/MastersThesis/Figures/15mmRebar/Disconnected10cm/Gaussian"
 for l in neighbour_average:
@@ -730,3 +735,4 @@ for l in neighbour_average:
     heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "BinnedClustered.csv",angle_type,l,0.7,Directory_slicesXY)
     heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "BinnedClustered.csv",angle_type,l,0.7,Directory_slicesZY)
     heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "BinnedClustered.csv",angle_type,l,0.7,Directory_slicesZX)
+'''

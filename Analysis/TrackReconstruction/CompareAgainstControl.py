@@ -99,7 +99,7 @@ def confidence_values(control1df,control1filename, #First Control dataframe and 
     
     
     angle_confidence = (scipy.stats.norm(0,no_stdev*angle_stdev).cdf(np.absolute(difference)) - 0.5)*2
-    angle_confidence[angle_confidence < filter_confidence] = 0
+    #angle_confidence[angle_confidence < filter_confidence] = 0
     
     
     confidence = control1dfvoxel
@@ -232,21 +232,21 @@ key = "POCA"
 base_filepath = "/home/anthony/MastersThesis/Data/"
 control1filename = "/JustConcreteBeam/JustBeam1Interaction.h5"
 
-df1 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam1Interaction.h5",key)
-df2 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam2Interaction.h5",key)
-df3 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam3Interaction.h5",key)
-df4 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam4Interaction.h5",key)
+#df1 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam1Interaction.h5",key)
+#df2 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam2Interaction.h5",key)
+#df3 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam3Interaction.h5",key)
+#df4 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam4Interaction.h5",key)
 
-control1df = pd.concat([df1,df2,df3,df4])
+#control1df = pd.concat([df1,df2,df3,df4])
 
-control2filename = "/JustConcreteBeam2/JustBeam1Interaction.h5"
+#control2filename = "/JustConcreteBeam2/JustBeam1Interaction.h5"
 
-df1 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam1Interaction.h5",key)
-df2 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam2Interaction.h5",key)
-df3 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam3Interaction.h5",key)
-df4 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam4Interaction.h5",key)
+#df1 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam1Interaction.h5",key)
+#df2 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam2Interaction.h5",key)
+#df3 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam3Interaction.h5",key)
+#df4 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam4Interaction.h5",key)
 
-control2df = pd.concat([df1,df2,df3,df4])
+#control2df = pd.concat([df1,df2,df3,df4])
 
 #df1 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGapInteractionUncertantity.h5",key)
 #df2 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap2InteractionUncertantity.h5",key)
@@ -257,11 +257,11 @@ control2df = pd.concat([df1,df2,df3,df4])
 
 
 
-df1 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5",key)
-df2 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam2Interaction.h5",key)
-df3 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam3Interaction.h5",key)
-df4 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam4Interaction.h5",key)
-imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5"
+#df1 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadiusInteraction.h5",key)
+#df2 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadius2Interaction.h5",key)
+#df3 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadius3Interaction.h5",key)
+#df4 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadius4Interaction.h5",key)
+#imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadiusInteraction.h5"
 
 
 #df1 = ReadH5.pandas_read("/RealisticConcreteBeam10mmRadius/RealisticBeam10mmRad1Interaction.h5",key)
@@ -276,67 +276,120 @@ imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam
 #df4 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad4Interaction.h5",key)
 #imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5"
 
-imaging = pd.concat([df1,df2,df3,df4])
+#imaging = pd.concat([df1,df2,df3,df4])
 
-VoxelSize = [15,12.5,10,7.5,5]
-STDcheck = [1,3.5]
-FilterOutBelow = [0.5,0.6,0.7,0.8]
+VoxelSize = [15,12.5]
+STDcheck = [5]
+FilterOutBelow = [0]
 neighbour_average = [True,False]
 binned_clustered = True
 angle_type = 3
 key = "POCA"
 
-'''
-directory = "/home/anthony/MastersThesis/Figures/15mmRebar/Disconnected10cm/Gaussian"
-try: 
-    os.mkdir(directory) 
-except OSError as error: 
-    print(error)
+base_data_directory = "/home/anthony/MastersThesis/Data/"
+ParentFolderPath = "/home/anthony/MastersThesis/Figures/MassOutput"
+interaction_name = ["RealisticConcreteBeam15mmRadius","RealisticConcreteBeam10mmRadius","RealisticConcreteBeam5mmRadius","Disconnected10cmGap","RustedBeam15mm"]
 
+def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter,binned_clustered,angle_type,key,ParentFolderPath):
+    df1 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam1Interaction.h5",key)
+    df2 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam2Interaction.h5",key)
+    df3 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam3Interaction.h5",key)
+    df4 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam4Interaction.h5",key)
 
-confidence_values(control1df,control1filename,
-                control2df,control2filename,
-              imaging,imagingfilename,
-                              angle_type,binned_clustered,
-                              3,0.7,15)
+    control1df = pd.concat([df1,df2,df3,df4])
 
-for l in neighbour_average:
-    if l == True:
-        neighbour_path = "NeighbourAverage"           
-    else: 
-        neighbour_path = "NotNeighbourAverage"
-        
-    try:
-        os.mkdir(directory + "/" + neighbour_path)
-        print("done")
-    except OSError as error: 
-        print(error)
-        
-    Directory_slicesXY = directory + "/" + neighbour_path +"/XYHeatMapSlices"
-    Directory_slicesZX = directory + "/" + neighbour_path +"/ZXHeatMapSlices"
-    Directory_slicesZY = directory + "/" + neighbour_path +"/ZYHeatMapSlices"
+    control2filename = "/JustConcreteBeam2/JustBeam1Interaction.h5"
+
+    df1 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam1Interaction.h5",key)
+    df2 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam2Interaction.h5",key)
+    df3 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam3Interaction.h5",key)
+    df4 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam4Interaction.h5",key)
+
+    control2df = pd.concat([df1,df2,df3,df4])
     
+    #Makes the figures on mass
+    #ParentFolderPath is where the output files will go 
     try: 
-        os.mkdir(Directory_slicesXY) 
+        os.mkdir(ParentFolderPath) 
     except OSError as error: 
-        print(error)
+        print(ParentFolderPath)
         
-    try: 
-        os.mkdir(Directory_slicesZX) 
-    except OSError as error: 
-        print(error)
-        
-    try: 
-        os.mkdir(Directory_slicesZY) 
-    except OSError as error: 
-        print(error)
-        
-    Voxel.heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0.7,Directory_slicesXY)
-    Voxel.heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0.7,Directory_slicesZY)
-    Voxel.heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0.7,Directory_slicesZX)
-'''
+    ParticleDetectorUncertantity = ["ExactPrecision","Gaussian","TopHat"]
+    
+    for i  in interaction_name:
+        try: 
+            os.mkdir(ParentFolderPath + "/" + i) 
+        except OSError as error: 
+            print(error)
+            
+        for j in ParticleDetectorUncertantity:
+            data_dir = base_data_directory + i + "/" + j + "/"
+            
+            if j == "Gaussian" or "TopHat":
+                df1 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "InteractionUncertantity.h5",key)
+                df2 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "2InteractionUncertantity.h5",key)
+                df3 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "3InteractionUncertantity.h5",key)
+                df4 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "4InteractionUncertantity.h5",key)
+                imagingfilename = "/" + i + "/" + j + "/" + i + "InteractionUncertantity.h5"
+                imaging = pd.concat([df1,df2,df3,df4])
+            else:
+                df1 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "Interaction.h5",key)
+                df2 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "2Interaction.h5",key)
+                df3 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "3Interaction.h5",key)
+                df4 = ReadH5.pandas_read("/" + i + "/" + j + "/" + i + "4Interaction.h5",key)
+                imagingfilename = "/" + i + "/" + j + "/" + i + "Interaction.h5"
+                imaging = pd.concat([df1,df2,df3,df4])
+                
+            try: 
+                os.mkdir(ParentFolderPath + "/" + i + "/" + j) 
+            except OSError as error: 
+                print(error)
 
 
+            confidence_values(control1df,control1filename,
+                            control2df,control2filename,
+                            imaging,imagingfilename,
+                            angle_type,binned_clustered,
+                            STDcheck,filter,VoxelSize)
+
+            for l in neighbour_average:
+                if l == True:
+                    neighbour_path = "NeighbourAverage"           
+                else: 
+                    neighbour_path = "NotNeighbourAverage"
+                    
+                try:
+                    os.mkdir(ParentFolderPath + "/" + i + "/" + j + "/" + neighbour_path)
+                    print("done")
+                except OSError as error: 
+                    print(error)
+                    
+                Directory_slicesXY = ParentFolderPath + "/" + i + "/" + j + "/" + neighbour_path +"/XYHeatMapSlices"
+                Directory_slicesZX = ParentFolderPath + "/" + i + "/" + j + "/" + neighbour_path +"/ZXHeatMapSlices"
+                Directory_slicesZY = ParentFolderPath + "/" + i + "/" + j + "/"+ neighbour_path +"/ZYHeatMapSlices"
+                
+                try: 
+                    os.mkdir(Directory_slicesXY) 
+                except OSError as error: 
+                    print(error)
+                    
+                try: 
+                    os.mkdir(Directory_slicesZX) 
+                except OSError as error: 
+                    print(error)
+                    
+                try: 
+                    os.mkdir(Directory_slicesZY) 
+                except OSError as error: 
+                    print(error)
+                    
+                Voxel.heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0.7,Directory_slicesXY)
+                Voxel.heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0.7,Directory_slicesZY)
+                Voxel.heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0.7,Directory_slicesZX)
+        return(None)
+
+make_heatmaps(base_data_directory,interaction_name,15,5,0,binned_clustered,angle_type,key,ParentFolderPath)
+'''    
 for i in VoxelSize:
     for j in STDcheck: 
         for k in FilterOutBelow:
@@ -372,8 +425,7 @@ for i in VoxelSize:
                     print(error)
                 
                 Voxel.heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,k,Directory_slices)
-                
-            
+'''         
             
 
 
@@ -381,4 +433,3 @@ for i in VoxelSize:
 #Voxel.heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type)
 #Voxel.heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type)
 #Voxel.heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type)
-
