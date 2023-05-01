@@ -96,8 +96,8 @@ def without_intersection(filename,uncertantity):
         standard_dev =  1  
         
         rows = (len(detector_data))
-        noise = IntroduceError.gaussian(standard_dev, (rows,3))
-        #noise = IntroduceError.top_hat(standard_dev,(rows,3))
+        #noise = IntroduceError.gaussian(standard_dev, (rows,3))
+        noise = IntroduceError.top_hat(standard_dev,(rows,3))
         
 
         detector_data['PosX'] = detector_data['PosX'] - noise[:,0]
@@ -215,8 +215,8 @@ def without_intersection(filename,uncertantity):
             if uncertantity == True:
                 #this is mm                
                 rows = (len(detector_data))
-                #noise = IntroduceError.gaussian(standard_dev, (rows,3))
-                noise = IntroduceError.top_hat(standard_dev,(rows,3))
+                noise = IntroduceError.gaussian(standard_dev, (rows,3))
+                #noise = IntroduceError.top_hat(standard_dev,(rows,3))
             
                 detector_data['PosX'] = detector_data['PosX'] - noise[:,0]
                 detector_data['PosY'] = detector_data['PosY'] - noise[:,1]
@@ -283,37 +283,78 @@ def without_intersection(filename,uncertantity):
 #filename = "/RealisticConcreteBeam/RealisticBeam4.h5"
 #filename = "/50mmSample/Lead/50000PureLeadSlab1.h5"
 #filename = "/RustedBeam15mm/RustedBeam15mmOG4.h5"
-filename = "/Disconnected3cmGap/Disconnected3cmGap.h5"
-#with_intersection(filename)
-without_intersection(filename,False) 
-without_intersection(filename,True) 
-filename = "/Disconnected3cmGap/Disconnected3cmGap2.h5"
-without_intersection(filename,False) 
-without_intersection(filename,True) 
+#filename = "/Disconnected3cmGap/Disconnected3cmGap.h5"
+#without_intersection(filename,False) 
+#without_intersection(filename,True) 
+#filename = "/Disconnected3cmGap/Disconnected3cmGap2.h5"
+#without_intersection(filename,False) 
+#without_intersection(filename,True) 
+
+#filename = "/Disconnected3cmGap/Disconnected3cmGap3.h5"
+#without_intersection(filename,False) 
+#without_intersection(filename,True) 
+
+#filename = "/Disconnected3cmGap/Disconnected3cmGap4.h5"
+#without_intersection(filename,False) 
+#without_intersection(filename,True) 
+
 
 
 ######################################################
-filename = "/JustConcreteBeam/JustBeam1.h5"
-without_intersection(filename,True)
+#filename = "/JustConcreteBeam/JustBeam1.h5"
+#without_intersection(filename,True)#
 
-filename = "/JustConcreteBeam/JustBeam2.h5"
-without_intersection(filename,True) 
+#filename = "/JustConcreteBeam/JustBeam2.h5"
+#without_intersection(filename,True) 
 
-filename = "/JustConcreteBeam/JustBeam3.h5"
-without_intersection(filename,True) 
+#filename = "/JustConcreteBeam/JustBeam3.h5"
+#without_intersection(filename,True) 
 
-filename = "/JustConcreteBeam/JustBeam4.h5"
-without_intersection(filename,True) 
+#filename = "/JustConcreteBeam/JustBeam4.h5"
+#without_intersection(filename,True) 
 ##########################################################
 
-filename = "/JustConcreteBeam2/JustBeam1.h5"
-without_intersection(filename,True)
+#filename = "/JustConcreteBeam2/JustBeam1.h5"
+#without_intersection(filename,True)
 
-filename = "/JustConcreteBeam2/JustBeam2.h5"
+#filename = "/JustConcreteBeam2/JustBeam2.h5"
+#without_intersection(filename,True) 
+
+#filename = "/JustConcreteBeam2/JustBeam3.h5"
+#without_intersection(filename,True) 
+
+#filename = "/JustConcreteBeam2/JustBeam4.h5"
+#without_intersection(filename,True) 
+
+#########################################################
+
+filename ="/Disconnected1point5cmGap/Disconnected1point5cmGap3.h5"
+without_intersection(filename,True) 
+without_intersection(filename,False) 
+
+filename ="/Disconnected1point5cmGap/Disconnected1point5cmGap2.h5"
+without_intersection(filename,True) 
+without_intersection(filename,False) 
+
+filename ="/Disconnected1point5cmGap/Disconnected1point5cmGap.h5"
+without_intersection(filename,True) 
+without_intersection(filename,False) 
+
+filename ="/Disconnected1point5cmGap/Disconnected1point5cmGap4.h5"
+without_intersection(filename,True) 
+without_intersection(filename,False) 
+
+filename = "/Disconnected3cmGap/Disconnected3cmGap.h5"
+
+without_intersection(filename,True) 
+filename = "/Disconnected3cmGap/Disconnected3cmGap2.h5"
+
 without_intersection(filename,True) 
 
-filename = "/JustConcreteBeam2/JustBeam3.h5"
+filename = "/Disconnected3cmGap/Disconnected3cmGap3.h5"
+
 without_intersection(filename,True) 
 
-filename = "/JustConcreteBeam2/JustBeam4.h5"
+filename = "/Disconnected3cmGap/Disconnected3cmGap4.h5"
+
 without_intersection(filename,True) 

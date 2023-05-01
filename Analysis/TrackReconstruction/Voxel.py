@@ -51,6 +51,9 @@ def voxelisation(voxel_side_length,filename,df,angle_type):
     if angle_type == 4:
         angle = "MDweighted"
         
+    if angle_type == 5:
+        angle = "momentumweighted"
+        
     df = df.loc[(df.X > -750) &
                             (df.X < 750) &
                             (df.Y > -112.5) &
@@ -75,7 +78,7 @@ def voxelisation(voxel_side_length,filename,df,angle_type):
     
     voxelised = df.groupby([pd.cut(df.X, np.linspace(detector_in_corners[2][0], detector_in_corners[0][0], x_voxel_no)),
                              pd.cut(df.Y, np.linspace(detector_in_corners[2][1], detector_in_corners[0][1], y_voxel_no)),
-                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])[angle].sum()
+                             pd.cut(df.Z, np.linspace(detector_out_corners[0][2], detector_in_corners[0][2], z_voxel_no))])[angle].median()
        
     
     Vol = "/home/anthony/MastersThesis/Data" + filename[:-3] + "3D.csv"
@@ -96,6 +99,9 @@ def image_heatmap_3D(filepath,detector_corners,angle_type):
         angle = "momentumweighted"
     if angle_type == 4:
         angle = "MDweighted"
+        
+    if angle_type == 5:
+        angle == "momentumweighted"
     
     
     df = pd.read_csv(filepath)
@@ -164,6 +170,9 @@ def heatmap_slices_zx(filepath,angle_type,neighbour_average,filter_confidence,di
         angle = "0"
     if angle_type == 4:
         angle = "MDweighted"
+        
+    if angle_type == 5:
+        angle = "momentumweighted"
     
     
     df = pd.read_csv(filepath)
@@ -231,6 +240,9 @@ def heatmap_slices_zy(filepath,angle_type,neighbour_average,filter_confidence,di
     if angle_type == 4:
         angle = "MDweighted"
     
+    if angle_type == 5:
+        angle = "momentumweighted"
+    
     
     df = pd.read_csv(filepath)
     df.rename(columns={"Unnamed: 0": "X", "Unnamed: 1": "Y", "Unnamed: 2": "Z","0": angle}, inplace = True)
@@ -296,6 +308,9 @@ def heatmap_slices_xy(filepath,angle_type,neighbour_average,filter_confidence,di
         angle = "0"
     if angle_type == 4:
         angle = "MDweighted"
+        
+    if angle_type == 5:
+        angle = "momentumweighted"
     
     
     df = pd.read_csv(filepath)
@@ -374,6 +389,9 @@ def binned_clustered(voxel_side_length,filename,df,angle_type):
         angle = "momentumweighted"
     if angle_type == 4:
         angle = "MDweighted"
+        
+    if angle_type == 5:
+        angle = "momentumweighted"
     
     df = df.loc[(df.X > -500) &
                             (df.X < 500) &
@@ -739,15 +757,15 @@ for l in neighbour_average:
 
 
 
-neighbour_average = [True,False]
-binned_clustered_algo = True
-angle_type = 3
-key = "POCA"
+#neighbour_average = [True,False]
+#binned_clustered_algo = True
+#angle_type = 3
+#key = "POCA"
 
-base_data_directory = "/home/anthony/MastersThesis/Data/"
-ParentFolderPath = "/home/anthony/MastersThesis/Figures/MassOutput/NoConfidenceValues"
+#base_data_directory = "/home/anthony/MastersThesis/Data/"
+#ParentFolderPath = "/home/anthony/MastersThesis/Figures/MassOutput/NoConfidenceValues"
 #interaction_name = ["RealisticConcreteBeam15mmRadius","RealisticConcreteBeam10mmRadius","RealisticConcreteBeam5mmRadius","Disconnected10cmGap","RustedBeam15mm"]
-interaction_name = ["Disconnected10cmGap","RustedBeam15mm"]
+#interaction_name = ["Disconnected10cmGap","RustedBeam15mm"]
 def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter,binned_clustered_algo,angle_type,key,ParentFolderPath):
     
     #Makes the figures on mass
@@ -828,4 +846,83 @@ def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter
                 heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "BinnedClustered.csv",angle_type,l,0,Directory_slicesZX)
     return(None)
 
-make_heatmaps(base_data_directory,interaction_name,15,5,0,binned_clustered,angle_type,key,ParentFolderPath)
+#make_heatmaps(base_data_directory,interaction_name,15,5,0,binned_clustered,angle_type,key,ParentFolderPath)
+
+
+
+
+
+def just_rebar_imaging():
+    
+    df1 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadiusInteraction.h5",key)
+    df2 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadius2Interaction.h5",key)
+    df3 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadius3Interaction.h5",key)
+    df4 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadius4Interaction.h5",key)
+    imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadiusInteraction.h5"
+    
+    df1 = pd.concat([df1,df2,df3,df4])
+    
+
+    #imagingfilename = "/NOCONCRETEREBAR/JustRebar15mmRadius1milliInteraction.h5"
+
+    base_filepath = "/home/anthony/MastersThesis/Data/"
+            
+    angle_type = [1,2,5,4]
+
+    directory = "/home/anthony/MastersThesis/Figures/ConcreteANDRebar"
+    try: 
+        os.mkdir(directory) 
+    except OSError as error: 
+        print(error)
+        
+    for i in angle_type:
+        voxelisation(15,imagingfilename,df1,i) 
+        save_directory = "/home/anthony/MastersThesis/Figures/ConcreteANDRebar/15mmVoxelMedian"
+        try: 
+            os.mkdir(save_directory) 
+        except OSError as error: 
+            print(error)
+        
+        save_directory_angle = save_directory + "/" + str(i)
+        
+        try: 
+            os.mkdir(save_directory_angle) 
+        except OSError as error: 
+            print(error)
+        
+        for j in [True,False]:
+            
+            if j == True:
+                neighbour_path = "/NeighbourAverage"           
+            else: 
+                neighbour_path = "/NotNeighbourAverage"
+                
+            try: 
+                os.mkdir(save_directory_angle + neighbour_path) 
+            except OSError as error: 
+                print(error)
+            Directory_slicesXY = save_directory_angle + neighbour_path + "/XYHeatMapSlices"
+            Directory_slicesZX = save_directory_angle + neighbour_path + "/ZXHeatMapSlices"
+            Directory_slicesZY = save_directory_angle + neighbour_path + "/ZYHeatMapSlices"
+            
+            try: 
+                os.mkdir(Directory_slicesXY) 
+            except OSError as error: 
+                print(error)
+                
+            try: 
+                os.mkdir(Directory_slicesZX) 
+            except OSError as error: 
+                print(error)
+                
+            try: 
+                os.mkdir(Directory_slicesZY) 
+            except OSError as error: 
+                print(error)
+                
+            heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "3D.csv",i,j,0,Directory_slicesXY)
+            heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "3D.csv",i,j,0,Directory_slicesZY)
+            heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "3D.csv",i,j,0,Directory_slicesZX)
+    return(None)
+
+just_rebar_imaging()
