@@ -328,22 +328,23 @@ def without_intersection(filename,uncertantity):
 
 #########################################################
 
-filename ="/Disconnected1point5cmGap/Disconnected1point5cmGap3.h5"
-without_intersection(filename,True) 
-without_intersection(filename,False) 
+#filename ="/Disconnected1point5cmGap/Disconnected1point5cmGap3.h5"
+#without_intersection(filename,True) 
+#without_intersection(filename,False) 
 
-filename ="/Disconnected1point5cmGap/Disconnected1point5cmGap2.h5"
-without_intersection(filename,True) 
-without_intersection(filename,False) 
+#filename ="/Disconnected1point5cmGap/Disconnected1point5cmGap2.h5"
+#without_intersection(filename,True) 
+#without_intersection(filename,False) 
 
-filename ="/Disconnected1point5cmGap/Disconnected1point5cmGap.h5"
-without_intersection(filename,True) 
-without_intersection(filename,False) 
-
+#filename ="/Disconnected1point5cmGap/Disconnected1point5cmGap.h5"
+#without_intersection(filename,True) 
+#without_intersection(filename,False) 
+'''
 filename ="/Disconnected1point5cmGap/Disconnected1point5cmGap4.h5"
-without_intersection(filename,True) 
+#without_intersection(filename,True) 
 without_intersection(filename,False) 
 
+##########################################################################
 filename = "/Disconnected3cmGap/Disconnected3cmGap.h5"
 
 without_intersection(filename,True) 
@@ -357,4 +358,15 @@ without_intersection(filename,True)
 
 filename = "/Disconnected3cmGap/Disconnected3cmGap4.h5"
 
+without_intersection(filename,True) 
+'''
+#####################################################################
+filename = "/RealisticConcreteBeam15mmRadius/RealisticBeam.h5"
+without_intersection(filename,True) 
+
+filename = "/RealisticConcreteBeam15mmRadius/RealisticBeam2.h5"
+without_intersection(filename,True) 
+filename = "/RealisticConcreteBeam15mmRadius/RealisticBeam3.h5"
+without_intersection(filename,True) 
+filename = "/RealisticConcreteBeam15mmRadius/RealisticBeam4.h5"
 without_intersection(filename,True) 
