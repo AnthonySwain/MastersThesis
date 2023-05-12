@@ -1,3 +1,4 @@
+//Generates the muons
 #include "generator.hh"
 #include "G4RunManager.hh"
 #include "CSVoutput.hh"

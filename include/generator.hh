@@ -1,4 +1,5 @@
-//Particle gun
+//Particle gun 
+//Generates the muons
 #ifndef GENERATOR_HH
 #define GENERATOR_HH
 

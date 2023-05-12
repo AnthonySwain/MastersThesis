@@ -19,7 +19,7 @@
 /vis/viewer/set/viewpointVector 1 1 1
 
 #Adding axis
-/vis/scene/add/axes 1 0 0 0.3 m
+#/vis/scene/add/axes 1 0 0 0.3 m
 #
 #Update every event
 /vis/viewer/set/autoRefresh true

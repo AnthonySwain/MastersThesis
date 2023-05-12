@@ -112,7 +112,7 @@ def confidence_values(control1df,control1filename, #First Control dataframe and 
 
 
 def compare_control(control_filepath,object_imaging_filepath,angle_type,voxel_side_length):
-    #Outdated
+    #Outdated - please use confidence values function
     control_df1 = ReadH5.pandas_read(control_filepath)
     control_df2 = ReadH5.pandas_read("/ReferenceConcreteBlock/2milli2Interaction.h5")
     imaging_df1 = ReadH5.pandas_read(object_imaging_filepath)
@@ -181,7 +181,7 @@ def compare_control(control_filepath,object_imaging_filepath,angle_type,voxel_si
     return(difference3D,ctrl3D)
 
 def confidence_rating_basic(control_filepath,object_imaging_filepath,qual_fact,voxel_side_length):
-    #OUTDATED
+    #Outdated - please use confidence values function
     #Compares the imaged object hits to a control concrete block and gives a confidence rating of steel being in certain areas
 
     #One concern is that the scattering throughout the uniform block of concrete won't be uniform which could cause issues because of the acceptance...
@@ -223,74 +223,8 @@ def confidence_rating_basic(control_filepath,object_imaging_filepath,qual_fact,v
 
     return(None)
 
-
-
-#voxel_side_length = 8#mm
-#binned_clustered = True
-key = "POCA"
-
-base_filepath = "/home/anthony/MastersThesis/Data/"
-control1filename = "/JustConcreteBeam/JustBeam1Interaction.h5"
-
-#df1 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam1Interaction.h5",key)
-#df2 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam2Interaction.h5",key)
-#df3 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam3Interaction.h5",key)
-#df4 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam4Interaction.h5",key)
-
-#control1df = pd.concat([df1,df2,df3,df4])
-
-#control2filename = "/JustConcreteBeam2/JustBeam1Interaction.h5"
-
-#df1 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam1Interaction.h5",key)
-#df2 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam2Interaction.h5",key)
-#df3 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam3Interaction.h5",key)
-#df4 = ReadH5.pandas_read("/JustConcreteBeam2/JustBeam4Interaction.h5",key)
-
-#control2df = pd.concat([df1,df2,df3,df4])
-
-#df1 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGapInteractionUncertantity.h5",key)
-#df2 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap2InteractionUncertantity.h5",key)
-#df3 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap3InteractionUncertantity.h5",key)
-#df4 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap4InteractionUncertantity.h5",key)
-#imagingfilename = "/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGapInteractionUncertantity.h5"
-
-
-
-
-#df1 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadiusInteraction.h5",key)
-#df2 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadius2Interaction.h5",key)
-#df3 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadius3Interaction.h5",key)
-#df4 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadius4Interaction.h5",key)
-#imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadiusInteraction.h5"
-
-
-#df1 = ReadH5.pandas_read("/RealisticConcreteBeam10mmRadius/RealisticBeam10mmRad1Interaction.h5",key)
-#df2 = ReadH5.pandas_read("/RealisticConcreteBeam10mmRadius/RealisticBeam10mmRad2Interaction.h5",key)
-#df3 = ReadH5.pandas_read("/RealisticConcreteBeam10mmRadius/RealisticBeam10mmRad3Interaction.h5",key)
-#df4 = ReadH5.pandas_read("/RealisticConcreteBeam10mmRadius/RealisticBeam10mmRad4Interaction.h5",key)
-#imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5"
-
-#df1 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad1Interaction.h5",key)
-#df2 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad2Interaction.h5",key)
-#df3 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad3Interaction.h5",key)
-#df4 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad4Interaction.h5",key)
-#imagingfilename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5"
-
-#imaging = pd.concat([df1,df2,df3,df4])
-
-VoxelSize = [15,12.5]
-STDcheck = [5]
-FilterOutBelow = [0]
-neighbour_average = [True,False]
-binned_clustered = True
-angle_type = 3
-key = "POCA"
-
-base_data_directory = "/home/anthony/MastersThesis/Data/"
-ParentFolderPath = "/home/anthony/MastersThesis/Figures/MassOutput"
-interaction_names = ["RealisticConcreteBeam15mmRadius","RealisticConcreteBeam10mmRadius","RealisticConcreteBeam5mmRadius","Disconnected10cmGap","RustedBeam15mm"]
-
 def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter,binned_clustered,angle_type,key,ParentFolderPath):
+    #Function to make heatmaps of the geometry (i.e steel rod in concrete) on mass.
     df1 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam1Interaction.h5",key)
     df2 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam2Interaction.h5",key)
     df3 = ReadH5.pandas_read("/JustConcreteBeam/JustBeam3Interaction.h5",key)
@@ -389,46 +323,27 @@ def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter
                 Voxel.heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,0,Directory_slicesZX)
     return(None)
 
-make_heatmaps(base_data_directory,interaction_names,15,5,0,binned_clustered,angle_type,key,ParentFolderPath)
-'''    
-for i in VoxelSize:
-    for j in STDcheck: 
-        for k in FilterOutBelow:
-            ParentFolderPath = "/home/anthony/MastersThesis/Data/ParameterTesting/" + str(i) + "mmVoxel_" + str(j) + "STD_" + str(k) + "Filter"
-            
-            try: 
-                os.mkdir(ParentFolderPath) 
-            except OSError as error: 
-                print(error)
-                
-            confidence_values(control1df,control1filename,
-                             control2df,control2filename,
-                              imaging,imagingfilename,
-                              angle_type,binned_clustered,
-                              j,k,i) #Finds the confidence for the given parameters
-            
-            for l in neighbour_average:
-                if l == True:
-                    neighbour_path = "NeighbourAverage"
-                    
-                else: 
-                    neighbour_path = "NotNeighbourAverage"
-                
-                try: 
-                    os.mkdir(ParentFolderPath + "/" + neighbour_path) 
-                except OSError as error: 
-                    print(error)
-                    
-                Directory_slices = ParentFolderPath + "/" + neighbour_path +"/XYHeatMapSlices"
-                try: 
-                    os.mkdir(Directory_slices) 
-                except OSError as error: 
-                    print(error)
-                
-                Voxel.heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type,l,k,Directory_slices)
-'''         
-            
 
+key = "POCA"
+
+base_filepath = "/home/anthony/MastersThesis/Data/"
+control1filename = "/JustConcreteBeam/JustBeam1Interaction.h5"
+
+VoxelSize = [15,12.5]
+STDcheck = [5]
+FilterOutBelow = [0]
+neighbour_average = [True,False]
+binned_clustered = True
+angle_type = 3
+key = "POCA"
+
+base_data_directory = "/home/anthony/MastersThesis/Data/"
+ParentFolderPath = "/home/anthony/MastersThesis/Figures/MassOutput"
+interaction_names = ["RealisticConcreteBeam15mmRadius","RealisticConcreteBeam10mmRadius","RealisticConcreteBeam5mmRadius","Disconnected10cmGap","RustedBeam15mm"]
+
+
+
+make_heatmaps(base_data_directory,interaction_names,15,5,0,binned_clustered,angle_type,key,ParentFolderPath)
 
 
 #Voxel.heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "Confidence.csv",angle_type)

@@ -1,3 +1,4 @@
+//Setting up the particle detectors
 #ifndef DETECTOR_HH
 #define DETECTOR_HH
 

@@ -1,3 +1,4 @@
+//Registering hits in the particle detectors
 #ifndef HIT_HH
 #define HIT_HH
 

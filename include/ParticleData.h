@@ -1,4 +1,5 @@
 //Sets up output data types for the particles 
+//Defines H5 structure to be used.
 #ifndef PARTICLEDATA_HH
 #define PARTICLEDATA_HH
 #include "H5Struct.h"

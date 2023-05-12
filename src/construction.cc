@@ -1,4 +1,4 @@
-//Importing the headerfile
+//Defines the geometry used in the simulation
 #include "construction.hh"
 #include "G4SDManager.hh"
 #define _USE_MATH_DEFINES

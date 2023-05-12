@@ -18,15 +18,12 @@ from skspatial.objects import Line, Points
 from skspatial.plotting import plot_3d
 
 def least_squares(hits):
+    #Fits the tracks of the muons from hits in the detector by the least squares method 
     line_fit = Line.best_fit(hits)
     
     return(line_fit)
 
 def objective_function(params, x1,y1,z1,x2,y2,z2):
-    #notes for later tony, d1,d2 are for the position vectors of the lines (but there should be 3 of these as its a vector
-    # not just one so this needs to be changed along with where the linest intersect.)
-    # Also check the constraint equations for the intersection is correct...
-
     #The algorithm minimises the distance between the 2 lines and the chi squared for each set of data points
     
     # r = r0 + u*d 
@@ -58,7 +55,7 @@ def objective_function(params, x1,y1,z1,x2,y2,z2):
     return mse1 + mse2 + distance
 
 def mse(pos_vector, direction_vector, x,y,z):
-    # x = x_0 + const * d 
+    #works out the mean squared error between hits and constructed track
     size = np.size(x)
 
     const = (x - pos_vector[0] * np.ones(size)) / direction_vector[0]
@@ -76,6 +73,8 @@ def mse(pos_vector, direction_vector, x,y,z):
     return (mse)
 
 def fit_lines(pos_hits_in,pos_hits_out):
+    #Called upon to fit tracks with the constraint that they must intersect from incoming and outgoing hits of the detectors
+
     #pos_hits_in and out are the 2 sets of datapoints for each line
     #May be useful to vectorise this in the future.
 
@@ -119,6 +118,7 @@ def get_line_coords(line,z_min,z_max,no_points):
     return(x,y,z)
 
 def residues_get(line,hits):
+    #Outdated, was used to work out residues.
     residues_square = []
     no_hits = int(np.size(hits)/3)
     print(np.size(hits)/3)

@@ -1,6 +1,7 @@
 #Thank you to the kind fellows on the python discord for helping with this:) 
 
 #Splits the data into voxels of a particulare size and assigns each voxel the average scatter angle inside
+#Has PoCA or binned clustering algorithms implemented with optimsiations sa noted in the thesis. 
 #Plots a heatmap based on value for the voxels in all xy,xz or yz planes
 
 import pandas as pd
@@ -486,288 +487,18 @@ def normalise(data):
     normalised_data = (data-np.min(data))/(np.max(data)-np.min(data))
     
     return(normalised_data)
-'''
-def heatmap_planar_x_y(filepath,angle_type,neighbour_average,filter_confidence,directory):
-    #Creates planar image in xy plane, much like a planar xray scan
-    if angle_type == 1:
-       angle = "angle"
-    
-    if angle_type == 2:
-        angle= "qualfactorangle"
-    
-    if angle_type == 3:
-        angle = "0"
-    if angle_type == 4:
-        angle = "MDweighted"
-        
-    df = pd.read_csv(filepath)
-    df['X'] = df['X'].str.strip('(]')
-    df['Y'] = df['Y'].str.strip('(]')
-    
-    df[angle] = df[angle].astype(float)
-    df[angle] = df[angle].fillna(0)
-    df[angle] = df[angle].abs()
-    
-    for index, row in df.iterrows():
-        df.loc[index,"X"] = math.ceil(np.average(np.fromstring(df.loc[index,"X"],sep=",")))
-        df.loc[index,"Y"] = math.ceil(np.average(np.fromstring(df.loc[index,"Y"],sep=",")))
-    
-    
-    pivot = df.pivot(values = angle,columns='X',index='Y')
-    
-    if neighbour_average == True:
-            values = pivot.to_numpy()
-            result = eight_neighbor_average_convolve2d(values)
-            
-            result1d = result.flatten('F')
-            normalised = normalise(result1d)
-            
-            #Any values less than 0.5 are set to 0 
-            normalised[normalised < filter_confidence] = 0
-            
-            df[angle] = normalised
-            pivot = df.pivot(values = angle,columns='X',index='Y')
-    
-    sns.heatmap(pivot,cmap = 'Spectral_r').axis('equal')
-    plt.title("XY Planar")
-    plt.autoscale()
-
-    plt.savefig(directory + "/XYPlanar.png",bbox_inches='tight')
-    plt.close()
-
-    return(None)
-
-def heatmap_planar_x_z(filepath,angle_type,neighbour_average,filter_confidence,directory):
-    #Creates planar image in xz plane, much like a planar xray scan
-    df = pd.read_csv(filepath)
-    
-    if angle_type == 1:
-       angle = "angle"
-    
-    if angle_type == 2:
-        angle= "qualfactorangle"
-    
-    if angle_type == 3:
-        angle = "0"
-    if angle_type == 4:
-        angle = "MDweighted"
-
-    df['X'] = df['X'].str.strip('(]')
-    df['Z'] = df['Z'].str.strip('(]')
-    
-    df[angle] = df[angle].astype(float)
-    df[angle] = df[angle].fillna(0)
-    df[angle] = df[angle].abs()
-    
-    for index, row in df.iterrows():
-        df.loc[index,"X"] = math.ceil(np.average(np.fromstring(df.loc[index,"X"],sep=",")))
-        df.loc[index,"Z"] = math.ceil(np.average(np.fromstring(df.loc[index,"Z"],sep=",")))
-        
-
-    
-    pivot = df.pivot(values = angle,columns='X',index='Z')
-    
-    if neighbour_average == True:
-            values = pivot.to_numpy()
-            result = eight_neighbor_average_convolve2d(values)
-            
-            result1d = result.flatten('F')
-            normalised = normalise(result1d)
-            
-            #Any values less than 0.5 are set to 0 
-            normalised[normalised < filter_confidence] = 0
-            
-            df[angle] = normalised
-            pivot = df.pivot(values = angle,columns='X',index='Z')
-    
-    sns.heatmap(pivot,cmap = 'Spectral_r').axis('equal')
-    plt.title("XZ Planar")
-    plt.autoscale()
-    
-
-    plt.savefig(directory + "/XZPlanar.png",bbox_inches='tight')
-    plt.close()
-    
-    return(None)
-
-def heatmap_planar_y_z(filepath,angle_type,neighbour_average,filter_confidence,directory):
-    #Creates planar image in yz plane, much like a planar xray scan
-    if angle_type == 1:
-       angle = "angle"
-    
-    if angle_type == 2:
-        angle= "qualfactorangle"
-    
-    if angle_type == 3:
-        angle = "0"
-    if angle_type == 4:
-        angle = "MDweighted"
-        
-    df = pd.read_csv(filepath)
-    
-    df['Y'] = df['Y'].str.strip('(]')
-    df['Z'] = df['Z'].str.strip('(]')
-    
-    df[angle] = df[angle].astype(float)
-    df[angle] = df[angle].fillna(0)
-    df[angle] = df[angle].abs()
-    
-    for index, row in df.iterrows():
-        df.loc[index,"Y"] = math.ceil(np.average(np.fromstring(df.loc[index,"Y"],sep=",")))
-        df.loc[index,"Z"] = math.ceil(np.average(np.fromstring(df.loc[index,"Z"],sep=",")))
-        
-
-    
-    pivot = df.pivot(values = angle,columns='Y',index='Z')
-    
-    if neighbour_average == True:
-            values = pivot.to_numpy()
-            result = eight_neighbor_average_convolve2d(values)
-            
-            result1d = result.flatten('F')
-            normalised = normalise(result1d)
-            
-            #Any values less than 0.5 are set to 0 
-            normalised[normalised < filter_confidence] = 0
-            
-            df[angle] = normalised
-            pivot = df.pivot(values = angle,columns='Y',index='Z')
-            
-            
-            
-    sns.heatmap(pivot,cmap = 'Spectral_r').axis('equal')
-    plt.title("YZ Planar")
-    plt.autoscale()
-    
-
-    plt.savefig(directory + "/YZPlanar.png",bbox_inches='tight')
-    plt.close()
-    return(None)
-'''
-
-
-
-#filename = "/50mmSample/Lead/50000PureLeadSlab1Interaction.h5"
-#filename = "/SteelRodInConcrete50mmRadius/2millionevents2Interaction.h5"
-#filename = "/ReferenceConcreteBlock/2milliInteraction.h5"
-#filename = "/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeamInteraction.h5"
-key = "POCA"
-
-#df = ReadH5.pandas_read("/08.03.2023/Steel/50000PureSteelSlab1Interaction.h5")
-
-#df = ReadH5.pandas_read(filename,key)
-#df2 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam2Interaction.h5",key)
-#df3 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam3Interaction.h5",key)
-#df4 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticBeam4Interaction.h5",key)
-#df = pd.concat([df,df2,df3,df4])
-
-#base_filepath = "/home/anthony/MastersThesis/Data/"
-
-
-#df1 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad1Interaction.h5",key)
-#df2 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad2Interaction.h5",key)
-#df3 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad3Interaction.h5",key)
-#df4 = ReadH5.pandas_read("/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad4Interaction.h5",key)
-#filename = "/RealisticConcreteBeam5mmRadius/RealisticBeam5mmRad1Interaction.h5"
-
-#df = pd.concat([df1,df2,df3,df4])
-
-
-#angle_type = 3
-#binned = True
-#voxel_side_length = 5 #(mm)
-
-#if binned == True:
- #   ending = "BinnedClustered.csv"
-    
-#else:
-  #  ending = "3D.csv"    
-#voxelisation(voxel_side_length,filename,df,angle_type)
-#binned_clustered(voxel_side_length,filename,df,angle_type) 
-
-
-
-#image_heatmap_3D(base_filepath + filename[:-3] + ending,detector_in_corners,angle_type)
-
-#heatmap_slices_xy(base_filepath + filename[:-3] + ending,angle_type)
-#heatmap_slices_zy(base_filepath + filename[:-3] + ending,angle_type)
-#heatmap_slices_zx(base_filepath + filename[:-3] + ending,angle_type)
-
-#heatmap_planar_x_y(base_filepath + filename[:-3] + ending,angle_type)
-#heatmap_planar_x_z(base_filepath + filename[:-3] + ending,angle_type)
-#heatmap_planar_y_z(base_filepath + filename[:-3] + ending,angle_type)
-
-#base_filepath = "/home/anthony/MastersThesis/Data/"
-#angle_type = 3
-#voxel_side_length = 15
-
-#df1 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGapInteractionUncertantity.h5",key)
-#df2 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap2InteractionUncertantity.h5",key)
-#df3 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap3InteractionUncertantity.h5",key)
-#df4 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGap4InteractionUncertantity.h5",key)
-#imagingfilename = "/DisconnectedRebar10cmGap/Gaussian/Disconnected10cmGapInteractionUncertantity.h5"
-
-
-#df1 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/ExactPrecision/Disconnected10cmGapInteraction.h5",key)
-#df2 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/ExactPrecision/Disconnected10cmGap2Interaction.h5",key)
-#df3 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/ExactPrecision/Disconnected10cmGap3Interaction.h5",key)
-#df4 = ReadH5.pandas_read("/DisconnectedRebar10cmGap/ExactPrecision/Disconnected10cmGap4Interaction.h5",key)
-#imagingfilename = "/DisconnectedRebar10cmGap/ExactPrecision/Disconnected10cmGapInteraction.h5"
-#df = pd.concat([df1,df2,df3,df4])
-#binned_clustered(voxel_side_length,imagingfilename,df,angle_type) 
-
-'''
-neighbour_average = [True,False]
-directory = "/home/anthony/MastersThesis/Figures/15mmRebar/Disconnected10cm/Gaussian"
-for l in neighbour_average:
-    if l == True:
-        neighbour_path = "NeighbourAverage"           
-    else: 
-        neighbour_path = "NotNeighbourAverage"
-        
-    try:
-        os.mkdir(directory + "/" + neighbour_path)
-        print("done")
-    except OSError as error: 
-        print(error)
-        
-    Directory_slicesXY = directory + "/" + neighbour_path +"/XYHeatMapSlices"
-    Directory_slicesZX = directory + "/" + neighbour_path +"/ZXHeatMapSlices"
-    Directory_slicesZY = directory + "/" + neighbour_path +"/ZYHeatMapSlices"
-    
-    try: 
-        os.mkdir(Directory_slicesXY) 
-    except OSError as error: 
-        print(error)
-        
-    try: 
-        os.mkdir(Directory_slicesZX) 
-    except OSError as error: 
-        print(error)
-        
-    try: 
-        os.mkdir(Directory_slicesZY) 
-    except OSError as error: 
-        print(error)
-        
-    heatmap_slices_xy(base_filepath + imagingfilename[:-3] + "BinnedClustered.csv",angle_type,l,0.7,Directory_slicesXY)
-    heatmap_slices_zy(base_filepath + imagingfilename[:-3] + "BinnedClustered.csv",angle_type,l,0.7,Directory_slicesZY)
-    heatmap_slices_zx(base_filepath + imagingfilename[:-3] + "BinnedClustered.csv",angle_type,l,0.7,Directory_slicesZX)
-'''
-
-
 
 #neighbour_average = [True,False]
 #binned_clustered_algo = True
 #angle_type = 3
-#key = "POCA"
+key = "POCA"
 
 #base_data_directory = "/home/anthony/MastersThesis/Data/"
 #ParentFolderPath = "/home/anthony/MastersThesis/Figures/MassOutput/NoConfidenceValues"
 #interaction_name = ["RealisticConcreteBeam15mmRadius","RealisticConcreteBeam10mmRadius","RealisticConcreteBeam5mmRadius","Disconnected10cmGap","RustedBeam15mm"]
 #interaction_name = ["Disconnected10cmGap","RustedBeam15mm"]
+
 def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter,binned_clustered_algo,angle_type,key,ParentFolderPath):
-    
     #Makes the figures on mass
     #ParentFolderPath is where the output files will go 
     try: 
@@ -853,7 +584,7 @@ def make_heatmaps(base_data_directory,interaction_name,VoxelSize,STDcheck,filter
 
 
 def just_rebar_imaging():
-    
+    #Also to make figures on mass (but of just the rebar - im pretty sure this is the same as the make heatmaps function..)
     df1 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadiusInteraction.h5",key)
     df2 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadius2Interaction.h5",key)
     df3 = ReadH5.pandas_read("/RealisticConcreteBeam15mmRadius/ExactPrecision/RealisticConcreteBeam15mmRadius3Interaction.h5",key)

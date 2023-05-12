@@ -1,4 +1,5 @@
-#Calls upon TrackReconstruction.py and VertexFinder.py to create H5 file of scattered angle and point of scattering based off of a single interaction model
+#Calls upon TrackReconstruction.py and VertexFinder.py to create H5 file of scattered angle and point of scattering based off of a single interaction model from 
+#hits in the particle detectors
 
 import csv
 import matplotlib.pyplot as plt
@@ -80,7 +81,8 @@ def with_intersection(filename):
     return(None)
 
 def without_intersection(filename,uncertantity):
-    #Filename of the H5 file, Quality check  refines scattering angle based off of confidence of a single scattering event
+    #Filename of the H5 file, uncertantity decides whether to put a tophat/gaussian filter onto the hit locations before analysing.
+
     event_chunk = 9999
     #Get the indicies for the every x event numbers given
     index = ReadH5.get_event_index(filename,event_chunk)

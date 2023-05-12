@@ -1,3 +1,4 @@
+//Code that gets run every event
 #include "run.hh"
 #include <fstream>
 
@@ -9,6 +10,9 @@ MyRunAction::~MyRunAction()
 
 void MyRunAction::BeginOfRunAction(const G4Run* run)
 {   
+    //Comments are from when CSV was being used as output.
+
+
     //Runs at the start of each run
     /*
     //Setting up the header of the datafiles

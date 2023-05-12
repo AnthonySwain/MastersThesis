@@ -1,4 +1,7 @@
+//Defines H5 structure to be used.
+
 #include "ParticleData.h"
+
 
 namespace H5CompositesStructures {
     H5COMPOSITES_DEFINE_STRUCT_DTYPE(InitialParticleData, PDGnumb, momentum, theta, phi, PosX, PosY, PosZ)

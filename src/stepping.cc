@@ -1,4 +1,4 @@
-//Writing a data output
+//Stepping - used for data output along steps
 
 #include "stepping.hh"
 #include "G4CsvNtupleManager.hh"

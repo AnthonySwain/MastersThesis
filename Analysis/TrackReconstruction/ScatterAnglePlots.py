@@ -1,4 +1,4 @@
-#Plots scatter angle distributions 
+#Plots scatter angle distributions from data of interactions
 import csv
 import matplotlib.pyplot as plt
 import numpy as np

@@ -4,6 +4,7 @@ import h5py
 import pandas as pd
 import numpy as np
 import sys
+
 #Pre-made functions to read H5 files and return a panda dataframe of the datafile 
 
 def get_detector_data(filename):

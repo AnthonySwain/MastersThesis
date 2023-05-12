@@ -1,3 +1,4 @@
+//Code that gets run every event
 #ifndef RUN_HH
 #define RUN_HH
 

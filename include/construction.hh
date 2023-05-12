@@ -1,5 +1,4 @@
-//Header file for constructing detectors
-//Make sure it's not included serveral times
+//Defines the geometry used in the simulation
 #ifndef CONSTRUCTION_HH
 #define CONSTRUCTION_HH
 

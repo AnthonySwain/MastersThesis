@@ -1,3 +1,4 @@
+//File is now redundant now H5 is setup.
 #ifndef CSVOUTPUT_HH 
 #define CSVOUTPUT_HH
 

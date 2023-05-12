@@ -1,3 +1,4 @@
+//Setting up the particle detectors
 #include "detector.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
