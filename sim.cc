@@ -1,4 +1,4 @@
-//Imports
+//Main simulation file - calls upon src and geant4 toolkit. 
 #include <iostream>
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 
     mgr.Initialize();
 
-    /*
+    
     //User interface
     G4UIExecutive *ui = new G4UIExecutive(argc, argv);
 
@@ -54,13 +54,13 @@ int main(int argc, char** argv)
     
     //Initialize visualisation
     visManager->Initialize();
-    */
+    
     //Get the pointer tp the UI manager, set verbosities
     G4UImanager *UImanager = G4UImanager::GetUIpointer();
     
     //Run the macro file
     UImanager->ApplyCommand("/control/execute run.mac");
-    //ui->SessionStart();
+    ui->SessionStart();
 
     return 0;
 }
